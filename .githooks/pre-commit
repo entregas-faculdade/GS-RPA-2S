@@ -1,0 +1,20 @@
+#!/bin/sh
+# --- Sarak Git Hook (Pre-Commit) ---
+if command -v python >/dev/null 2>&1; then PY=python; else PY=python3; fi
+
+echo "[Sarak] Checking staged files for leaked secrets..."
+"$PY" .githooks/verify_commit.py --root .
+if [ "$?" -ne 0 ]; then
+  echo ""
+  echo "COMMIT BLOCKED - secret or sensitive file detected in staged files."
+  echo "   Fix: move the secret to .env (and add it to .gitignore), then re-stage."
+  exit 1
+fi
+
+if [ -f .agents/generate_index.py ]; then
+  echo "[Sarak] Updating the local agents index..."
+  "$PY" .agents/generate_index.py
+  git add .agents/index.md
+fi
+
+exit 0
