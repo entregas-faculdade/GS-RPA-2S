@@ -54,16 +54,15 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 2 | [plan-01.02-ingestao-e-sanitizacao](plan/plan-01.02-ingestao-e-sanitizacao.md) | Ingerir pedidos de txt/csv/json e sanitizar a entrada | — | 🟢 Aprovada | `specs/01.02-ingestao-e-sanitizacao.md` |
-| 3 | [plan-01.03-anonimizacao-de-pii](plan/plan-01.03-anonimizacao-de-pii.md) | Anonimizar CPF, telefone e e-mail antes de qualquer log ou chamada externa | 01.02 | 🔴 A executar | `specs/01.03-anonimizacao-de-pii.md` |
-| 4 | [plan-04.01-storage-sqlite](plan/plan-04.01-storage-sqlite.md) | Persistir pedidos, fila de revisão, feedback e execuções em SQLite | — | 🔴 A executar | `arquitetura/04.01-persistencia.md` |
-| 5 | [plan-02.01-dataset-e-classificador](plan/plan-02.01-dataset-e-classificador.md) | Criar o conjunto rotulado sintético e o classificador regex + TF-IDF | 01.03 | 🔴 A executar | `specs/02.01-classificacao.md` |
-| 6 | [plan-02.02-confianca-e-revisao-humana](plan/plan-02.02-confianca-e-revisao-humana.md) | Calcular a confiança e decidir quando enviar o pedido à revisão humana | 02.01 | 🔴 A executar | `specs/02.02-confianca-e-revisao-humana.md` |
-| 7 | [plan-03.01-catalogo-e-allowlist](plan/plan-03.01-catalogo-e-allowlist.md) | Criar o catálogo de serviços com allowlist de domínios e verificação de links | 02.01 | 🔴 A executar | `specs/03.01-catalogo-e-allowlist.md` |
-| 8 | [plan-03.02-resposta-final-e-llm](plan/plan-03.02-resposta-final-e-llm.md) | Montar a resposta final ao cidadão, com LLM opcional e caminho seguro | 03.01 | 🔴 A executar | `specs/03.02-resposta-final-e-llm.md` |
-| 9 | [plan-04.03-orquestracao-rpa](plan/plan-04.03-orquestracao-rpa.md) | Orquestrar o pipeline em lote com retry, idempotência, agendamento e relatório de execução | 03.02 | 🔴 A executar | `arquitetura/04.03-orquestracao-rpa.md` |
-| 10 | [plan-04.02-interface-streamlit](plan/plan-04.02-interface-streamlit.md) | Criar a interface Streamlit de atendimento, fila de revisão e feedback | 04.03 | 🔴 A executar | `specs/04.02-interface.md` |
-| 11 | [plan-05.01-validacao-e-entrega](plan/plan-05.01-validacao-e-entrega.md) | Validar com amostra rotulada, documentar evidências e preparar a entrega | 04.02 | 🔴 A executar | `specs/05.01-validacao-e-entrega.md` |
+| 1 | [plan-01.03-anonimizacao-de-pii](plan/plan-01.03-anonimizacao-de-pii.md) | Anonimizar CPF, telefone e e-mail antes de qualquer log ou chamada externa | — | 🟡 Em execução | `specs/01.03-anonimizacao-de-pii.md` |
+| 2 | [plan-04.01-storage-sqlite](plan/plan-04.01-storage-sqlite.md) | Persistir pedidos, fila de revisão, feedback e execuções em SQLite | — | 🔴 A executar | `arquitetura/04.01-persistencia.md` |
+| 3 | [plan-02.01-dataset-e-classificador](plan/plan-02.01-dataset-e-classificador.md) | Criar o conjunto rotulado sintético e o classificador regex + TF-IDF | 01.03 | 🔴 A executar | `specs/02.01-classificacao.md` |
+| 4 | [plan-02.02-confianca-e-revisao-humana](plan/plan-02.02-confianca-e-revisao-humana.md) | Calcular a confiança e decidir quando enviar o pedido à revisão humana | 02.01 | 🔴 A executar | `specs/02.02-confianca-e-revisao-humana.md` |
+| 5 | [plan-03.01-catalogo-e-allowlist](plan/plan-03.01-catalogo-e-allowlist.md) | Criar o catálogo de serviços com allowlist de domínios e verificação de links | 02.01 | 🔴 A executar | `specs/03.01-catalogo-e-allowlist.md` |
+| 6 | [plan-03.02-resposta-final-e-llm](plan/plan-03.02-resposta-final-e-llm.md) | Montar a resposta final ao cidadão, com LLM opcional e caminho seguro | 03.01 | 🔴 A executar | `specs/03.02-resposta-final-e-llm.md` |
+| 7 | [plan-04.03-orquestracao-rpa](plan/plan-04.03-orquestracao-rpa.md) | Orquestrar o pipeline em lote com retry, idempotência, agendamento e relatório de execução | 03.02 | 🔴 A executar | `arquitetura/04.03-orquestracao-rpa.md` |
+| 8 | [plan-04.02-interface-streamlit](plan/plan-04.02-interface-streamlit.md) | Criar a interface Streamlit de atendimento, fila de revisão e feedback | 04.03 | 🔴 A executar | `specs/04.02-interface.md` |
+| 9 | [plan-05.01-validacao-e-entrega](plan/plan-05.01-validacao-e-entrega.md) | Validar com amostra rotulada, documentar evidências e preparar a entrega | 04.02 | 🔴 A executar | `specs/05.01-validacao-e-entrega.md` |
 
 ---
 

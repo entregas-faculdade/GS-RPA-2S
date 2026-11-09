@@ -4,11 +4,11 @@ familia: "01"
 item: "R01.3"
 titulo: "Anonimizar CPF, telefone e e-mail antes de qualquer log ou chamada externa"
 dominio: "Núcleo do robô"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[003-seguranca-sem-autenticacao]]", "[[005-llm-apenas-reformula-resposta]]"]
-depende_de: "plan-01.02-ingestao-e-sanitizacao"
+depende_de: ""
 destino_sintese: "specs/01.03-anonimizacao-de-pii.md"
 ---
 
@@ -41,6 +41,7 @@ O texto que sai desta função é o **único** que pode ser logado, gravado ou e
 | ADR | [[005-llm-apenas-reformula-resposta]] | o LLM só recebe texto anonimizado |
 | Contexto | [[00-contexto]] · [[00-knowledge]] | sempre |
 | Skill | `padrao-escrita` + `padrao-python` | identificadores em inglês; comentários e textos ao usuário em português; limiares de clean code |
+| Spec fixa | [[01.02-ingestao-e-sanitizacao]] | contrato de `Request` e da sanitização que antecede esta etapa |
 | Código | `src/triage/ingestion/` | a entrada desta etapa é a saída (texto sanitizado) da anterior |
 
 # 5. Instruções de execução
