@@ -63,7 +63,8 @@ via normal.
 
 | # | Achado | Origem | Registrado em | Peso |
 |---|---|---|---|---|
-| — | _(vazio)_ | — | — | — |
+| 1 | `ruff check .` falha em `.githooks/verify_commit.py:204` (E731, arquivo vindo da base) e os critérios das plans 04.03 e 05.01 usam `ruff check .`; falta um `ruff.toml` do repositório que fixe as regras e exclua `.githooks/` | execução | 2026-11-09 | médio |
+| 2 | `pip install -r requirements-dev.txt` falha no Windows em ambiente virtual com caminho longo (jupyterlab, "Long Path support"); passou em caminho curto — registrar no README de entrega | execução | 2026-11-09 | baixo |
 
 ---
 

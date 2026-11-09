@@ -54,7 +54,7 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-01.01-setup-projeto](plan/plan-01.01-setup-projeto.md) | Montar a estrutura do projeto, dependências e ponto de entrada mínimo | — | 🟡 Em execução | `arquitetura/01.01-estrutura-do-projeto.md` |
+| 1 | [plan-01.01-setup-projeto](plan/plan-01.01-setup-projeto.md) | Montar a estrutura do projeto, dependências e ponto de entrada mínimo | — | 🟢 Aprovada | `arquitetura/01.01-estrutura-do-projeto.md` |
 | 2 | [plan-01.02-ingestao-e-sanitizacao](plan/plan-01.02-ingestao-e-sanitizacao.md) | Ingerir pedidos de txt/csv/json e sanitizar a entrada | 01.01 | 🔴 A executar | `specs/01.02-ingestao-e-sanitizacao.md` |
 | 3 | [plan-01.03-anonimizacao-de-pii](plan/plan-01.03-anonimizacao-de-pii.md) | Anonimizar CPF, telefone e e-mail antes de qualquer log ou chamada externa | 01.02 | 🔴 A executar | `specs/01.03-anonimizacao-de-pii.md` |
 | 4 | [plan-04.01-storage-sqlite](plan/plan-04.01-storage-sqlite.md) | Persistir pedidos, fila de revisão, feedback e execuções em SQLite | 01.01 | 🔴 A executar | `arquitetura/04.01-persistencia.md` |
