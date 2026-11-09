@@ -4,7 +4,7 @@ familia: "01"
 item: "R01.1"
 titulo: "Montar a estrutura do projeto, dependências e ponto de entrada mínimo"
 dominio: "Núcleo do robô"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[00-fundacao-tecnologica]]", "[[001-stack-principal]]", "[[004-infra-execucao-local]]"]
