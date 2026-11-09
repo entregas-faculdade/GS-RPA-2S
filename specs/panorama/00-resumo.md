@@ -11,13 +11,12 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 # Panorama
 
 ## Progresso
-█░░░░░░░░░ 18% · 2/11 itens ✅
+██░░░░░░░░ 27% · 3/11 itens ✅
 
 ## Agora
-—
+- 🟡 · plan-04.01 · R04.1 · Persistir pedidos, fila de revisão, feedback e execuções em SQLite
 
 ## Próximas
-- 🔴 · plan-04.01 · R04.1 · Persistir pedidos, fila de revisão, feedback e execuções em SQLite
 - 🔴 · plan-02.01 · R02.1 · Criar o conjunto rotulado sintético e o classificador regex + TF-IDF
 - 🔴 · plan-02.02 · R02.2 · Calcular a confiança e decidir quando enviar o pedido à revisão humana
 - 🔴 · plan-03.01 · R03.1 · Criar o catálogo de serviços com allowlist de domínios e verificação de links
@@ -29,7 +28,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 ## Por família
 | FF | Família | Itens ✅/total | Progresso | Plans abertas |
 |---|---|---|---|---|
-| 01 | Núcleo do robô | 2/3 | ███░░ | 1 |
+| 01 | Núcleo do robô | 3/3 | █████ | 1 |
 | 02 | Classificação | 0/2 | ░░░░░ | 2 |
 | 03 | Automação | 0/2 | ░░░░░ | 2 |
 | 04 | Operação e interface | 0/3 | ░░░░░ | 3 |
@@ -38,3 +37,4 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 ## Atenção
 - 🟢 plan-01.03 · Anonimizar CPF, telefone e e-mail antes de qualquer log ou chamada externa — aguardando síntese
 - 📋 4 achado(s) no `00-backlog`
+- ⚠️ 1 problema(s) de família/item — rode `generate_summary.py --check`

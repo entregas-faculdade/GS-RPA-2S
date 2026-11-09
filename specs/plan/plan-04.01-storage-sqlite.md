@@ -4,7 +4,7 @@ familia: "04"
 item: "R04.1"
 titulo: "Persistir pedidos, fila de revisão, feedback e execuções em SQLite"
 dominio: "Operação e interface"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[002-persistencia-sqlite-e-arquivos]]", "[[003-seguranca-sem-autenticacao]]"]
