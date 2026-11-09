@@ -8,7 +8,7 @@ status: "🔴 A executar"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[002-persistencia-sqlite-e-arquivos]]", "[[003-seguranca-sem-autenticacao]]"]
-depende_de: "plan-01.01-setup-projeto"
+depende_de: ""
 destino_sintese: "arquitetura/04.01-persistencia.md"
 ---
 
@@ -39,6 +39,7 @@ passou pela anonimização (ver §5.3).
 |---|---|---|
 | ADR | [[002-persistencia-sqlite-e-arquivos]] | escolha e limites do SQLite |
 | ADR | [[003-seguranca-sem-autenticacao]] | só texto anonimizado é gravado |
+| Spec fixa | [[01.01-estrutura-do-projeto]] | layout `src/triage/`, `load_settings()` e comandos de verificação |
 | Contexto | [[00-contexto]] · [[00-knowledge]] | sempre |
 | Skill | `padrao-escrita` + `padrao-python` | identificadores em inglês; comentários e textos ao usuário em português; limiares de clean code |
 

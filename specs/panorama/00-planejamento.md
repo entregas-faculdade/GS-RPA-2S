@@ -72,7 +72,7 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 >   pretendida*. Um achado que o usuário promove a evolução de longo prazo pode virar item.
 
 ## 01 · Núcleo do robô
-- 🔷 **R01.1** Estrutura do projeto — dependências, configuração, log e `run.py` mínimo
+- ✅ **R01.1** Estrutura do projeto — dependências, configuração, log e `run.py` mínimo (✅ 2026-11-09)
 - 🔷 **R01.2** Ingestão e sanitização — txt/csv/json tolerante a falhas
 - 🔷 **R01.3** Anonimização de PII — CPF, telefone e e-mail
 

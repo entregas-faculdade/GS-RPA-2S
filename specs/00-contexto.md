@@ -89,7 +89,7 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 > Cada item aponta para a spec fixa em `arquitetura/` que o detalha. Esta seção é o índice, não o tratado.
 
 - **Stack:** Python; Streamlit (interface); scikit-learn (TF-IDF); `re`; SQLite local. Detalhe em
-  [[00-fundacao-tecnologica]]. Versão do Python e dependências fixadas na plan de setup.
+  [[00-fundacao-tecnologica]]. Dependências fixadas com `==` em `requirements*.txt`; detalhe em [[01.01-estrutura-do-projeto]].
 - **Padrão da linguagem:** skill `padrao-python`. Este repositório não adota o template de módulos, então não
   há gate `tools/gate`: vale o Nível 0 do `padrao-escrita` conferido por leitura e `padrao-python` (`validate.py`).
 - **Mapa de pacotes (previsto; criado pelas plans; código em `src/triage/`, identificadores em inglês, textos em português):**
@@ -105,8 +105,8 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 | `triage.pipeline` | orquestração | encadeia as etapas, retry, idempotência e relatório de execução |
 
 - **Fronteiras:** o núcleo não importa a interface; só `triage.storage` toca o SQLite.
-- **Comandos vitais (previstos; nascem nas plans):** `python run.py` (robô) e `streamlit run app.py` (interface).
-  Testes e lint serão fixados na plan de setup.
+- **Comandos vitais:** `pip install -r requirements-dev.txt` · `python run.py` (robô) · `python -m pytest -q` ·
+  `python -m ruff check run.py src tests`. `streamlit run app.py` (interface) ainda é previsto.
 
 ---
 
@@ -213,8 +213,8 @@ O prompt da base manda; esta seção acrescenta obrigações de execução e ver
 | Git e ramificações | `main` (produção) e `master` protegidas; `develop` é a branch de trabalho e integração, e toda branch nasce dela e volta para ela; prefixos plan/ e sarak/; equipe com vários desenvolvedores pode ter outras branches de trabalho; nunca se trabalha em `main` | Padrão da base; este repositório não tem `config/verification.json` (sem binding). |
 | Autorização permanente dos commits do fluxo | Não: panorama e autorização a cada escrita. | Não. |
 | Terminal padrão dos comandos para o usuário | O da sessão, dito a cada comando. | `powershell`. |
-| Verificação escopada | Testes e análise estática do escopo tocado, gate do módulo e gate do commit sobre o diff. | Testes e análise estática do escopo tocado, conferidos por leitura (`padrao-python`); comandos reais fixados na plan de setup. Sem gate de módulo. |
-| Verificação ampla | Escopo tocado, consumidores afetados e gate do repositório. | Suíte de testes do projeto inteira, assim que a plan de setup a definir. |
+| Verificação escopada | Testes e análise estática do escopo tocado, gate do módulo e gate do commit sobre o diff. | Testes e análise estática do escopo tocado, `python -m pytest <caminho>` e `python -m ruff check <caminho>`, mais o validador de `padrao-python` (`scripts/validate.py <alvo>`). Sem gate de módulo. |
+| Verificação ampla | Escopo tocado, consumidores afetados e gate do repositório. | `python -m pytest -q` (suíte inteira) e `python -m ruff check run.py src tests`. |
 | Verificação completa | Suíte inteira, build, ponta a ponta no navegador e container. | Vazio: a plan nomeia. Sem build nem container. |
 | Gate do commit | Checagem equivalente ao hook sobre o diff staged. | `python .githooks/verify_commit.py` sobre o staged (gate de segredos do `pre-commit`). |
 | Navegador | Verificação visual no navegador, se houver superfície visual. | `streamlit run app.py`, quando a interface existir; conferência visual local. |
@@ -264,7 +264,7 @@ Antes de escolher **como** fazer algo, leia **[[00-knowledge]]** — é o rotead
 > é o `git` e os `adr/`.
 
 - **Prazo:** segue o calendário da Global Solution (data a confirmar com a turma).
-- **Pendente de decisão:** provedor de LLM free tier; versão do Python e dependências; terminal e autorização
+- **Pendente de decisão:** provedor de LLM free tier; versão-alvo do Python (só 3.14.0 foi verificado); terminal e autorização
   permanente dos commits (§5); lista final de categorias e do catálogo de serviços (recorte A).
 - **Sem binding:** o template de módulos e o gate `tools/gate` não estão instalados (decisão de 2026-11-09).
 - **Carimbo `.sarak/base.json` ausente:** o `init_repo.py` falhou ao carimbar (base via cache de plugin, sem git).

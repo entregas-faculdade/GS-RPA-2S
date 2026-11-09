@@ -54,10 +54,9 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-01.01-setup-projeto](plan/plan-01.01-setup-projeto.md) | Montar a estrutura do projeto, dependências e ponto de entrada mínimo | — | 🟢 Aprovada | `arquitetura/01.01-estrutura-do-projeto.md` |
-| 2 | [plan-01.02-ingestao-e-sanitizacao](plan/plan-01.02-ingestao-e-sanitizacao.md) | Ingerir pedidos de txt/csv/json e sanitizar a entrada | 01.01 | 🔴 A executar | `specs/01.02-ingestao-e-sanitizacao.md` |
+| 2 | [plan-01.02-ingestao-e-sanitizacao](plan/plan-01.02-ingestao-e-sanitizacao.md) | Ingerir pedidos de txt/csv/json e sanitizar a entrada | — | 🟡 Em execução | `specs/01.02-ingestao-e-sanitizacao.md` |
 | 3 | [plan-01.03-anonimizacao-de-pii](plan/plan-01.03-anonimizacao-de-pii.md) | Anonimizar CPF, telefone e e-mail antes de qualquer log ou chamada externa | 01.02 | 🔴 A executar | `specs/01.03-anonimizacao-de-pii.md` |
-| 4 | [plan-04.01-storage-sqlite](plan/plan-04.01-storage-sqlite.md) | Persistir pedidos, fila de revisão, feedback e execuções em SQLite | 01.01 | 🔴 A executar | `arquitetura/04.01-persistencia.md` |
+| 4 | [plan-04.01-storage-sqlite](plan/plan-04.01-storage-sqlite.md) | Persistir pedidos, fila de revisão, feedback e execuções em SQLite | — | 🔴 A executar | `arquitetura/04.01-persistencia.md` |
 | 5 | [plan-02.01-dataset-e-classificador](plan/plan-02.01-dataset-e-classificador.md) | Criar o conjunto rotulado sintético e o classificador regex + TF-IDF | 01.03 | 🔴 A executar | `specs/02.01-classificacao.md` |
 | 6 | [plan-02.02-confianca-e-revisao-humana](plan/plan-02.02-confianca-e-revisao-humana.md) | Calcular a confiança e decidir quando enviar o pedido à revisão humana | 02.01 | 🔴 A executar | `specs/02.02-confianca-e-revisao-humana.md` |
 | 7 | [plan-03.01-catalogo-e-allowlist](plan/plan-03.01-catalogo-e-allowlist.md) | Criar o catálogo de serviços com allowlist de domínios e verificação de links | 02.01 | 🔴 A executar | `specs/03.01-catalogo-e-allowlist.md` |

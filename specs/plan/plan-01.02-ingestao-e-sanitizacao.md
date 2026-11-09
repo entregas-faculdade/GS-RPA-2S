@@ -4,11 +4,11 @@ familia: "01"
 item: "R01.2"
 titulo: "Ingerir pedidos de txt/csv/json e sanitizar a entrada"
 dominio: "Núcleo do robô"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[003-seguranca-sem-autenticacao]]", "[[00-fundacao-tecnologica]]"]
-depende_de: "plan-01.01-setup-projeto"
+depende_de: ""
 destino_sintese: "specs/01.02-ingestao-e-sanitizacao.md"
 ---
 
@@ -41,6 +41,7 @@ objetos `{"id": "...", "text": "..."}` ou um objeto único).
 |---|---|---|
 | ADR | [[003-seguranca-sem-autenticacao]] | controles de sanitização exigidos |
 | Spec fixa | [[00-fundacao-tecnologica]] | posição da etapa 1 no fluxo |
+| Spec fixa | [[01.01-estrutura-do-projeto]] | layout `src/triage/`, configuração, log e comandos de verificação |
 | Enunciado | `GS2026_2_Enunciado_Final_RPA_IA(2).pdf` §4 | falhas previsíveis (arquivo ausente, dado inválido) com log e caminho seguro |
 | Contexto | [[00-contexto]] · [[00-knowledge]] | sempre |
 | Skill | `padrao-escrita` + `padrao-python` | identificadores em inglês; comentários e textos ao usuário em português; limiares de clean code |
