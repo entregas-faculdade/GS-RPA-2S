@@ -44,6 +44,11 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 | FF | Família | Escopo (uma linha) |
 |---|---|---|
 | 00 | Fundação | processo SDD, lei do template e fundação tecnológica — reservada |
+| 01 | Núcleo do robô | estrutura do projeto, ingestão, sanitização e anonimização de PII (etapa 1) |
+| 02 | Classificação | regex + TF-IDF, confiança e gatilhos de revisão humana (etapa 2) |
+| 03 | Automação | catálogo, allowlist, verificação de links e resposta final com LLM opcional (etapa 3) |
+| 04 | Operação e interface | persistência SQLite, orquestração RPA, relatório de execução e interface Streamlit |
+| 05 | Validação e entrega | conjunto rotulado, métricas, evidências, README e quadro de temas |
 
 ---
 
@@ -65,6 +70,27 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 >   mesma ação** em que a plan é removida. O **usuário** decide o que entra no horizonte; o revisor escreve.
 > - **Não é backlog:** o [[00-backlog]] guarda *achados* (problemas notados); este horizonte guarda *evolução
 >   pretendida*. Um achado que o usuário promove a evolução de longo prazo pode virar item.
+
+## 01 · Núcleo do robô
+- 🔷 **R01.1** Estrutura do projeto — dependências, configuração, log e `run.py` mínimo
+- 🔷 **R01.2** Ingestão e sanitização — txt/csv/json tolerante a falhas
+- 🔷 **R01.3** Anonimização de PII — CPF, telefone e e-mail
+
+## 02 · Classificação
+- 🔷 **R02.1** Classificador — conjunto rotulado sintético, regex e TF-IDF
+- 🔷 **R02.2** Confiança e revisão humana — limiares e gatilhos
+
+## 03 · Automação
+- 🔷 **R03.1** Catálogo e allowlist — links oficiais verificados
+- 🔷 **R03.2** Resposta final — template com LLM opcional e fallback
+
+## 04 · Operação e interface
+- 🔷 **R04.1** Persistência SQLite — idempotência, fila, feedback e execuções
+- 🔷 **R04.2** Interface Streamlit — atendimento, revisão e feedback
+- 🔷 **R04.3** Orquestração RPA — lote, retry, agendamento e relatório de execução
+
+## 05 · Validação e entrega
+- 🔷 **R05.1** Validação e entrega — métricas, notebook de evidências e README
 
 <!-- Exemplo (comentado: não conta como item real)
 ## 02 · Base de dados

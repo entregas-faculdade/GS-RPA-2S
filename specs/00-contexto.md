@@ -31,7 +31,12 @@ inegociável ou o mapa de roteamento. Nunca por conta própria fora de uma plan.
 > agentes) e **o que ele explicitamente NÃO é**. Sem marketing, sem histórico. Um agente lê isto e para de
 > supor. Proibido descrever a estrutura de pastas aqui — isso é da §3.
 
-<!-- PREENCHER -->
+O **GS RPA 2S** é um protótipo acadêmico (FIAP, Global Solution 2026.2, disciplina *AI for RPA*): um robô de
+triagem de pedidos de serviços públicos do cidadão. Ele lê o pedido (txt/csv/json), sanitiza e anonimiza dados
+pessoais, classifica o assunto (regex + TF-IDF) e responde com o link oficial de um catálogo curado, ou
+encaminha a uma fila de revisão humana quando não resolve. Consumidor: o cidadão que não sabe a qual órgão
+recorrer (via interface) e os avaliadores da disciplina (via README e evidências). **Não é** um sistema de
+produção, não usa dado pessoal real, não faz deploy em nuvem e não é um chatbot generalista.
 
 ---
 
@@ -54,7 +59,15 @@ inegociável ou o mapa de roteamento. Nunca por conta própria fora de uma plan.
 > **Regra de ouro: referencie, nunca duplique.** Se uma regra já está numa spec fixa ou numa skill, escreva
 > uma linha e o ponteiro. Conteúdo duplicado desatualiza e passa a mentir.
 
-<!-- PREENCHER -->
+- Regras universais de código: [`AGENTS.md`](../AGENTS.md) e skills `padrao-escrita` e `padrao-python` — SRP,
+  função ≤ 40 linhas, aninhamento ≤ 3, ≤ 4 parâmetros, zero hardcoded, nenhuma exceção engolida.
+- **Dado pessoal real nunca entra** no repositório, em log ou em API. Só dados sintéticos ou públicos.
+- **PII (CPF, telefone, e-mail) é anonimizada antes de qualquer log ou chamada a API** ([[003-seguranca-sem-autenticacao]]).
+- **Segredos só em `.env`** (fora do Git); `.env.example` sem valor.
+- **O robô só responde com link da allowlist** de domínios do catálogo (`.gov.br` e órgãos oficiais).
+- **O LLM apenas reformula** a resposta já decidida; nunca classifica nem escolhe URL ([[005-llm-apenas-reformula-resposta]]).
+- **Falha previsível nunca derruba a execução**: registra em log e segue por caminho seguro.
+- **Sem deploy em nuvem e sem CI/CD** ([[004-infra-execucao-local]]). O gate de commit só barra segredos.
 
 ---
 
@@ -75,7 +88,25 @@ inegociável ou o mapa de roteamento. Nunca por conta própria fora de uma plan.
 >
 > Cada item aponta para a spec fixa em `arquitetura/` que o detalha. Esta seção é o índice, não o tratado.
 
-<!-- PREENCHER -->
+- **Stack:** Python; Streamlit (interface); scikit-learn (TF-IDF); `re`; SQLite local. Detalhe em
+  [[00-fundacao-tecnologica]]. Versão do Python e dependências fixadas na plan de setup.
+- **Padrão da linguagem:** skill `padrao-python`. Este repositório não adota o template de módulos, então não
+  há gate `tools/gate`: vale o Nível 0 do `padrao-escrita` conferido por leitura e `padrao-python` (`validate.py`).
+- **Mapa de pacotes (previsto; criado pelas plans; código em `src/triage/`, identificadores em inglês, textos em português):**
+
+| Pacote | Papel | Responsabilidade |
+|---|---|---|
+| `triage.ingestion` | etapa 1 | ler txt/csv/json, validar formato, sanitizar |
+| `triage.privacy` | etapa 1 | anonimizar CPF/telefone/e-mail |
+| `triage.classification` | etapa 2 | regex + TF-IDF, score de confiança, decisão de revisão |
+| `triage.automation` | etapa 3 | catálogo, allowlist, verificação de links, resposta (+ LLM opcional) |
+| `triage.storage` | transversal | SQLite: idempotência, fila de revisão, feedback |
+| `triage.interface` | borda | Streamlit sobre o núcleo |
+| `triage.pipeline` | orquestração | encadeia as etapas, retry, idempotência e relatório de execução |
+
+- **Fronteiras:** o núcleo não importa a interface; só `triage.storage` toca o SQLite.
+- **Comandos vitais (previstos; nascem nas plans):** `python run.py` (robô) e `streamlit run app.py` (interface).
+  Testes e lint serão fixados na plan de setup.
 
 ---
 
@@ -102,7 +133,16 @@ inegociável ou o mapa de roteamento. Nunca por conta própria fora de uma plan.
 > Mantenha entre 6 e 15 linhas. Se passar disso, o repositório precisa de specs melhores, não de mais linhas
 > aqui. **Ponteiro órfão é defeito**: toda spec citada tem de existir.
 
-<!-- PREENCHER -->
+| Tipo de tarefa | Leia antes (specs fixas) | Capacidade |
+|---|---|---|
+| Mudar stack ou ferramenta | [[00-fundacao-tecnologica]] + [[001-stack-principal]] | [[00-knowledge]] |
+| Mexer em persistência, fila ou idempotência | [[002-persistencia-sqlite-e-arquivos]] | [[00-knowledge]] |
+| Mexer em PII, sanitização, allowlist ou revisão humana | [[003-seguranca-sem-autenticacao]] | [[00-knowledge]] |
+| Execução, ambiente ou publicação | [[004-infra-execucao-local]] | [[00-knowledge]] |
+| Usar ou alterar o LLM | [[005-llm-apenas-reformula-resposta]] + [[003-seguranca-sem-autenticacao]] | [[00-knowledge]] |
+| Mudar decisão estrutural | todos os `adr/` + [[00-fundacao-tecnologica]] | [[00-knowledge]] |
+| Criar ou executar uma plan | [[00-indice]] + [[00-prompt-revisor]] / [[00-prompt-executor]] | [[00-knowledge]] |
+| Achado fora do escopo | [[00-backlog]] | [[00-knowledge]] |
 
 ---
 
@@ -160,7 +200,7 @@ caminho.
 > **Nenhum agente adiciona co-autoria**: sem `Co-Authored-By` e sem qualquer outra marca de autoria de agente
 > na mensagem.
 
-<!-- PREENCHER: desvios específicos deste repositório, se houver -->
+- Este repositório é acadêmico e simples: sem CI/CD, sem deploy e sem módulos. Toda plan que toca PII, allowlist ou LLM cita o ADR 003 ou 005.
 
 ### O ciclo neste repositório
 
@@ -170,17 +210,17 @@ O prompt da base manda; esta seção acrescenta obrigações de execução e ver
 
 | Parâmetro | Padrão (sem declaração) | Este repositório declara |
 |---|---|---|
-| Git e ramificações | `main` (produção) e `master` protegidas; `develop` é a branch de trabalho e integração, e toda branch nasce dela e volta para ela; prefixos plan/ e sarak/; equipe com vários desenvolvedores pode ter outras branches de trabalho; nunca se trabalha em `main` | declarado em config/verification.json (git) |
-| Autorização permanente dos commits do fluxo | Não: panorama e autorização a cada escrita. | <!-- `sim` se o dono autorizou, de uma vez, os dois commits do fluxo (o do veredito e o da síntese); o push continua do usuário. --> |
-| Terminal padrão dos comandos para o usuário | O da sessão, dito a cada comando. | <!-- `powershell` ou `bash`. --> |
-| Verificação escopada | Testes e análise estática do escopo tocado, gate do módulo e gate do commit sobre o diff. | `node tools/gate/validate.mjs <módulo>`; <!-- Acrescente comandos reais de teste e análise estática do binding. --> |
-| Verificação ampla | Escopo tocado, consumidores afetados e gate do repositório. | `node tools/gate/validate.mjs --all`; <!-- Acrescente comandos reais dos testes dos consumidores afetados. --> |
-| Verificação completa | Suíte inteira, build, ponta a ponta no navegador e container. | <!-- Comandos reais da suíte, build, navegador e container; vazio: a plan nomeia. --> |
-| Gate do commit | Checagem equivalente ao hook sobre o diff staged. | `node tools/verify-commit.mjs pre-commit` |
-| Navegador | Verificação visual no navegador, se houver superfície visual. | <!-- Comando real; sem superfície visual, declare — e o motivo. --> |
+| Git e ramificações | `main` (produção) e `master` protegidas; `develop` é a branch de trabalho e integração, e toda branch nasce dela e volta para ela; prefixos plan/ e sarak/; equipe com vários desenvolvedores pode ter outras branches de trabalho; nunca se trabalha em `main` | Padrão da base; este repositório não tem `config/verification.json` (sem binding). |
+| Autorização permanente dos commits do fluxo | Não: panorama e autorização a cada escrita. | Não. |
+| Terminal padrão dos comandos para o usuário | O da sessão, dito a cada comando. | `powershell`. |
+| Verificação escopada | Testes e análise estática do escopo tocado, gate do módulo e gate do commit sobre o diff. | Testes e análise estática do escopo tocado, conferidos por leitura (`padrao-python`); comandos reais fixados na plan de setup. Sem gate de módulo. |
+| Verificação ampla | Escopo tocado, consumidores afetados e gate do repositório. | Suíte de testes do projeto inteira, assim que a plan de setup a definir. |
+| Verificação completa | Suíte inteira, build, ponta a ponta no navegador e container. | Vazio: a plan nomeia. Sem build nem container. |
+| Gate do commit | Checagem equivalente ao hook sobre o diff staged. | `python .githooks/verify_commit.py` sobre o staged (gate de segredos do `pre-commit`). |
+| Navegador | Verificação visual no navegador, se houver superfície visual. | `streamlit run app.py`, quando a interface existir; conferência visual local. |
 | Numeração das plans | `plan-NN`, contador único no `00-indice`. | `plan-FF.NN`, contador por família no `00-indice`. |
 | Panorama | Não adota. | Sim; este molde traz `panorama/` e o `00-indice` por família. |
-| Spec de regras e geradores `--check` | `arquitetura/04-regras.md` e os geradores do template de módulos: `node tools/sync-env.mjs --check`, `node tools/sync-deploy.mjs --check`, `node tools/generate-port-schemas.mjs --check` e `node tools/generate-lint-config.mjs --check`. | `arquitetura/04-regras.md`; os mesmos quatro comandos do template de módulos. |
+| Spec de regras e geradores `--check` | `arquitetura/04-regras.md` e os geradores do template de módulos: `node tools/sync-env.mjs --check`, `node tools/sync-deploy.mjs --check`, `node tools/generate-port-schemas.mjs --check` e `node tools/generate-lint-config.mjs --check`. | Não se aplica: sem template de módulos nem `04-regras.md`. |
 | Uso de ADR | Sim, somente com duas opções reais, custo da escolhida e alto custo de reversão. | Sim, sob esses critérios. |
 | Obrigações acrescentadas | Nenhuma. | Nenhuma. <!-- Exemplo: execução que cria migration entrega antes/depois/rollback. --> |
 | Medição do ambiente | Comandos da skill `code-limpeza-ambiente`. | subcomandos `snapshot` e `diff` da skill `code-limpeza-ambiente` (`environment.py`), com `--out <snapshot.json> --tmp-prefix <prefixo>` e `--from <snapshot.json>`; caminho da skill conforme a instalação do plugin. |
@@ -207,7 +247,12 @@ Antes de escolher **como** fazer algo, leia **[[00-knowledge]]** — é o rotead
 > tipo de item: diretórios gerados que não se editam à mão; arquivos que só o usuário altera; operações
 > irreversíveis que exigem confirmação; integrações que não podem ser chamadas em desenvolvimento.
 
-<!-- PREENCHER -->
+- Não comite `.env`, o arquivo `.db` do SQLite nem dados reais: são locais e fora do Git.
+- Não edite `.githooks/config.json` à mão: é gerado pela base (a mudança vai à base, não aqui).
+- Não responda com URL fora da allowlist nem aceite URL vinda do LLM sem validar contra o catálogo.
+- Não faça scraping ao vivo para montar respostas: o catálogo é estático e curado.
+- Não use `git commit --no-verify`: o gate de segredos é a única proteção do repositório público.
+- Não faça push sem confirmação do usuário: o repositório é público e o push é irreversível.
 
 ---
 
@@ -218,7 +263,14 @@ Antes de escolher **como** fazer algo, leia **[[00-knowledge]]** — é o rotead
 > (`2026-07-31`, nunca "semana passada"). Item resolvido sai daqui — esta seção não é histórico; o histórico
 > é o `git` e os `adr/`.
 
-<!-- PREENCHER -->
+- **Prazo:** segue o calendário da Global Solution (data a confirmar com a turma).
+- **Pendente de decisão:** provedor de LLM free tier; versão do Python e dependências; terminal e autorização
+  permanente dos commits (§5); lista final de categorias e do catálogo de serviços (recorte A).
+- **Sem binding:** o template de módulos e o gate `tools/gate` não estão instalados (decisão de 2026-11-09).
+- **Carimbo `.sarak/base.json` ausente:** o `init_repo.py` falhou ao carimbar (base via cache de plugin, sem git).
+- **Falso positivo do gate de segredos** em `.githooks/verify_commit.py` corrigido localmente em 2026-11-09;
+  correção na base ainda pendente.
+- **Remoto e primeiro push** do repositório ainda não feitos.
 
 ---
 
