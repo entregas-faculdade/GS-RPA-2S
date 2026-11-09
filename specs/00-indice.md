@@ -54,7 +54,7 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 2 | [plan-01.02-ingestao-e-sanitizacao](plan/plan-01.02-ingestao-e-sanitizacao.md) | Ingerir pedidos de txt/csv/json e sanitizar a entrada | — | 🟡 Em execução | `specs/01.02-ingestao-e-sanitizacao.md` |
+| 2 | [plan-01.02-ingestao-e-sanitizacao](plan/plan-01.02-ingestao-e-sanitizacao.md) | Ingerir pedidos de txt/csv/json e sanitizar a entrada | — | 🟢 Aprovada | `specs/01.02-ingestao-e-sanitizacao.md` |
 | 3 | [plan-01.03-anonimizacao-de-pii](plan/plan-01.03-anonimizacao-de-pii.md) | Anonimizar CPF, telefone e e-mail antes de qualquer log ou chamada externa | 01.02 | 🔴 A executar | `specs/01.03-anonimizacao-de-pii.md` |
 | 4 | [plan-04.01-storage-sqlite](plan/plan-04.01-storage-sqlite.md) | Persistir pedidos, fila de revisão, feedback e execuções em SQLite | — | 🔴 A executar | `arquitetura/04.01-persistencia.md` |
 | 5 | [plan-02.01-dataset-e-classificador](plan/plan-02.01-dataset-e-classificador.md) | Criar o conjunto rotulado sintético e o classificador regex + TF-IDF | 01.03 | 🔴 A executar | `specs/02.01-classificacao.md` |

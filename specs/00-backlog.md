@@ -65,6 +65,7 @@ via normal.
 |---|---|---|---|---|
 | 1 | `ruff check .` falha em `.githooks/verify_commit.py:204` (E731, arquivo vindo da base) e os critérios das plans 04.03 e 05.01 usam `ruff check .`; falta um `ruff.toml` do repositório que fixe as regras e exclua `.githooks/` | execução | 2026-11-09 | médio |
 | 2 | `pip install -r requirements-dev.txt` falha no Windows em ambiente virtual com caminho longo (jupyterlab, "Long Path support"); passou em caminho curto — registrar no README de entrega | execução | 2026-11-09 | baixo |
+| 3 | `sanitizer.py:36-38` — `MAX_TEXT_LENGTH` é checado no texto bruto antes da normalização NFKC, que pode expandir caracteres (ex.: `ﷺ` vira 18 caracteres): o texto sanitizado pode passar de 2000, e quem consumir `Request.text` não deve presumir esse teto | execução | 2026-11-09 | baixo |
 
 ---
 
