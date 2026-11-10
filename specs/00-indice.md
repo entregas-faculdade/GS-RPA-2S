@@ -54,7 +54,7 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-04.01-storage-sqlite](plan/plan-04.01-storage-sqlite.md) | Persistir pedidos, fila de revisão, feedback e execuções em SQLite | — | 🟡 Em execução | `arquitetura/04.01-persistencia.md` |
+| 1 | [plan-04.01-storage-sqlite](plan/plan-04.01-storage-sqlite.md) | Persistir pedidos, fila de revisão, feedback e execuções em SQLite | — | 🟢 Aprovada | `arquitetura/04.01-persistencia.md` |
 | 2 | [plan-02.01-dataset-e-classificador](plan/plan-02.01-dataset-e-classificador.md) | Criar o conjunto rotulado sintético e o classificador regex + TF-IDF | 01.03 | 🔴 A executar | `specs/02.01-classificacao.md` |
 | 3 | [plan-02.02-confianca-e-revisao-humana](plan/plan-02.02-confianca-e-revisao-humana.md) | Calcular a confiança e decidir quando enviar o pedido à revisão humana | 02.01 | 🔴 A executar | `specs/02.02-confianca-e-revisao-humana.md` |
 | 4 | [plan-03.01-catalogo-e-allowlist](plan/plan-03.01-catalogo-e-allowlist.md) | Criar o catálogo de serviços com allowlist de domínios e verificação de links | 02.01 | 🔴 A executar | `specs/03.01-catalogo-e-allowlist.md` |

@@ -14,7 +14,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 ██░░░░░░░░ 27% · 3/11 itens ✅
 
 ## Agora
-- 🟡 · plan-04.01 · R04.1 · Persistir pedidos, fila de revisão, feedback e execuções em SQLite
+—
 
 ## Próximas
 - 🔴 · plan-02.01 · R02.1 · Criar o conjunto rotulado sintético e o classificador regex + TF-IDF
@@ -28,13 +28,12 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 ## Por família
 | FF | Família | Itens ✅/total | Progresso | Plans abertas |
 |---|---|---|---|---|
-| 01 | Núcleo do robô | 3/3 | █████ | 1 |
+| 01 | Núcleo do robô | 3/3 | █████ | 0 |
 | 02 | Classificação | 0/2 | ░░░░░ | 2 |
 | 03 | Automação | 0/2 | ░░░░░ | 2 |
 | 04 | Operação e interface | 0/3 | ░░░░░ | 3 |
 | 05 | Validação e entrega | 0/1 | ░░░░░ | 1 |
 
 ## Atenção
-- 🟢 plan-01.03 · Anonimizar CPF, telefone e e-mail antes de qualquer log ou chamada externa — aguardando síntese
-- 📋 4 achado(s) no `00-backlog`
-- ⚠️ 1 problema(s) de família/item — rode `generate_summary.py --check`
+- 🟢 plan-04.01 · Persistir pedidos, fila de revisão, feedback e execuções em SQLite — aguardando síntese
+- 📋 5 achado(s) no `00-backlog`
