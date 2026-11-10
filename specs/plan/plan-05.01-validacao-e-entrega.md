@@ -4,7 +4,7 @@ familia: "05"
 item: "R05.1"
 titulo: "Validar com amostra rotulada, documentar evidências e preparar a entrega"
 dominio: "Validação e entrega"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[00-fundacao-tecnologica]]", "[[005-llm-apenas-reformula-resposta]]", "[[003-seguranca-sem-autenticacao]]"]

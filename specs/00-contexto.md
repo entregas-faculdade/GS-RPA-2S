@@ -107,7 +107,7 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 - **Fronteiras:** o núcleo não importa a interface; só `triage.storage` toca o SQLite.
 - **Comandos vitais:** `pip install -r requirements-dev.txt` · `python scripts/train_model.py` (gera o modelo) ·
   `python run.py --input <pasta> --output <pasta>` (robô; flags em [[04.03-orquestracao-rpa]]) · `python -m pytest -q` ·
-  `python -m ruff check run.py src tests`. `streamlit run app.py` (interface) ainda é previsto.
+  `python -m ruff check run.py src tests` · `streamlit run app.py` (interface local; [[04.02-interface]]).
 
 ---
 
@@ -219,7 +219,7 @@ O prompt da base manda; esta seção acrescenta obrigações de execução e ver
 | Verificação ampla | Escopo tocado, consumidores afetados e gate do repositório. | `python -m pytest -q` (suíte inteira) e `python -m ruff check run.py src tests`. |
 | Verificação completa | Suíte inteira, build, ponta a ponta no navegador e container. | Vazio: a plan nomeia. Sem build nem container. |
 | Gate do commit | Checagem equivalente ao hook sobre o diff staged. | `python .githooks/verify_commit.py` sobre o staged (gate de segredos do `pre-commit`). |
-| Navegador | Verificação visual no navegador, se houver superfície visual. | `streamlit run app.py`, quando a interface existir; conferência visual local. |
+| Navegador | Verificação visual no navegador, se houver superfície visual. | `streamlit run app.py`; conferência visual local. |
 | Numeração das plans | `plan-NN`, contador único no `00-indice`. | `plan-FF.NN`, contador por família no `00-indice`. |
 | Panorama | Não adota. | Sim; este molde traz `panorama/` e o `00-indice` por família. |
 | Spec de regras e geradores `--check` | `arquitetura/04-regras.md` e os geradores do template de módulos: `node tools/sync-env.mjs --check`, `node tools/sync-deploy.mjs --check`, `node tools/generate-port-schemas.mjs --check` e `node tools/generate-lint-config.mjs --check`. | Não se aplica: sem template de módulos nem `04-regras.md`. |
