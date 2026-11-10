@@ -4,7 +4,7 @@ familia: "02"
 item: "R02.2"
 titulo: "Calcular a confiança e decidir quando enviar o pedido à revisão humana"
 dominio: "Classificação"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[003-seguranca-sem-autenticacao]]", "[[00-fundacao-tecnologica]]"]

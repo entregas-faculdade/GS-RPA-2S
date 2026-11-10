@@ -77,7 +77,7 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 - ✅ **R01.3** Anonimização de PII — CPF, telefone e e-mail (✅ 2026-11-09)
 
 ## 02 · Classificação
-- 🔷 **R02.1** Classificador — conjunto rotulado sintético, regex e TF-IDF
+- ✅ **R02.1** Classificador — conjunto rotulado sintético, regex e TF-IDF (✅ 2026-11-09)
 - 🔷 **R02.2** Confiança e revisão humana — limiares e gatilhos
 
 ## 03 · Automação
