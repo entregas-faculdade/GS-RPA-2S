@@ -69,6 +69,7 @@ via normal.
 | 4 | `privacy/patterns.py` — formas raras deixam resíduo: DDD com zero (`011 91234-5678` → `011 [TELEFONE]`) e e-mail com letra acentuada na parte local (`joão@exemplo.com` → `joã[EMAIL]`); `4 dígitos-4 dígitos` como protocolo (`2024-1234`) vira `[TELEFONE]` (precisão aceita a favor da garantia) | execução | 2026-11-09 | baixo |
 | 5 | `tests/storage/test_hashing.py:13` — `test_hash_ignores_unicode_composition` compara "ã" composto com "a" + acento combinante, indistinguíveis no editor; escrever as duas formas com escapes Unicode para a intenção ficar legível | execução | 2026-11-09 | baixo |
 | 6 | `requirements.txt` — `joblib` é importado direto em `classification/model.py` mas não está fixado (vem de transitiva do scikit-learn), e o ambiente local roda scikit-learn 1.8.0 contra o 1.9.1 fixado; modelo `.joblib` treinado numa versão pode não carregar em outra | execução | 2026-11-09 | baixo |
+| 7 | `.env.example` não lista `CONFIDENCE_MIN` e `AMBIGUITY_MARGIN`, lidos por `config.py` | execução | 2026-11-09 | baixo |
 
 ---
 
