@@ -4,7 +4,7 @@ familia: "02"
 item: "R02.1"
 titulo: "Criar o conjunto rotulado sintético e o classificador regex + TF-IDF"
 dominio: "Classificação"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[00-fundacao-tecnologica]]", "[[005-llm-apenas-reformula-resposta]]"]

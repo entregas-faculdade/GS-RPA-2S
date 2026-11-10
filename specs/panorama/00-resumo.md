@@ -11,7 +11,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 # Panorama
 
 ## Progresso
-██░░░░░░░░ 27% · 3/11 itens ✅
+███░░░░░░░ 36% · 4/11 itens ✅
 
 ## Agora
 —
@@ -31,9 +31,10 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 01 | Núcleo do robô | 3/3 | █████ | 0 |
 | 02 | Classificação | 0/2 | ░░░░░ | 2 |
 | 03 | Automação | 0/2 | ░░░░░ | 2 |
-| 04 | Operação e interface | 0/3 | ░░░░░ | 3 |
+| 04 | Operação e interface | 1/3 | █░░░░ | 3 |
 | 05 | Validação e entrega | 0/1 | ░░░░░ | 1 |
 
 ## Atenção
 - 🟢 plan-04.01 · Persistir pedidos, fila de revisão, feedback e execuções em SQLite — aguardando síntese
 - 📋 5 achado(s) no `00-backlog`
+- ⚠️ 1 problema(s) de família/item — rode `generate_summary.py --check`
