@@ -17,7 +17,6 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 —
 
 ## Próximas
-- 🔴 · plan-02.01 · R02.1 · Criar o conjunto rotulado sintético e o classificador regex + TF-IDF
 - 🔴 · plan-02.02 · R02.2 · Calcular a confiança e decidir quando enviar o pedido à revisão humana
 - 🔴 · plan-03.01 · R03.1 · Criar o catálogo de serviços com allowlist de domínios e verificação de links
 - 🔴 · plan-03.02 · R03.2 · Montar a resposta final ao cidadão, com LLM opcional e caminho seguro
@@ -31,10 +30,9 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 01 | Núcleo do robô | 3/3 | █████ | 0 |
 | 02 | Classificação | 0/2 | ░░░░░ | 2 |
 | 03 | Automação | 0/2 | ░░░░░ | 2 |
-| 04 | Operação e interface | 1/3 | █░░░░ | 3 |
+| 04 | Operação e interface | 1/3 | █░░░░ | 2 |
 | 05 | Validação e entrega | 0/1 | ░░░░░ | 1 |
 
 ## Atenção
-- 🟢 plan-04.01 · Persistir pedidos, fila de revisão, feedback e execuções em SQLite — aguardando síntese
-- 📋 5 achado(s) no `00-backlog`
-- ⚠️ 1 problema(s) de família/item — rode `generate_summary.py --check`
+- 🟢 plan-02.01 · Criar o conjunto rotulado sintético e o classificador regex + TF-IDF — aguardando síntese
+- 📋 6 achado(s) no `00-backlog`

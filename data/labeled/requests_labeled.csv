@@ -1,0 +1,181 @@
+id,text,label,split,urgent
+L001,Como faço para tirar minha primeira habilitação?,driver_license,train,0
+L002,preciso renovar a cnh que vence mês que vem,driver_license,train,0
+L003,"perdi minha carteira de motorista, como pedir a segunda via?",driver_license,train,0
+L004,onde agendo o exame médico para a CNH,driver_license,test,0
+L005,"Quero dar entrada na habilitação para dirigir moto, qual o passo a passo?",driver_license,train,0
+L006,"minha cnh venceu há 2 meses, posso renovar ainda ou preciso refazer a prova?",driver_license,train,0
+L007,"boa tarde, gostaria de saber como emitir a 2ª via da carteira nacional de habilitação, meu número de contato é [TELEFONE]",driver_license,test,0
+L008,como adicionar categoria A na minha habilitaçao,driver_license,train,0
+L009,"cnh digital, como baixar",driver_license,train,0
+L010,Preciso do CPF [CPF] ou de outro documento pra abrir o processo da carteira de motorista?,driver_license,test,0
+L011,"roubaram minha carteira com a cnh dentro, o que eu faço?",driver_license,train,0
+L012,"quero ser motorista de aplicativo, preciso de que tipo de habilitação? EAR",driver_license,train,0
+L013,"tô com a carteira de motorista suspensa, como recorrer pra reaver",driver_license,train,0
+L014,Como fazer o exame toxicológico para renovar a carteira de caminhoneiro?,driver_license,test,0
+L015,cnh vencida posso dirigir??,driver_license,train,0
+L016,gostaria de informações sobre o curso de direção e a prova teórica,driver_license,train,0
+L017,"preciso do CPF para tirar a CNH, qual o procedimento?",driver_license,test,0
+L018,"minha habilitacao foi apreendida na blitz, como recuperar",driver_license,train,0
+L019,como trocar a habilitação estrangeira pela brasileira,driver_license,train,0
+L020,"renovaçao da carteira de habilitaçao online, tem como?",driver_license,test,0
+L021,Como emitir a segunda via do IPTU deste ano?,property_tax,train,0
+L022,quero parcelar o iptu atrasado,property_tax,train,0
+L023,"o valor do imposto sobre meu imóvel veio muito alto, como contestar?",property_tax,train,0
+L024,como consulto os débitos do meu imóvel na prefeitura,property_tax,test,0
+L025,"Boa tarde, gostaria de saber se tenho direito a isenção de IPTU por ser aposentado.",property_tax,train,0
+L026,nao recebi o carnê do iptu em casa,property_tax,train,0
+L027,tem desconto pra pagar o iptu à vista?,property_tax,test,0
+L028,preciso da certidão negativa de débitos do imóvel pra vender a casa,property_tax,train,0
+L029,como atualizar o cadastro imobiliário do meu terreno,property_tax,train,0
+L030,imposto predial: como funciona o parcelamento em 10 vezes?,property_tax,test,0
+L031,"recebi aviso de penhora da minha casa por dívida do imposto do imóvel e vão leiloar semana que vem, preciso de ajuda",property_tax,train,1
+L032,"meu telefone é [TELEFONE], queria ajuda com o boleto do IPTU vencido",property_tax,train,0
+L033,como fazer a revisao do valor venal da minha casa,property_tax,train,0
+L034,como pagar o iptu pelo pix,property_tax,test,0
+L035,"Gostaria de regularizar a dívida ativa do imóvel, tenho um aviso de cobrança da prefeitura",property_tax,train,0
+L036,"imposto do imóvel em atraso, perdi o prazo. e agora",property_tax,train,0
+L037,quero transferir a titularidade do imóvel no cadastro da prefeitura para pagar o imposto no meu nome,property_tax,test,0
+L038,isenção de iptu para idosos,property_tax,train,0
+L039,como solicito restituição do IPTU pago duas vezes,property_tax,train,0
+L040,valor do imposto territorial e predial urbano do meu apartamento,property_tax,test,0
+L041,Como tirar a primeira via do RG?,id_card,train,0
+L042,"preciso da segunda via da carteira de identidade, perdi a minha",id_card,train,0
+L043,onde agendo atendimento para emissão do rg,id_card,train,0
+L044,quero trocar meu documento de identidade antigo pelo novo modelo,id_card,test,0
+L045,"meu rg foi roubado, preciso registrar e pedir outro",id_card,train,0
+L046,Qual o valor da taxa para tirar a identidade?,id_card,train,0
+L047,"boa noite, a foto do meu RG está muito velha, posso atualizar?",id_card,test,0
+L048,como corrigir o nome no meu documento de identidade após o casamento,id_card,train,0
+L049,documentos necessários pra emitir a carteira de identidade de uma criança,id_card,train,0
+L050,o Instituto de Identificação ainda emite rg em papel?,id_card,test,0
+L051,rg digital existe? como pegar,id_card,train,0
+L052,"fui assaltado e levaram minha identidade, tenho medo de golpe com meus documentos, o que faço agora?",id_card,train,1
+L053,"preciso fazer a identidade pro meu filho de 5 anos, o que levar?",id_card,train,0
+L054,Como solicitar carteira de identidade nacional com CPF [CPF] como número único?,id_card,test,0
+L055,"agendamento do rg pelo site, não consigo achar horário",id_card,train,0
+L056,"quero tirar identidade pela primeira vez, tenho 40 anos e nunca tive documento",id_card,train,0
+L057,"extraviei a cédula de identidade, como fazer?",id_card,test,0
+L058,preciso de identidade nova porque a minha rasgou,id_card,train,0
+L059,"atendimento pra emitir o rg em cidade do interior, tem posto móvel?",id_card,train,0
+L060,"meu contato [EMAIL], dúvida sobre prazo de entrega do RG",id_card,test,0
+L061,Como faço a inscrição no CPF?,cpf_registration,train,0
+L062,"meu cpf está irregular, como regularizar?",cpf_registration,train,0
+L063,preciso consultar a situação cadastral do meu CPF,cpf_registration,train,0
+L064,como tirar o CPF de um recém-nascido,cpf_registration,test,0
+L065,"cpf suspenso, como resolver",cpf_registration,train,0
+L066,Quero corrigir a data de nascimento errada no meu cpf,cpf_registration,train,0
+L067,"comprovante de inscrição no cpf, onde emito?",cpf_registration,test,0
+L068,meu cpf está pendente de regularização e não consigo abrir conta,cpf_registration,train,0
+L069,como alterar o nome no cadastro de pessoas físicas depois do casamento,cpf_registration,train,0
+L070,"o cpf [CPF] aparece como cancelado por multiplicidade, e agora?",cpf_registration,test,0
+L071,preciso de ajuda para regularizar o cadastro de pessoa física na receita federal,cpf_registration,train,0
+L072,"meu cpf foi usado em golpe e estão me cobrando dívidas que não são minhas, preciso de ajuda urgente",cpf_registration,train,1
+L073,"pedi o cpf pelo site e deu erro, como faço",cpf_registration,train,0
+L074,segunda via do cartão do cpf,cpf_registration,test,0
+L075,"meu cpf foi usado por outra pessoa, como verificar e corrigir",cpf_registration,train,0
+L076,"dúvida: cpf de estrangeiro, como tirar?",cpf_registration,train,0
+L077,regularizar CPF pendente por não votar,cpf_registration,test,0
+L078,quero saber se meu cpf tem pendência,cpf_registration,train,0
+L079,"como inscrever meu filho no cadastro de pessoas fisicas, ele acabou de nascer",cpf_registration,train,0
+L080,"cpf com divergencia no nome, como arrumar?",cpf_registration,test,0
+L081,Como tirar o título de eleitor pela primeira vez?,voter_id,train,0
+L082,"perdi meu título de eleitor, como pedir a segunda via?",voter_id,train,0
+L083,quero transferir meu título para outra cidade,voter_id,train,0
+L084,onde fica minha zona eleitoral,voter_id,test,0
+L085,como saber meu local de votação,voter_id,train,0
+L086,"meu título foi cancelado, como regularizar?",voter_id,train,0
+L087,"Preciso justificar minha ausência na eleição, como faço?",voter_id,test,0
+L088,"tenho 16 anos, posso fazer o titulo de eleitor?",voter_id,train,0
+L089,como regularizar a situação eleitoral para poder tirar passaporte,voter_id,train,0
+L090,mudei de endereço e preciso atualizar o título eleitoral,voter_id,test,0
+L091,biometria eleitoral: como agendar o cadastro,voter_id,train,0
+L092,quero emitir o e-título no celular,voter_id,train,0
+L093,como consultar se estou em dia com a justiça eleitoral,voter_id,train,0
+L094,"não votei nas últimas eleições, tem multa? como pagar",voter_id,test,0
+L095,titulo de eleitor: segunda via online,voter_id,train,0
+L096,"Como corrigir o nome do meu titulo de eleitor, está escrito errado. Contato [TELEFONE]",voter_id,train,0
+L097,preciso do comprovante de quitação eleitoral,voter_id,test,0
+L098,"quero me alistar pra votar, o que preciso levar no cartório eleitoral",voter_id,train,0
+L099,cadastro biométrico é obrigatório? vou perder o direito de votar?,voter_id,train,0
+L100,"mesário voluntário, como me inscrever",voter_id,test,0
+L101,Como faço o CadÚnico?,social_benefits,train,0
+L102,quero me inscrever no bolsa família,social_benefits,train,0
+L103,"meu bolsa familia foi bloqueado, o que fazer?",social_benefits,train,0
+L104,"preciso atualizar os dados do cadastro único, mudei de endereço",social_benefits,test,0
+L105,como consultar o saldo e o calendário do bolsa família,social_benefits,train,0
+L106,Minha renda mudou e não sei se ainda tenho direito ao benefício do governo,social_benefits,train,0
+L107,"meu benefício foi cancelado e minha família está sem renda nenhuma, preciso de ajuda urgente",social_benefits,test,1
+L108,como funciona o cadunico pra conseguir tarifa social de energia?,social_benefits,train,0
+L109,onde fica o CRAS para fazer o cadastro?,social_benefits,train,0
+L110,"cartão do bolsa familia perdido, como pedir outro",social_benefits,test,0
+L111,"tenho 3 filhos e renda baixa, posso receber auxílio do governo?",social_benefits,train,0
+L112,como incluir meu bebê no cadastro único,social_benefits,train,0
+L113,"o cad unico venceu, preciso renovar?",social_benefits,train,0
+L114,"Dei entrada no cadúnico faz 2 meses e nada, meu telefone é [TELEFONE]",social_benefits,test,0
+L115,bolsa familia: por que meu benefício está em averiguação?,social_benefits,train,0
+L116,como pedir o auxílio gás,social_benefits,train,0
+L117,"Preciso do NIS, como descobrir meu número?",social_benefits,test,0
+L118,"minha família está passando fome e perdemos o bolsa família, preciso de ajuda",social_benefits,train,1
+L119,quero saber se posso ter bolsa familia sendo MEI,social_benefits,train,0
+L120,como cadastrar família de baixa renda para programas sociais,social_benefits,test,0
+L121,Como dar entrada na aposentadoria?,social_security,train,0
+L122,quero agendar atendimento no INSS,social_security,train,0
+L123,"meu pedido de aposentadoria por idade foi negado, como recorrer?",social_security,train,0
+L124,como consulto o extrato de contribuições do meu inss,social_security,test,0
+L125,"estou com câncer, afastado do trabalho e sem renda, preciso do auxílio doença com urgência",social_security,train,1
+L126,qual o tempo de contribuição necessário para me aposentar?,social_security,train,0
+L127,como solicito pensão por morte do meu marido,social_security,test,0
+L128,"o meu benefício do inss está atrasado, já faz 3 meses",social_security,train,0
+L129,gostaria de saber como funciona o salário maternidade para autônoma,social_security,train,0
+L130,como emitir o meu CNIS,social_security,test,0
+L131,"estou doente, sem trabalhar e sem receber nada do INSS há meses, não tenho dinheiro nem pra comida",social_security,train,1
+L132,perícia médica do inss: como remarcar?,social_security,train,0
+L133,"quero revisar o valor da minha aposentadoria, acho que calcularam errado",social_security,train,0
+L134,"aposentadoria rural, quais documentos?",social_security,test,0
+L135,como pedir o auxílio-reclusão,social_security,train,0
+L136,"contribuí como MEI por 20 anos, já posso me aposentar? contato [EMAIL]",social_security,train,0
+L137,"como acessar o meu inss pelo celular, aplicativo",social_security,test,0
+L138,"pedi o benefício e está em análise há 5 meses, como acelerar?",social_security,train,0
+L139,minha mãe faleceu e preciso saber como pedir a pensão,social_security,train,0
+L140,como fazer a prova de vida do aposentado,social_security,test,0
+L141,Como pedir a segunda via da certidão de nascimento?,birth_certificate,train,0
+L142,preciso da certidão de casamento para dar entrada num financiamento,birth_certificate,train,0
+L143,"quero registrar meu filho que acabou de nascer, o que levar ao cartório?",birth_certificate,train,0
+L144,como obter certidão de óbito do meu pai,birth_certificate,test,0
+L145,"a certidão de nascimento da minha filha veio com o nome errado, como corrigir?",birth_certificate,train,0
+L146,"onde peço certidão online, sem ir ao cartório",birth_certificate,train,0
+L147,perdi a certidao de nascimento original,birth_certificate,test,0
+L148,"Preciso de certidão de casamento atualizada, com averbação do divórcio",birth_certificate,train,0
+L149,como fazer o registro tardio de nascimento de adulto,birth_certificate,train,0
+L150,meu bebê está internado na UTI e o hospital exige a certidão de nascimento para continuar o tratamento,birth_certificate,test,1
+L151,"certidão de nascimento pra tirar passaporte, tem que ser atualizada?",birth_certificate,train,0
+L152,"Boa tarde, preciso da 2ª via da certidão de casamento, meu e-mail é [EMAIL]",birth_certificate,train,0
+L153,"registro civil de bebê, qual prazo máximo?",birth_certificate,train,0
+L154,"cartório não quer emitir a certidão, alegam que o livro está danificado",birth_certificate,test,0
+L155,como incluir o sobrenome do pai na certidão de nascimento,birth_certificate,train,0
+L156,certidao de nascimento gratuita pra quem não tem condições,birth_certificate,train,0
+L157,solicitar certidão de inteiro teor,birth_certificate,test,0
+L158,"casei no religioso e quero o registro civil do casamento, como faço?",birth_certificate,train,0
+L159,"certidão de óbito para dar baixa na conta, o banco está cobrando",birth_certificate,train,0
+L160,como pedir certidão de nascimento de outro estado,birth_certificate,test,0
+L161,Quero saber a previsão do tempo para amanhã,other,train,0
+L162,como emitir passaporte?,other,train,0
+L163,qual o melhor restaurante perto de mim,other,train,0
+L164,"preciso renovar meu passaporte, perdi o prazo",other,test,0
+L165,como faço para abrir uma empresa MEI?,other,train,0
+L166,"meu vizinho faz barulho de madrugada, para quem reclamo?",other,train,0
+L167,"buraco enorme na rua da minha casa, quem conserta?",other,test,0
+L168,"quero comprar um carro usado, qual site é confiável",other,train,0
+L169,como declarar o imposto de renda,other,train,0
+L170,"oi, tudo bem?",other,test,0
+L171,estou sofrendo violência doméstica e preciso de ajuda agora,other,train,1
+L172,meu filho está passando mal e o hospital não atende,other,train,1
+L173,como tirar o alvará de funcionamento do meu comércio,other,train,0
+L174,"preciso de um advogado gratuito, onde procuro?",other,test,0
+L175,quando abre a matrícula na escola pública?,other,train,0
+L176,como recorrer de multa de trânsito do meu veículo,other,train,0
+L177,"meu telefone [TELEFONE] e meu e-mail [EMAIL], quero reclamar do atendimento do posto de saúde",other,test,0
+L178,"quero denunciar uma queimada na mata perto da minha casa, o fogo está chegando nas casas",other,train,1
+L179,como tirar o licenciamento do veículo,other,train,0
+L180,teste teste 123,other,test,0

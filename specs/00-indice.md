@@ -54,7 +54,7 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-02.01-dataset-e-classificador](plan/plan-02.01-dataset-e-classificador.md) | Criar o conjunto rotulado sintético e o classificador regex + TF-IDF | 01.03 | 🟡 Em execução | `specs/02.01-classificacao.md` |
+| 1 | [plan-02.01-dataset-e-classificador](plan/plan-02.01-dataset-e-classificador.md) | Criar o conjunto rotulado sintético e o classificador regex + TF-IDF | 01.03 | 🟢 Aprovada | `specs/02.01-classificacao.md` |
 | 2 | [plan-02.02-confianca-e-revisao-humana](plan/plan-02.02-confianca-e-revisao-humana.md) | Calcular a confiança e decidir quando enviar o pedido à revisão humana | 02.01 | 🔴 A executar | `specs/02.02-confianca-e-revisao-humana.md` |
 | 3 | [plan-03.01-catalogo-e-allowlist](plan/plan-03.01-catalogo-e-allowlist.md) | Criar o catálogo de serviços com allowlist de domínios e verificação de links | 02.01 | 🔴 A executar | `specs/03.01-catalogo-e-allowlist.md` |
 | 4 | [plan-03.02-resposta-final-e-llm](plan/plan-03.02-resposta-final-e-llm.md) | Montar a resposta final ao cidadão, com LLM opcional e caminho seguro | 03.01 | 🔴 A executar | `specs/03.02-resposta-final-e-llm.md` |
