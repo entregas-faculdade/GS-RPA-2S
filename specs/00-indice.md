@@ -54,7 +54,7 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-02.03-urgencia-saude](plan/plan-02.03-urgencia-saude.md) | Detectar urgência de saúde e não tratar "urgente" de cortesia como emergência | — | 🔵 Em correção | `specs/02.02-confianca-e-revisao-humana.md` |
+| 1 | [plan-02.03-urgencia-saude](plan/plan-02.03-urgencia-saude.md) | Detectar urgência de saúde e não tratar "urgente" de cortesia como emergência | — | 🟢 Aprovada | `specs/02.02-confianca-e-revisao-humana.md` |
 | 2 | [plan-03.03-catalogo-v2](plan/plan-03.03-catalogo-v2.md) | Evoluir o catálogo para vários links e telefones, com aprovação e verificador | — | 🟢 Aprovada | `specs/03.01-catalogo-e-allowlist.md` |
 | 3 | [plan-03.04-catalogo-sao-paulo](plan/plan-03.04-catalogo-sao-paulo.md) | Carregar a lista aprovada de fontes de SP (saúde, educação, veículos, prefeitura) | 03.03 (+ lista aprovada) | 🔴 A executar | `specs/03.01-catalogo-e-allowlist.md` |
 | 4 | [plan-03.05-localizador-de-servicos](plan/plan-03.05-localizador-de-servicos.md) | Criar o localizador determinístico de fontes aprovadas, com medição | 03.04 | 🔴 A executar | `specs/03.03-localizador-de-servicos.md` |

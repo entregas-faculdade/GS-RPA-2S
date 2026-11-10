@@ -14,8 +14,8 @@ from triage.interface.service import (
 from triage.storage import Repository
 
 RG_TEXT = "Preciso saber como emitir a segunda via do meu RG. Nunca fiz esse pedido antes."
-URGENT_TEXT = "Urgente! Meu benefício foi cortado e preciso de ajuda hoje."
-PII_URGENT_TEXT = "Urgente! Meu CPF é 123.456.789-09 e meu benefício foi cortado, preciso de ajuda hoje."
+URGENT_TEXT = "Meu benefício foi cortado e preciso de ajuda urgente hoje."
+PII_URGENT_TEXT = "Meu CPF é 123.456.789-09 e meu benefício foi cortado, preciso de ajuda urgente hoje."
 
 
 def _count(repository: Repository, table: str) -> int:

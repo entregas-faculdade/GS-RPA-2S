@@ -14,7 +14,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 ██████░░░░ 60% · 12/20 itens ✅
 
 ## Agora
-- 🔵 · plan-02.03 · R02.3 · "Detectar urgência de saúde e parar de tratar \"urgente\" de cortesia como emergência"
+—
 
 ## Próximas
 - 🔴 · plan-03.04 · R03.4 · Carregar no catálogo a lista aprovada de fontes públicas (saúde, educação, veículos e prefeitura de São Paulo)
@@ -34,5 +34,6 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
+- 🟢 plan-02.03 · "Detectar urgência de saúde e parar de tratar \"urgente\" de cortesia como emergência" — aguardando síntese
 - 🟢 plan-03.03 · Evoluir o catálogo para vários links e telefones por serviço, com aprovação e verificação — aguardando síntese
 - 📋 20 achado(s) no `00-backlog`

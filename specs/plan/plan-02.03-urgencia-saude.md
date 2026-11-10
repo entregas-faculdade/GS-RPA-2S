@@ -4,7 +4,7 @@ familia: "02"
 item: "R02.3"
 titulo: "Detectar urgência de saúde e parar de tratar \"urgente\" de cortesia como emergência"
 dominio: "Classificação"
-status: "🔵 Em correção"
+status: "🟢 Aprovada"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[02.02-confianca-e-revisao-humana]]", "[[003-seguranca-sem-autenticacao]]"]
@@ -164,6 +164,17 @@ só expressões de risco; a regra "na dúvida, revisão" e a coerência com a co
 - 6 pedidos `urgent=1` do CSV continuam sem detecção por léxico; precisam de decisão do revisor (termos extras ou ajuste do rótulo).
 - O gate `ruff` do §7 não fica 100% limpo pelos 3 erros preexistentes acima.
 
+## Resumo da execução (correção 1) — 2026-11-10
+
+**Achado 1 — suíte vermelha por regressão desta plan.** Corrigido: o antes→depois do veredito foi aplicado literalmente e o léxico não mudou.
+- `tests/interface/test_service.py:17` — `URGENT_TEXT` agora usa "preciso de ajuda urgente hoje" (sem "Urgente!").
+- `tests/interface/test_service.py:18` — `PII_URGENT_TEXT`, idem.
+- `tests/pipeline/test_processor.py:53` — `_request(...)`, idem.
+- Reconheço: as 3 falhas vinham da remoção de `urgente` feita por esta plan, não de outra conversa.
+
+**Verificação:** `python -m pytest tests/classification tests/pipeline tests/interface -q` → 148 passed. `python -m ruff check` nos dois arquivos alterados → sem erro. Nenhum outro teste do escopo ampliado quebrou, então não houve troca adicional.
+
+**Arquivos alterados nesta rodada:** `tests/interface/test_service.py`, `tests/pipeline/test_processor.py`. `git status --short` mostra só esses dois mais os dois da execução original.
 
 ---
 
@@ -189,3 +200,7 @@ Verifiquei: `git diff` do escopo (só `data/urgency_terms.json` e `tests/classif
    antes: `_request("Urgente! Meu benefício foi cortado e preciso de ajuda hoje.")`
    depois: `_request("Meu benefício foi cortado e preciso de ajuda urgente hoje.")`
 4. Rodar `python -m pytest tests/classification tests/pipeline tests/interface -q` → verde. Se outro teste do escopo ampliado quebrar por "urgente", aplicar o mesmo tipo de troca e listar no resumo.
+
+## Veredito — 2026-11-10 — 🟢 Aprovado (correção 1)
+
+Verifiquei: `git diff` da correção → só `tests/interface/test_service.py:17-18` e `tests/pipeline/test_processor.py:53`, com o antes e o depois idênticos aos que escrevi; o léxico não mudou depois do primeiro veredito. `python -m pytest tests/classification tests/pipeline tests/interface tests/automation tests/evaluation -q` → 332 passed. `ruff` nos três arquivos de teste alterados → sem erro. O resumo da correção coincide com o diff e reconhece a causa das falhas. Os pontos do primeiro veredito seguem válidos: 7 casos obrigatórios verdes, nenhum falso positivo no CSV, medição do README inalterada.

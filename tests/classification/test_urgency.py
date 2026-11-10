@@ -2,10 +2,15 @@
 
 from pathlib import Path
 
+import pandas as pd
 import pytest
 
 from triage.classification import urgency
 from triage.classification.urgency import is_urgent
+
+DATASET_PATH = Path(__file__).resolve().parents[2] / "data" / "labeled" / "requests_labeled.csv"
+# Pedidos urgent=1 que o léxico nunca cobriu (anteriores ao léxico de saúde): vão à revisão por outros gatilhos.
+KNOWN_UNDETECTED_IDS = {"L031", "L052", "L125", "L131", "L150", "L178"}
 
 
 @pytest.mark.parametrize(
@@ -66,3 +71,27 @@ def test_lexicon_is_loaded_once(tmp_path: Path) -> None:
     is_urgent("outro texto", lexicon)
 
     assert urgency._load_pattern.cache_info().hits == 1
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("dores no peito e falta de ar", True),
+        ("meu pai teve um desmaio e precisa de ambulância", True),
+        ("preciso de ajuda urgente", True),
+        ("Quero renovar a CNH, é urgente", False),
+        ("Quero abrir uma reclamação. Urgente obrigado.", False),
+        ("preciso do IPTU com urgência de entrega", False),
+        ("como tirar a segunda via do RG", False),
+    ],
+)
+def test_health_emergency_is_urgent_and_courtesy_urgente_is_not(text: str, expected: bool) -> None:
+    assert is_urgent(text) is expected
+
+
+def test_labeled_dataset_urgent_column_matches_lexicon() -> None:
+    dataset = pd.read_csv(DATASET_PATH, encoding="utf-8")
+
+    mismatched = {row.id for row in dataset.itertuples() if is_urgent(row.text) != bool(row.urgent)}
+
+    assert mismatched == KNOWN_UNDETECTED_IDS

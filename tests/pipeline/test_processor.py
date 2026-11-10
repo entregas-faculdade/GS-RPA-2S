@@ -50,7 +50,7 @@ def test_second_call_with_same_text_is_skipped(make_deps: Callable[..., Deps]) -
 def test_urgent_request_goes_to_review(make_deps: Callable[..., Deps]) -> None:
     deps = make_deps()
 
-    result = process_request(_request("Urgente! Meu benefício foi cortado e preciso de ajuda hoje."), deps)
+    result = process_request(_request("Meu benefício foi cortado e preciso de ajuda urgente hoje."), deps)
 
     assert result.status == "queued_for_review"
     assert result.reason == "urgent"
