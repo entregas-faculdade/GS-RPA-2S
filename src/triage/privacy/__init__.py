@@ -1,4 +1,4 @@
-"""Anonimização de dados pessoais (CPF, telefone, e-mail) antes de log ou API."""
+"""Anonimização de dados pessoais (CPF, telefone, e-mail, nome, endereço, CEP, RG, data e documentos) antes de log ou API."""
 
 from triage.privacy.anonymizer import AnonymizationResult, anonymize
 

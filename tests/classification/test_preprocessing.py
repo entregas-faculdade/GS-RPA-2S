@@ -30,6 +30,11 @@ def test_normalize_drops_anonymization_markers() -> None:
     assert normalize("meu cpf [CPF] e tel [TELEFONE] e [EMAIL]") == "cpf tel"
 
 
+def test_normalize_drops_every_anonymization_marker() -> None:
+    raw = "Meu nome é [NOME], CEP [CEP], [ENDERECO], RG [RG], [DATA], CNH [DOCUMENTO]"
+    assert normalize(raw) == "nome cep rg cnh"
+
+
 def test_fold_keeps_punctuation_but_drops_accents_and_markers() -> None:
     assert fold("Cadúnico [CPF]?") == "cadunico  ?"
 

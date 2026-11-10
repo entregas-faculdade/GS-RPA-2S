@@ -1,7 +1,13 @@
-"""Anonimização de dados pessoais: troca CPF, telefone e e-mail por marcadores.
+"""Anonimização de dados pessoais: troca CPF, telefone, e-mail, nome, endereço, CEP, RG, data e documentos.
 
-Limites declarados: cobre apenas CPF, telefone brasileiro e e-mail. Nomes de pessoas, endereços,
-RG e outros identificadores NÃO são anonimizados (risco residual).
+Princípio: na dúvida, mascarar. Falso negativo (dado pessoal que passa) é a falha grave; falso positivo
+(palavra comum mascarada) é aceitável quando raro. Cidade, estado e bairro NÃO são mascarados.
+
+Limites declarados (risco residual): nome fora de qualquer contexto e fora da lista de prenomes pode passar;
+endereço sem logradouro (só "perto da padaria") passa; cidade e bairro não são mascarados.
+
+Ordem de aplicação (fixa, para um tipo não consumir o dígito de outro): e-mail, CPF, documentos, CEP, RG,
+data, endereço, nome e, por último, telefone (o mais ambíguo, que só casa o que sobrou).
 
 Decisão sobre CPF: 11 dígitos soltos só são CPF se os dígitos verificadores forem válidos; o formato
 pontuado (000.000.000-00) é sempre CPF. Assim, protocolos e códigos de 11 dígitos não são apagados.
@@ -13,20 +19,41 @@ não registra o texto em log e é idempotente (os marcadores não contêm dígit
 import re
 from dataclasses import dataclass
 
+from triage.privacy.address import mask_addresses
+from triage.privacy.identifiers import mask_identifiers
+from triage.privacy.names import mask_names
 from triage.privacy.patterns import (
     CPF_MARKER,
     CPF_PATTERN,
     CPF_PUNCTUATED_PATTERN,
     EMAIL_MARKER,
     EMAIL_PATTERN,
+    KIND_ADDRESS,
+    KIND_CPF,
+    KIND_DATE,
+    KIND_DOCUMENT,
+    KIND_EMAIL,
+    KIND_NAME,
+    KIND_PHONE,
+    KIND_POSTAL_CODE,
+    KIND_RG,
     PHONE_MARKER,
     PHONE_PATTERN,
 )
+from triage.privacy.substitution import substitute
 from triage.privacy.validators import is_valid_cpf
 
-KIND_CPF = "cpf"
-KIND_PHONE = "phone"
-KIND_EMAIL = "email"
+COUNT_KEYS = (
+    KIND_CPF,
+    KIND_PHONE,
+    KIND_EMAIL,
+    KIND_NAME,
+    KIND_ADDRESS,
+    KIND_POSTAL_CODE,
+    KIND_RG,
+    KIND_DATE,
+    KIND_DOCUMENT,
+)
 
 
 @dataclass(frozen=True)
@@ -44,23 +71,14 @@ def _replace_cpf(match: re.Match[str]) -> str:
     return value
 
 
-def _substitute(pattern: re.Pattern[str], marker: str | None, text: str, replacer=None) -> tuple[str, int]:
-    """Aplica `pattern` e conta só as trocas que de fato viraram marcador."""
-    replaced = 0
-
-    def swap(match: re.Match[str]) -> str:
-        nonlocal replaced
-        result = replacer(match) if replacer else marker
-        if result != match.group():
-            replaced += 1
-        return result
-
-    return pattern.sub(swap, text), replaced
-
-
 def anonymize(text: str) -> AnonymizationResult:
-    """Substitui e-mail, CPF e telefone (nesta ordem) por marcadores e conta cada tipo."""
-    text, emails = _substitute(EMAIL_PATTERN, EMAIL_MARKER, text)
-    text, cpfs = _substitute(CPF_PATTERN, None, text, _replace_cpf)
-    text, phones = _substitute(PHONE_PATTERN, PHONE_MARKER, text)
-    return AnonymizationResult(text, {KIND_CPF: cpfs, KIND_PHONE: phones, KIND_EMAIL: emails})
+    """Substitui os dados pessoais por marcadores, na ordem do docstring do módulo, e conta cada tipo."""
+    counts: dict[str, int] = {}
+    text, counts[KIND_EMAIL] = substitute(EMAIL_PATTERN, EMAIL_MARKER, text)
+    text, counts[KIND_CPF] = substitute(CPF_PATTERN, None, text, _replace_cpf)
+    text, identifiers = mask_identifiers(text)
+    counts.update(identifiers)
+    text, counts[KIND_ADDRESS] = mask_addresses(text)
+    text, counts[KIND_NAME] = mask_names(text)
+    text, counts[KIND_PHONE] = substitute(PHONE_PATTERN, PHONE_MARKER, text)
+    return AnonymizationResult(text, {key: counts[key] for key in COUNT_KEYS})

@@ -79,6 +79,7 @@ via normal.
 | 14 | `python -m ruff check run.py src tests` com o ruff 0.17.4 fixado acusa 9 erros em arquivos de plans anteriores (I001 em `sanitizer.py`, `test_decision.py`, `test_model.py`, `test_sanitizer.py` e `test_repository.py`; UP033 em `allowlist.py` e `urgency.py`; UP017 em `repository.py`; SIM117 em `test_repository.py:143`), 8 corrigíveis com `--fix` | execução | 2026-11-10 | baixo |
 | 15 | `pipeline/processor.py` (`process_request`) — pedido repetido volta como `skipped_duplicate` sem texto de resposta, então a interface só diz "já registrado"; oferecer um modo que devolva a resposta já decidida sem regravar | execução | 2026-11-10 | baixo |
 | 16 | `interface/service.py` (`send_feedback`) — "uma avaliação por resposta" é controlada só em memória do serviço: reiniciar o app permite avaliar de novo o mesmo pedido, e o storage aceita feedbacks repetidos para o mesmo hash | execução | 2026-11-10 | baixo |
+| 17 | `privacy/names.py` — prenome da lista dentro de nome de lugar vira falso positivo (`Vila Madalena` → `Vila [NOME]`); estender os prefixos de topônimo (vila, jardim, parque, bairro) | execução | 2026-11-10 | baixo |
 
 ---
 

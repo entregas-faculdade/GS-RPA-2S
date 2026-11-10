@@ -35,8 +35,8 @@ flowchart LR
   H --> G
 ```
 
-1. **Sanitização e anonimização:** limita o tamanho, neutraliza HTML e caracteres de controle e troca CPF, telefone e
-   e-mail por marcadores antes de qualquer outro passo.
+1. **Sanitização e anonimização:** limita o tamanho, neutraliza HTML e caracteres de controle e troca CPF, telefone,
+   e-mail, nome, endereço, CEP, RG, data e documentos por marcadores antes de qualquer outro passo.
 2. **Classificação:** atalho por regex quando o assunto é explícito; senão, TF-IDF com regressão logística. A
    confiança e a folga para a segunda melhor categoria decidem se o robô responde sozinho.
 3. **Resposta:** só links do catálogo curado e da allowlist (`.gov.br`), com o link verificado na rede. Pedido de
@@ -110,7 +110,7 @@ app.py                   interface Streamlit
 scripts/train_model.py   treina e grava o classificador
 src/triage/
   ingestion/             leitura de txt/csv/json e sanitização
-  privacy/               anonimização de CPF, telefone e e-mail
+  privacy/               anonimização de PII (CPF, contato, nome, endereço, documentos)
   classification/        regex, TF-IDF, confiança e decisão de revisão
   automation/            catálogo, allowlist, verificação de links, resposta e LLM opcional
   storage/               SQLite: idempotência, fila de revisão e feedback
@@ -154,9 +154,12 @@ estão em [notebooks/evidence.ipynb](notebooks/evidence.ipynb).
 
 ## Proteção de dados, ética e ODS
 
-O protótipo usa só dados sintéticos e anonimiza CPF, telefone e e-mail por regex antes de qualquer log, gravação
-ou chamada a API, em linha com a LGPD (minimização e finalidade); a anonimização por regex não cobre nome e
-endereço, e isso é um limite declarado. Do ponto de vista ético, o robô só responde com links de domínios oficiais da allowlist, prefere pedir
+O protótipo usa só dados sintéticos e anonimiza CPF, telefone, e-mail, nome de pessoa, endereço (logradouro com
+número e complementos), CEP, RG, data completa e números de documento (título de eleitor, CNH, NIS, PIS, cartão SUS,
+CNPJ, passaporte, matrícula) antes de qualquer log, gravação ou chamada a API, em linha com a LGPD (minimização e
+finalidade). A anonimização usa regex, contexto e uma lista de prenomes, sem modelo de NER, e na dúvida mascara.
+Limites declarados (risco residual): nome fora de contexto e fora da lista pode passar; endereço sem logradouro
+passa; cidade, estado e bairro não são mascarados. Do ponto de vista ético, o robô só responde com links de domínios oficiais da allowlist, prefere pedir
 **revisão humana** a arriscar uma resposta errada (urgência, dúvida e fora do catálogo vão para uma pessoa) e deixa
 claro que é um protótipo; o LLM, se ligado, apenas reformula o que já foi decidido. Como candidatos a ODS, o
 **ODS 16** (instituições eficazes e acesso à informação) e o **ODS 10** (redução das desigualdades, ao facilitar o

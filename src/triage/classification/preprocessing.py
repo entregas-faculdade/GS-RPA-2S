@@ -3,11 +3,11 @@
 import re
 import unicodedata
 
-from triage.privacy.patterns import CPF_MARKER, EMAIL_MARKER, PHONE_MARKER
+from triage.privacy.patterns import ALL_MARKERS
 
 # Marcadores da anonimização dizem que houve um dado pessoal, não qual é o assunto: se virassem
 # token, "[CPF]" em qualquer pedido pareceria um pedido sobre CPF.
-_MARKERS_PATTERN = re.compile("|".join(re.escape(marker) for marker in (CPF_MARKER, PHONE_MARKER, EMAIL_MARKER)))
+_MARKERS_PATTERN = re.compile("|".join(re.escape(marker) for marker in ALL_MARKERS))
 _NON_WORD_PATTERN = re.compile(r"[^a-z0-9]+")
 
 # Stopwords curtas, já sem acento (a normalização remove os acentos antes do filtro).

@@ -5,7 +5,7 @@ dominio: "Governança de Specs (SDD)"
 status: "🟢 Vigente"
 tags: ["processo", "indice", "sdd"]
 relacionados: ["[[00-contexto]]", "[[00-backlog]]", "[[00-prompt-revisor]]", "[[00-prompt-executor]]"]
-proximo_numero_plan: {"01": 4, "02": 3, "03": 3, "04": 4, "05": 2} # Com famílias: mapa família → NN; simples: escalar NN único. Só sobe, nunca reaproveitado — ver §4.
+proximo_numero_plan: {"01": 5, "02": 3, "03": 3, "04": 4, "05": 2} # Com famílias: mapa família → NN; simples: escalar NN único. Só sobe, nunca reaproveitado — ver §4.
 ---
 
 # 0. O que é este arquivo
@@ -54,6 +54,7 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
+| 1 | [plan-01.04-anonimizacao-ampliada](plan/plan-01.04-anonimizacao-ampliada.md) | Ampliar a anonimização para nome, endereço, CEP, RG, data e documentos | — | 🟢 Aprovada | `specs/01.03-anonimizacao-de-pii.md` |
 
 ---
 

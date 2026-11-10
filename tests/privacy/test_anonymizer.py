@@ -11,7 +11,8 @@ PUNCTUATED_CPF = "529.982.247-25"
 
 
 def _counts(cpf: int = 0, phone: int = 0, email: int = 0) -> dict[str, int]:
-    return {"cpf": cpf, "phone": phone, "email": email}
+    extra_keys = ("name", "address", "postal_code", "rg", "date", "document")
+    return {"cpf": cpf, "phone": phone, "email": email, **dict.fromkeys(extra_keys, 0)}
 
 
 @pytest.mark.parametrize(
