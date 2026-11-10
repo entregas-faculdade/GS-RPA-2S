@@ -105,7 +105,8 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 | `triage.pipeline` | orquestração | encadeia as etapas, retry, idempotência e relatório de execução |
 
 - **Fronteiras:** o núcleo não importa a interface; só `triage.storage` toca o SQLite.
-- **Comandos vitais:** `pip install -r requirements-dev.txt` · `python run.py` (robô) · `python -m pytest -q` ·
+- **Comandos vitais:** `pip install -r requirements-dev.txt` · `python scripts/train_model.py` (gera o modelo) ·
+  `python run.py --input <pasta> --output <pasta>` (robô; flags em [[04.03-orquestracao-rpa]]) · `python -m pytest -q` ·
   `python -m ruff check run.py src tests`. `streamlit run app.py` (interface) ainda é previsto.
 
 ---
@@ -136,7 +137,8 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 | Tipo de tarefa | Leia antes (specs fixas) | Capacidade |
 |---|---|---|
 | Mudar stack ou ferramenta | [[00-fundacao-tecnologica]] + [[001-stack-principal]] | [[00-knowledge]] |
-| Mexer em persistência, fila ou idempotência | [[002-persistencia-sqlite-e-arquivos]] | [[00-knowledge]] |
+| Mexer em persistência, fila ou idempotência | [[002-persistencia-sqlite-e-arquivos]] + [[04.01-persistencia]] | [[00-knowledge]] |
+| Mexer no robô ponta a ponta, relatório ou agendamento | [[04.03-orquestracao-rpa]] | [[00-knowledge]] |
 | Mexer em PII, sanitização, allowlist ou revisão humana | [[003-seguranca-sem-autenticacao]] | [[00-knowledge]] |
 | Execução, ambiente ou publicação | [[004-infra-execucao-local]] | [[00-knowledge]] |
 | Usar ou alterar o LLM | [[005-llm-apenas-reformula-resposta]] + [[003-seguranca-sem-autenticacao]] | [[00-knowledge]] |

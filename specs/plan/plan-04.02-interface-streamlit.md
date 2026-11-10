@@ -4,7 +4,7 @@ familia: "04"
 item: "R04.2"
 titulo: "Criar a interface Streamlit de atendimento, fila de revisão e feedback"
 dominio: "Operação e interface"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Média"
 tags: ["plan"]
 relacionados: ["[[001-stack-principal]]", "[[003-seguranca-sem-autenticacao]]", "[[004-infra-execucao-local]]"]

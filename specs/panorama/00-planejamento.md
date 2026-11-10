@@ -87,7 +87,7 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 ## 04 · Operação e interface
 - ✅ **R04.1** Persistência SQLite — idempotência, fila, feedback e execuções (✅ 2026-11-09)
 - 🔷 **R04.2** Interface Streamlit — atendimento, revisão e feedback
-- 🔷 **R04.3** Orquestração RPA — lote, retry, agendamento e relatório de execução
+- ✅ **R04.3** Orquestração RPA — lote, retry, agendamento e relatório de execução (✅ 2026-11-10)
 
 ## 05 · Validação e entrega
 - 🔷 **R05.1** Validação e entrega — métricas, notebook de evidências e README
