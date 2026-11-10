@@ -11,7 +11,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 # Panorama
 
 ## Progresso
-██████░░░░ 60% · 12/20 itens ✅
+███████░░░ 70% · 14/20 itens ✅
 
 ## Agora
 —
@@ -28,8 +28,8 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | FF | Família | Itens ✅/total | Progresso | Plans abertas |
 |---|---|---|---|---|
 | 01 | Núcleo do robô | 4/4 | █████ | 0 |
-| 02 | Classificação | 2/4 | ██░░░ | 2 |
-| 03 | Automação | 2/7 | █░░░░ | 5 |
+| 02 | Classificação | 3/4 | ███░░ | 2 |
+| 03 | Automação | 3/7 | ██░░░ | 5 |
 | 04 | Operação e interface | 3/4 | ███░░ | 1 |
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
@@ -37,3 +37,4 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 - 🟢 plan-02.03 · "Detectar urgência de saúde e parar de tratar \"urgente\" de cortesia como emergência" — aguardando síntese
 - 🟢 plan-03.03 · Evoluir o catálogo para vários links e telefones por serviço, com aprovação e verificação — aguardando síntese
 - 📋 20 achado(s) no `00-backlog`
+- ⚠️ 2 problema(s) de família/item — rode `generate_summary.py --check`
