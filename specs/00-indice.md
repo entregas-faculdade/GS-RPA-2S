@@ -54,10 +54,9 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-03.02-resposta-final-e-llm](plan/plan-03.02-resposta-final-e-llm.md) | Montar a resposta final ao cidadão, com LLM opcional e caminho seguro | 03.01 | 🟢 Aprovada | `specs/03.02-resposta-final-e-llm.md` |
-| 2 | [plan-04.03-orquestracao-rpa](plan/plan-04.03-orquestracao-rpa.md) | Orquestrar o pipeline em lote com retry, idempotência, agendamento e relatório de execução | 03.02 | 🔴 A executar | `arquitetura/04.03-orquestracao-rpa.md` |
-| 3 | [plan-04.02-interface-streamlit](plan/plan-04.02-interface-streamlit.md) | Criar a interface Streamlit de atendimento, fila de revisão e feedback | 04.03 | 🔴 A executar | `specs/04.02-interface.md` |
-| 4 | [plan-05.01-validacao-e-entrega](plan/plan-05.01-validacao-e-entrega.md) | Validar com amostra rotulada, documentar evidências e preparar a entrega | 04.02 | 🔴 A executar | `specs/05.01-validacao-e-entrega.md` |
+| 1 | [plan-04.03-orquestracao-rpa](plan/plan-04.03-orquestracao-rpa.md) | Orquestrar o pipeline em lote com retry, idempotência, agendamento e relatório de execução | 03.02 | 🟡 Em execução | `arquitetura/04.03-orquestracao-rpa.md` |
+| 2 | [plan-04.02-interface-streamlit](plan/plan-04.02-interface-streamlit.md) | Criar a interface Streamlit de atendimento, fila de revisão e feedback | 04.03 | 🔴 A executar | `specs/04.02-interface.md` |
+| 3 | [plan-05.01-validacao-e-entrega](plan/plan-05.01-validacao-e-entrega.md) | Validar com amostra rotulada, documentar evidências e preparar a entrega | 04.02 | 🔴 A executar | `specs/05.01-validacao-e-entrega.md` |
 
 ---
 

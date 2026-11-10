@@ -4,7 +4,7 @@ familia: "04"
 item: "R04.3"
 titulo: "Orquestrar o pipeline em lote com retry, idempotência, agendamento e relatório de execução"
 dominio: "Operação e interface"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[00-fundacao-tecnologica]]", "[[002-persistencia-sqlite-e-arquivos]]", "[[003-seguranca-sem-autenticacao]]"]

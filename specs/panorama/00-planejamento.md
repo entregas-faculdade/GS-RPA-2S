@@ -82,7 +82,7 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 
 ## 03 · Automação
 - ✅ **R03.1** Catálogo e allowlist — links oficiais verificados (✅ 2026-11-09)
-- 🔷 **R03.2** Resposta final — template com LLM opcional e fallback
+- ✅ **R03.2** Resposta final — template com LLM opcional e fallback (✅ 2026-11-09)
 
 ## 04 · Operação e interface
 - ✅ **R04.1** Persistência SQLite — idempotência, fila, feedback e execuções (✅ 2026-11-09)
