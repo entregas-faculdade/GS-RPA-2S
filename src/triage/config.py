@@ -14,6 +14,8 @@ DEFAULT_OUTPUT_DIR = "output"
 DEFAULT_LOG_LEVEL = "INFO"
 CONFIDENCE_MIN = 0.60
 AMBIGUITY_MARGIN = 0.15
+FINDER_MIN_SCORE = 0.25
+FINDER_MARGIN = 0.15
 DEFAULT_LINK_CHECK_USER_AGENT = "GS-RPA-Triagem/1.0 (projeto academico FIAP)"
 TRUE_VALUES = frozenset({"1", "true", "yes", "on"})
 
@@ -30,6 +32,8 @@ class Settings:
     output_dir: str
     confidence_min: float = CONFIDENCE_MIN
     ambiguity_margin: float = AMBIGUITY_MARGIN
+    finder_min_score: float = FINDER_MIN_SCORE
+    finder_margin: float = FINDER_MARGIN
     link_check_user_agent: str = DEFAULT_LINK_CHECK_USER_AGENT
 
 
@@ -64,5 +68,7 @@ def load_settings(dotenv_path: Path = DEFAULT_DOTENV_PATH) -> Settings:
         output_dir=DEFAULT_OUTPUT_DIR,
         confidence_min=_parse_threshold("CONFIDENCE_MIN", CONFIDENCE_MIN),
         ambiguity_margin=_parse_threshold("AMBIGUITY_MARGIN", AMBIGUITY_MARGIN),
+        finder_min_score=_parse_threshold("FINDER_MIN_SCORE", FINDER_MIN_SCORE),
+        finder_margin=_parse_threshold("FINDER_MARGIN", FINDER_MARGIN),
         link_check_user_agent=os.getenv("LINK_CHECK_USER_AGENT", "").strip() or DEFAULT_LINK_CHECK_USER_AGENT,
     )

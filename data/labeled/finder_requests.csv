@@ -1,0 +1,97 @@
+id,text,expected_id,split
+F001,onde consigo remédio de graça pra pressão alta,popular_pharmacy,train
+F002,a farmácia popular dá remedio pra diabetes?,popular_pharmacy,test
+F003,quero saber o calendario de vacinação das crianças,vaccination,train
+F004,tem campanha de vacina contra gripe esse mês?,vaccination,test
+F005,fui mal atendido no posto e quero reclamar do atendimento do sus,sus_ombudsman,train
+F006,quero fazer uma denuncia sobre atendimento ruim no sus,sus_ombudsman,test
+F007,"comprei um alimento vencido no mercado, quem fiscaliza isso?",anvisa,train
+F008,como baixo o app do sus pra ver meus exames,meu_sus_digital,test
+F009,onde vejo meu historico de saude no celular,meu_sus_digital,train
+F010,preciso de informação sobre os hospitais do estado de sp,sp_health_secretariat,test
+F011,como me inscrevo no enem desse ano,enem,train
+F012,quando sai a nota do enem,enem,test
+F013,"ouvi falar do pé de meia, como funciona o dinheiro pra aluno?",pe_de_meia,train
+F014,tem ajuda em dinheiro pra estudante do ensino medio?,pe_de_meia,test
+F015,"queria entrar numa faculdade com bolsa, tem prouni?",higher_education_access,train
+F016,como funciona o sisu pra quem terminou o colegio,higher_education_access,test
+F017,quero matricular meu filho numa escola estadual,seduc_sp,train
+F018,onde faço matricula de escola do estado em sp,seduc_sp,test
+F019,preciso de vaga em creche perto de casa,sme_sp,train
+F020,como inscrever meu bebê na creche da prefeitura,sme_sp,test
+F021,onde vejo o resultado do encceja,inep,train
+F022,recebi uma multa de transito e quero consultar,detran_sp,test
+F023,como faço a transferência do carro que comprei,detran_sp,train
+F024,"meu licenciamento do carro venceu, e agora",detran_sp,test
+F025,preciso renovar minha carteira de motorista,driver_license,train
+F026,como emitir a carteira digital de transito,senatran,test
+F027,tem um buraco enorme na rua da minha casa,sp156,train
+F028,a lampada do poste da rua queimou faz semana,sp156,test
+F029,quero pedir a poda de uma arvore que ameaça cair na calçada,sp156,train
+F030,o lixo nao foi coletado essa semana no meu bairro,sp156,test
+F031,como pagar o ipva do meu carro em sp,sefaz_sp_ipva,train
+F032,quando vence o ipva do meu veiculo?,sefaz_sp_ipva,test
+F033,preciso pagar o boleto do mei desse mes,mei_das,train
+F034,como emitir guia do mei atrasada,mei_das,test
+F035,como faço a declaração do imposto de renda,federal_revenue,train
+F036,"caí na malha fina, o que eu faço",federal_revenue,test
+F037,preciso emitir nota fiscal de serviço na prefeitura,nfe_paulistana,train
+F038,quero uma certidão negativa de débitos,tax_clearance,test
+F039,como registro minha empresa na junta comercial,jucesp,train
+F040,preciso do alvará de funcionamento do meu comércio,gap_city_permit_property_tax,test
+F041,como agendar atendimento no poupatempo,poupatempo,train
+F042,quero marcar uma vaga no poupatempo do centro,poupatempo,test
+F043,preciso regularizar meu cpf que ta pendente,cpf_registration,train
+F044,quero dar entrada no seguro desemprego,labor_ministry,test
+F045,preciso da minha carteira de trabalho digital,labor_ministry,train
+F046,"preciso chamar uma ambulancia urgente, meu pai passou mal",samu_192,test
+F047,teve uma enchente e a agua entrou em casa,civil_defense_199,train
+F048,"meu vizinho agride a mulher dele, como denuncio",women_helpline_180,test
+F049,quero denunciar maus tratos contra um idoso,human_rights_100,train
+F050,fui assaltado agora e preciso da policia,police_190,test
+F051,"quero pagar o ipva do carro, o iptu da casa eu ja paguei",sefaz_sp_ipva,train
+F052,"vim saber do iptu do meu apartamento, o ipva ja esta quitado",property_tax,test
+F053,"tem um buraco na minha rua, e o imposto de renda eu entrego depois",sp156,train
+F054,"como vejo o gabarito do enem, a matricula da escola municipal do meu irmão eu ja fiz",enem,test
+F055,"quero vacinar meu filho, a vaga na creche municipal já está certa",vaccination,train
+F056,"preciso emitir o das do mei, o alvará da prefeitura eu ja resolvi",mei_das,test
+F057,"como consultar a multa de transito, o ipva eu ja paguei",detran_sp,train
+F058,"meu seguro desemprego saiu, agora preciso do remedio gratuito da farmácia popular",popular_pharmacy,test
+F059,"quero declarar o imposto de renda, o iptu da prefeitura já está pago",federal_revenue,train
+F060,"a nota do enem saiu e o 156 ja resolveu o buraco da rua, falta so a matricula na faculdade",enem,test
+F061,a loja online não entregou meu celular,none,train
+F062,quero cancelar a assinatura da minha academia,none,test
+F063,o banco cobrou uma tarifa que eu nao contratei,none,train
+F064,qual o melhor restaurante japones da cidade,none,test
+F065,asdf qwer zxcv,none,train
+F066,oi tudo bem,none,test
+F067,"preciso trocar o pneu do meu carro, qual oficina é boa",none,train
+F068,meu plano de saúde particular negou a cirurgia,none,test
+F069,quanto custa um iphone novo,none,train
+F070,como faço pra aprender inglês rápido,none,test
+F071,minha internet está muito lenta desde ontem,none,train
+F072,"quero tirar o passaporte, como faço",none,test
+F073,preciso de um advogado para o meu divórcio,none,train
+F074,o time do meu coração perdeu ontem,none,test
+F075,quero saber a previsão do tempo para o fim de semana,none,train
+F076,"meu cachorro esta doente, onde tem veterinário",none,test
+F077,como faço um bolo de cenoura,none,train
+F078,"o aluguel do meu apartamento subiu muito, o que a lei diz",none,test
+F079,quero abrir uma conta no banco pra receber salário,none,train
+F080,tenho uma dúvida sobre a mensalidade da minha faculdade particular,none,test
+F081,quero renovar o seguro do meu carro,none,train
+F082,como tirar visto para os estados unidos,none,test
+F083,meu onibus atrasou hoje de novo,none,train
+F084,kkkkk não sei o que escrever,none,test
+F085,a escola particular do meu filho aumentou a mensalidade,none,train
+F086,o que é imposto de importação em compra da china,none,test
+F087,"meu carro quebrou na estrada, preciso de guincho do seguro",none,train
+F088,"quero vender meu carro usado, como faço o anúncio",none,test
+F089,"meu amigo vai abrir uma empresa de tecnologia, que linguagem ele deve aprender",none,train
+F090,como cuidar da saúde mental no trabalho,none,test
+F091,qual documento a pousada pede pra fazer check-in,none,train
+F092,"quero comprar um terreno, como funciona a escritura",none,test
+F093,o médico particular cobrou caro pela consulta,none,train
+F094,quero estudar medicina em portugal,none,test
+F095,tem um buraco enorme na rua da minha casa aqui em curitiba,none,train
+F096,como pago o ipva do meu carro no rio de janeiro,none,test

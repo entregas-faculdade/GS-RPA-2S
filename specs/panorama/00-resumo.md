@@ -14,7 +14,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 ███████░░░ 77% · 17/22 itens ✅
 
 ## Agora
-- 🟡 · plan-03.05 · R03.5 · Criar o localizador determinístico de fontes aprovadas por texto do pedido, com medição
+—
 
 ## Próximas
 - 🔴 · plan-03.06 · R03.6 · "Responder em degraus no pipeline: serviço, canal geral, \"não tenho a informação\" e telefones de emergência"
@@ -32,4 +32,5 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
-- 📋 22 achado(s) no `00-backlog`
+- 🟢 plan-03.05 · Criar o localizador determinístico de fontes aprovadas por texto do pedido, com medição — aguardando síntese
+- 📋 24 achado(s) no `00-backlog`

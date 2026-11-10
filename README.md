@@ -158,6 +158,8 @@ esta amostra sintética, não pedidos reais. Matriz de confusão, métricas por 
 erros, casos de falha tratados (arquivo ausente, JSON inválido, link fora do ar, resposta vazia do LLM, modelo ausente)
 e limites estão em [notebooks/evidence.ipynb](notebooks/evidence.ipynb).
 
+Localizador de fontes (sem LLM, `ServiceFinder`), medido em 96 pedidos sintéticos (48 de treino para ajustar os limiares e 48 de teste só para reportar): no teste, cobertura de 47,9%, acerto de 87,0% entre os que devolveram fonte (20 de 23) e falso positivo de 16,7% (3 de 18 pedidos sem fonte, entre eles um de outra cidade, que o piloto de São Paulo não distingue); no treino, 45,8%, 90,9% e 5,6%. Os padrões `FINDER_MIN_SCORE=0,25` e `FINDER_MARGIN=0,15` preferem dizer "não sei" a apontar a fonte errada, e isso custa cobertura: isto descreve esta amostra sintética, não pedidos reais (seção 5 do [notebook](notebooks/evidence.ipynb)).
+
 ## Proteção de dados, ética e ODS
 
 O protótipo usa só dados sintéticos e anonimiza CPF, telefone, e-mail, nome de pessoa, endereço (logradouro com

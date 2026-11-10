@@ -4,9 +4,23 @@ from pathlib import Path
 
 import pytest
 
-from triage.config import DEFAULT_LINK_CHECK_USER_AGENT, load_settings
+from triage.config import (
+    DEFAULT_LINK_CHECK_USER_AGENT,
+    FINDER_MARGIN,
+    FINDER_MIN_SCORE,
+    load_settings,
+)
 
-ENV_KEYS = ("LLM_ENABLED", "LLM_BASE_URL", "LLM_MODEL", "LLM_API_KEY", "LOG_LEVEL", "LINK_CHECK_USER_AGENT")
+ENV_KEYS = (
+    "LLM_ENABLED",
+    "LLM_BASE_URL",
+    "LLM_MODEL",
+    "LLM_API_KEY",
+    "LOG_LEVEL",
+    "LINK_CHECK_USER_AGENT",
+    "FINDER_MIN_SCORE",
+    "FINDER_MARGIN",
+)
 
 
 @pytest.fixture(autouse=True)
@@ -67,3 +81,48 @@ def test_link_check_user_agent_comes_from_the_environment(monkeypatch: pytest.Mo
 def test_blank_link_check_user_agent_falls_back_to_the_default(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     monkeypatch.setenv("LINK_CHECK_USER_AGENT", "   ")
     assert load_settings(tmp_path / "missing.env").link_check_user_agent == DEFAULT_LINK_CHECK_USER_AGENT
+
+
+def test_finder_thresholds_default_when_unset(tmp_path: Path) -> None:
+    settings = load_settings(tmp_path / "missing.env")
+
+    assert settings.finder_min_score == FINDER_MIN_SCORE
+    assert settings.finder_margin == FINDER_MARGIN
+
+
+def test_finder_thresholds_come_from_the_environment(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    monkeypatch.setenv("FINDER_MIN_SCORE", "0.4")
+    monkeypatch.setenv("FINDER_MARGIN", " 0.2 ")
+
+    settings = load_settings(tmp_path / "missing.env")
+
+    assert settings.finder_min_score == 0.4
+    assert settings.finder_margin == 0.2
+
+
+INVALID_FINDER_VALUES = [
+    (name, raw_value)
+    for name in ("FINDER_MIN_SCORE", "FINDER_MARGIN")
+    for raw_value in ("abc", "1.5", "-0.1", "nan")
+]
+
+
+@pytest.mark.parametrize("invalid", INVALID_FINDER_VALUES)
+def test_invalid_finder_threshold_falls_back_to_the_default_with_a_warning(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, caplog: pytest.LogCaptureFixture, invalid: tuple[str, str]
+) -> None:
+    name, raw_value = invalid
+    monkeypatch.setenv(name, raw_value)
+
+    with caplog.at_level("WARNING", logger="triage.config"):
+        settings = load_settings(tmp_path / "missing.env")
+
+    assert (settings.finder_min_score, settings.finder_margin) == (FINDER_MIN_SCORE, FINDER_MARGIN)
+    assert name in caplog.text
+
+
+@pytest.mark.parametrize("raw_value", ["0", "1"])
+def test_finder_thresholds_accept_the_range_limits(monkeypatch: pytest.MonkeyPatch, tmp_path: Path, raw_value: str) -> None:
+    monkeypatch.setenv("FINDER_MIN_SCORE", raw_value)
+
+    assert load_settings(tmp_path / "missing.env").finder_min_score == float(raw_value)

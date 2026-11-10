@@ -52,7 +52,9 @@ Textos fixos em português, nunca gerados por LLM:
   a atendimento humano. Sem nenhum canal aprovado: só a frase de encaminhamento prioritário, com log `WARNING`; nunca um
   número escrito no código.
 - **degrau 2:** o template de `kind` `portal`/`channel` abre dizendo que **não foi achado um serviço específico** e que o
-  canal oficial indicado é o do órgão; depois nome, órgão, abrangência, instruções, links e telefones.
+  canal oficial indicado é o do órgão; depois nome, órgão, abrangência, instruções, links e telefones. A fonte vem do
+  localizador, que errou 3 de 18 pedidos sem fonte na amostra de teste: o texto deve soar como **sugestão** ("pode atender
+  ao seu pedido; se não for o que procura, o pedido segue para atendimento humano"), nunca como resposta certa.
 
 # 3. Escopo
 ## 3.1 Dentro
