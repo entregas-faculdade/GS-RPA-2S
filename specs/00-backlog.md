@@ -73,6 +73,7 @@ via normal.
 | 8 | `automation/link_check.py:38-40` — `requests` segue redirecionamentos e a URL final não é validada contra a allowlist: uma URL `gov.br` que redirecione para fora do domínio passa no `check_link` | execução | 2026-11-09 | médio |
 | 9 | `data/catalog.json` — `birth_certificate` aponta para uma notícia de 2021 (o `gov.br/mdh` recusa o cliente `requests`) e `voter_id` e `property_tax` para o hub genérico `gov.br/pt-br/servicos` e `tse.jus.br` está fora da allowlist; decisão do usuário: incluir `tse.jus.br` e uma URL específica de título de eleitor, ou manter o hub | execução | 2026-11-09 | baixo |
 | 10 | `automation/link_check.py` — `gov.br/mdh` (e talvez outros órgãos) devolve 403 ao `User-Agent` padrão do `requests` e `gov.br/mre` derrubou a conexão numa tentativa; um `User-Agent` identificado no `check_link` pode ser preciso para o catálogo crescer | execução | 2026-11-09 | baixo |
+| 11 | `.env.example` não documenta que `LLM_ENABLED` é desligado por padrão nem o formato esperado de `LLM_BASE_URL` (termina em `/v1`, sem `/chat/completions`) | execução | 2026-11-09 | baixo |
 
 ---
 

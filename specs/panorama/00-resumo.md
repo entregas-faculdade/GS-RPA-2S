@@ -14,7 +14,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 ██████░░░░ 63% · 7/11 itens ✅
 
 ## Agora
-- 🟡 · plan-03.02 · R03.2 · Montar a resposta final ao cidadão, com LLM opcional e caminho seguro
+—
 
 ## Próximas
 - 🔴 · plan-04.03 · R04.3 · Orquestrar o pipeline em lote com retry, idempotência, agendamento e relatório de execução
@@ -25,13 +25,11 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | FF | Família | Itens ✅/total | Progresso | Plans abertas |
 |---|---|---|---|---|
 | 01 | Núcleo do robô | 3/3 | █████ | 0 |
-| 02 | Classificação | 2/2 | █████ | 1 |
-| 03 | Automação | 1/2 | ██░░░ | 2 |
+| 02 | Classificação | 2/2 | █████ | 0 |
+| 03 | Automação | 1/2 | ██░░░ | 1 |
 | 04 | Operação e interface | 1/3 | █░░░░ | 2 |
 | 05 | Validação e entrega | 0/1 | ░░░░░ | 1 |
 
 ## Atenção
-- 🟢 plan-02.02 · Calcular a confiança e decidir quando enviar o pedido à revisão humana — aguardando síntese
-- 🟢 plan-03.01 · Criar o catálogo de serviços com allowlist de domínios e verificação de links — aguardando síntese
-- 📋 10 achado(s) no `00-backlog`
-- ⚠️ 2 problema(s) de família/item — rode `generate_summary.py --check`
+- 🟢 plan-03.02 · Montar a resposta final ao cidadão, com LLM opcional e caminho seguro — aguardando síntese
+- 📋 11 achado(s) no `00-backlog`
