@@ -75,20 +75,28 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 - ✅ **R01.1** Estrutura do projeto — dependências, configuração, log e `run.py` mínimo (✅ 2026-11-09)
 - ✅ **R01.2** Ingestão e sanitização — txt/csv/json tolerante a falhas (✅ 2026-11-09)
 - ✅ **R01.3** Anonimização de PII — CPF, telefone e e-mail (✅ 2026-11-09)
-- 🔷 **R01.4** Anonimização ampliada — nome, endereço, CEP, RG, data e documentos
+- ✅ **R01.4** Anonimização ampliada — nome, endereço, CEP, RG, data e documentos (✅ 2026-11-10)
 
 ## 02 · Classificação
 - ✅ **R02.1** Classificador — conjunto rotulado sintético, regex e TF-IDF (✅ 2026-11-09)
 - ✅ **R02.2** Confiança e revisão humana — limiares e gatilhos (✅ 2026-11-09)
+- 🔷 **R02.3** Urgência de saúde — termos de emergência e "urgente" de cortesia
+- 🔷 **R02.4** Dataset ampliado e calibração — treino ≥ 40 por categoria e limiares por validação cruzada
 
 ## 03 · Automação
 - ✅ **R03.1** Catálogo e allowlist — links oficiais verificados (✅ 2026-11-09)
 - ✅ **R03.2** Resposta final — template com LLM opcional e fallback (✅ 2026-11-09)
+- 🔷 **R03.3** Catálogo v2 — vários links e telefones, esfera, aprovação e verificador
+- 🔷 **R03.4** Catálogo de São Paulo — fontes aprovadas de saúde, educação, veículos e prefeitura
+- 🔷 **R03.5** Localizador de serviços — busca determinística nas fontes aprovadas, com medição
+- 🔷 **R03.6** Resposta em degraus — serviço, canal geral, "não tenho a informação" e emergência
+- 🔷 **R03.7** LLM assistente de localização — escolha entre fontes aprovadas, opcional
 
 ## 04 · Operação e interface
 - ✅ **R04.1** Persistência SQLite — idempotência, fila, feedback e execuções (✅ 2026-11-09)
 - ✅ **R04.2** Interface Streamlit — atendimento, revisão e feedback (✅ 2026-11-10)
 - ✅ **R04.3** Orquestração RPA — lote, retry, agendamento e relatório de execução (✅ 2026-11-10)
+- 🔷 **R04.4** Revisão com categoria e exportação — catalogar pedidos anonimizados
 
 ## 05 · Validação e entrega
 - ✅ **R05.1** Validação e entrega — métricas, notebook de evidências e README (✅ 2026-11-10)

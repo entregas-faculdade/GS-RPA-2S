@@ -5,7 +5,7 @@ dominio: "Governança de Specs (SDD)"
 status: "🟢 Vigente"
 tags: ["processo", "indice", "sdd"]
 relacionados: ["[[00-contexto]]", "[[00-backlog]]", "[[00-prompt-revisor]]", "[[00-prompt-executor]]"]
-proximo_numero_plan: {"01": 5, "02": 3, "03": 3, "04": 4, "05": 2} # Com famílias: mapa família → NN; simples: escalar NN único. Só sobe, nunca reaproveitado — ver §4.
+proximo_numero_plan: {"01": 5, "02": 5, "03": 8, "04": 5, "05": 2} # Com famílias: mapa família → NN; simples: escalar NN único. Só sobe, nunca reaproveitado — ver §4.
 ---
 
 # 0. O que é este arquivo
@@ -54,7 +54,14 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-01.04-anonimizacao-ampliada](plan/plan-01.04-anonimizacao-ampliada.md) | Ampliar a anonimização para nome, endereço, CEP, RG, data e documentos | — | 🟢 Aprovada | `specs/01.03-anonimizacao-de-pii.md` |
+| 1 | [plan-02.03-urgencia-saude](plan/plan-02.03-urgencia-saude.md) | Detectar urgência de saúde e não tratar "urgente" de cortesia como emergência | — | 🟡 Em execução | `specs/02.02-confianca-e-revisao-humana.md` |
+| 2 | [plan-03.03-catalogo-v2](plan/plan-03.03-catalogo-v2.md) | Evoluir o catálogo para vários links e telefones, com aprovação e verificador | — | 🟡 Em execução | `specs/03.01-catalogo-e-allowlist.md` |
+| 3 | [plan-03.04-catalogo-sao-paulo](plan/plan-03.04-catalogo-sao-paulo.md) | Carregar a lista aprovada de fontes de SP (saúde, educação, veículos, prefeitura) | 03.03 (+ lista aprovada) | 🔴 A executar | `specs/03.01-catalogo-e-allowlist.md` |
+| 4 | [plan-03.05-localizador-de-servicos](plan/plan-03.05-localizador-de-servicos.md) | Criar o localizador determinístico de fontes aprovadas, com medição | 03.04 | 🔴 A executar | `specs/03.03-localizador-de-servicos.md` |
+| 5 | [plan-03.06-resposta-em-degraus](plan/plan-03.06-resposta-em-degraus.md) | Responder em degraus: serviço, canal geral, "não tenho a informação" e emergência | 03.05 | 🔴 A executar | `specs/arquitetura/04.03-orquestracao-rpa.md` |
+| 6 | [plan-03.07-llm-assistente-de-localizacao](plan/plan-03.07-llm-assistente-de-localizacao.md) | LLM opcional escolhe entre fontes aprovadas e melhora o texto | 03.06 | 🔴 A executar | `adr/006-llm-escolhe-apenas-entre-fontes-aprovadas.md` |
+| 7 | [plan-02.04-dataset-ampliado-e-calibracao](plan/plan-02.04-dataset-ampliado-e-calibracao.md) | Ampliar o treino (≥ 40 por categoria) e recalibrar a confiança por validação cruzada | 03.04, 02.03 | 🔴 A executar | `specs/02.01-classificacao.md` |
+| 8 | [plan-04.04-revisao-com-categoria-e-exportacao](plan/plan-04.04-revisao-com-categoria-e-exportacao.md) | Registrar a categoria correta na revisão e exportar pedidos anonimizados | 03.06 | 🔴 A executar | `specs/arquitetura/04.01-persistencia.md` |
 
 ---
 
