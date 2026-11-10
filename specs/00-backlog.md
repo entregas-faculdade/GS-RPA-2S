@@ -81,6 +81,8 @@ via normal.
 | 16 | `interface/service.py` (`send_feedback`) — "uma avaliação por resposta" é controlada só em memória do serviço: reiniciar o app permite avaliar de novo o mesmo pedido, e o storage aceita feedbacks repetidos para o mesmo hash | execução | 2026-11-10 | baixo |
 | 17 | `privacy/names.py` — prenome da lista dentro de nome de lugar vira falso positivo (`Vila Madalena` → `Vila [NOME]`); estender os prefixos de topônimo (vila, jardim, parque, bairro) | execução | 2026-11-10 | baixo |
 | 18 | `docs/quadro-de-temas.md` ainda diz que a anonimização cobre só CPF, telefone e e-mail; atualizar para os nove tipos | revisão | 2026-11-10 | baixo |
+| 19 | `automation/resolver.py` — `resolve_entry` não confere `status`: uma entrada `candidate` passada diretamente é entregue; checar `approved` também ali | revisão | 2026-11-10 | médio |
+| 20 | `data/urgency_terms.json` — o léxico casa frases exatas: `dor muito forte no peito` e `dificuldade em respirar` não são urgentes; 6 pedidos `urgent=1` do CSV (L031, L052, L125, L131, L150, L178) nunca foram detectados por léxico | revisão | 2026-11-10 | médio |
 
 ---
 

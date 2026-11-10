@@ -1,11 +1,17 @@
-"""Resolução de categoria em serviço do catálogo, só com link permitido e no ar."""
+"""Resolução de categoria em serviço do catálogo, só com fonte aprovada e links permitidos e no ar."""
 
 import logging
-from collections.abc import Callable, Mapping
-from dataclasses import dataclass
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass, replace
 
 from triage.automation.allowlist import is_allowed, load_allowed_suffixes
-from triage.automation.catalog import ServiceEntry, load_catalog
+from triage.automation.catalog import (
+    KIND_SERVICE,
+    Link,
+    ServiceEntry,
+    approved_only,
+    load_catalog,
+)
 from triage.automation.link_check import LinkStatus, check_link
 
 REASON_OUT_OF_CATALOG = "out_of_catalog"
@@ -28,11 +34,11 @@ class CatalogLookup:
 
     def __init__(
         self,
-        catalog: Mapping[str, ServiceEntry],
+        catalog: Sequence[ServiceEntry],
         allowed_suffixes: frozenset[str],
         link_checker: Callable[[str], LinkStatus] = check_link,
     ) -> None:
-        self._catalog = catalog
+        self._catalog = tuple(catalog)
         self._allowed_suffixes = allowed_suffixes
         self._link_checker = link_checker
         self._link_cache: dict[str, LinkStatus] = {}
@@ -42,19 +48,40 @@ class CatalogLookup:
             self._link_cache[url] = self._link_checker(url)
         return self._link_cache[url]
 
+    def _link_is_usable(self, entry: ServiceEntry, link: Link) -> bool:
+        if not is_allowed(link.url, self._allowed_suffixes):
+            logger.error("Defeito no catálogo: link de %s fora da allowlist", entry.id)
+            return False
+        status = self._check_once(link.url)
+        if not status.ok:
+            logger.warning("Link de %s indisponível (%s)", entry.id, status.error)
+        return status.ok
+
+    def approved_entries(self) -> list[ServiceEntry]:
+        """As entradas `approved`, para o localizador."""
+        return approved_only(list(self._catalog))
+
+    def resolve_entry(self, entry: ServiceEntry) -> Resolution:
+        """Verifica a entrada e a devolve só com os links vivos; sem nenhum link vivo, `link_unavailable`.
+
+        Entrada só com telefones (sem link) é aceita sem verificação de rede.
+        """
+        live_links = tuple(link for link in entry.links if self._link_is_usable(entry, link))
+        if entry.links and not live_links:
+            return Resolution(None, REASON_LINK_UNAVAILABLE)
+        return Resolution(replace(entry, links=live_links), None)
+
     def resolve(self, category: str) -> Resolution:
         """Devolve o serviço da categoria, ou `Resolution(None, motivo)`; nunca levanta exceção de rede."""
-        service = self._catalog.get(category)
-        if category == OTHER_CATEGORY or service is None:
+        if category == OTHER_CATEGORY:
             return Resolution(None, REASON_OUT_OF_CATALOG)
-        if not is_allowed(service.url, self._allowed_suffixes):
-            logger.error("Defeito no catálogo: URL de %s fora da allowlist", category)
-            return Resolution(None, REASON_LINK_UNAVAILABLE)
-        status = self._check_once(service.url)
-        if not status.ok:
-            logger.warning("Link de %s indisponível (%s)", category, status.error)
-            return Resolution(None, REASON_LINK_UNAVAILABLE)
-        return Resolution(service, None)
+        entry = next(
+            (item for item in self.approved_entries() if item.category == category and item.kind == KIND_SERVICE),
+            None,
+        )
+        if entry is None:
+            return Resolution(None, REASON_OUT_OF_CATALOG)
+        return self.resolve_entry(entry)
 
 
 def build_default_lookup() -> CatalogLookup:

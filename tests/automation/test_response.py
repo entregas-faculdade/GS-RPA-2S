@@ -1,10 +1,11 @@
 """Resposta final: template como padrão e todo caminho de falha do LLM caindo nele."""
 
+import dataclasses
 import logging
 
 import pytest
 
-from triage.automation.catalog import ServiceEntry
+from triage.automation.catalog import Link, Phone, ServiceEntry
 from triage.automation.llm_client import LlmInvalidResponse, LlmUnavailable
 from triage.automation.response import (
     FALLBACK_LLM_INVALID_RESPONSE,
@@ -16,7 +17,23 @@ from triage.automation.response_guard import MAX_RESPONSE_LENGTH
 from triage.automation.templates import render_template
 
 URL = "https://www.gov.br/inss"
-SERVICE = ServiceEntry("social_security", "Aposentadoria (INSS)", "INSS", URL, "Entre com a conta gov.br.", "fonte", "2026-11-09")
+SERVICE = ServiceEntry(
+    id="social_security",
+    category="social_security",
+    kind="service",
+    scope="federal",
+    coverage="Brasil",
+    area="social",
+    display_name="Aposentadoria (INSS)",
+    agency="INSS",
+    instructions="Entre com a conta gov.br.",
+    keywords=("inss",),
+    links=(Link("Portal do INSS", URL),),
+    phones=(),
+    source_note="fonte",
+    verified_on="2026-11-09",
+    status="approved",
+)
 TEMPLATE = render_template(SERVICE)
 
 
@@ -32,10 +49,33 @@ class StubClient:
         return self.answer
 
 
-def test_template_has_service_name_agency_instructions_and_link() -> None:
-    for part in ("Aposentadoria (INSS)", "INSS", "Entre com a conta gov.br.", URL):
+def test_template_has_service_name_agency_coverage_instructions_and_link() -> None:
+    for part in ("Aposentadoria (INSS)", "INSS", "Brasil", "Entre com a conta gov.br.", f"Portal do INSS: {URL}"):
         assert part in TEMPLATE
+    assert "Telefones" not in TEMPLATE
     assert render_template(SERVICE) == TEMPLATE
+
+
+def test_template_lists_every_link_and_phone_one_per_line() -> None:
+    other = "https://www.gov.br/outro"
+    service = dataclasses.replace(
+        SERVICE,
+        links=(Link("Portal do INSS", URL), Link("Outra página", other)),
+        phones=(Phone("Central do INSS", "135"), Phone("Ouvidoria", "0800 61 61 61")),
+    )
+    lines = render_template(service).splitlines()
+    assert f"Portal do INSS: {URL}" in lines
+    assert f"Outra página: {other}" in lines
+    assert "Telefones:" in lines
+    assert "Central do INSS: 135" in lines
+    assert "Ouvidoria: 0800 61 61 61" in lines
+
+
+def test_template_without_links_shows_only_phones() -> None:
+    service = dataclasses.replace(SERVICE, links=(), phones=(Phone("Central 156", "156"),))
+    text = render_template(service)
+    assert "Central 156: 156" in text
+    assert "https://" not in text
 
 
 def test_without_client_the_template_answers_and_no_fallback_is_reported() -> None:

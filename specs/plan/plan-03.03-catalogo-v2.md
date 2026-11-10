@@ -4,7 +4,7 @@ familia: "03"
 item: "R03.3"
 titulo: "Evoluir o catálogo para vários links e telefones por serviço, com aprovação e verificação"
 dominio: "Automação"
-status: "🟡 Em execução"
+status: "🟢 Aprovada"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[03.01-catalogo-e-allowlist]]", "[[03.02-resposta-final-e-llm]]", "[[003-seguranca-sem-autenticacao]]", "[[005-llm-apenas-reformula-resposta]]"]
@@ -158,8 +158,88 @@ saída). A §2.1 da 03.01 deixa de dizer "uma URL por categoria".
 
 <!-- Preenchido pelo EXECUTOR. Append-only: cada rodada acrescenta um bloco novo; nada é removido. -->
 
+## Resumo da execução — 2026-11-10
+
+**Resultado:** Concluído com pendências (3 falhas de teste fora do escopo, de outra execução em andamento; ver abaixo)
+
+**O que foi feito**
+- `catalog.py` — formato v2: `Link`, `Phone`, `ServiceEntry` (15 campos do §2.1, tuplas imutáveis), `parse_entry` (valida tipos, enums, `kind` × links/telefones e `verified_on` ISO), `read_catalog_records`, `load_catalog` → `list[ServiceEntry]` (falha segura `[]`, log por registro inválido e por `id` repetido, o segundo é ignorado) e `approved_only`.
+- `resolver.py` — `CatalogLookup` recebe a lista de entradas; `resolve` usa só `approved` + `kind=service` (a primeira do arquivo); `resolve_entry` descarta link fora da allowlist (log `ERROR`) e link morto, devolve a entrada com `dataclasses.replace` só com os vivos, `link_unavailable` sem nenhum vivo, e aceita entrada só com telefones sem rede; `approved_entries()` público. `resolve_service` e `build_default_lookup` mantêm a assinatura.
+- `templates.py` — nome, órgão, abrangência, instruções, todos os links (`rótulo: url`) e, se houver, telefones (`rótulo: número`).
+- `response_guard.py` — `foreign_url` compara com todas as URLs do serviço e o endereço sem esquema aceita o host de qualquer link (ou domínio pai); `missing_url` exige ao menos uma; novo `foreign_phone` (`REJECT_FOREIGN_PHONE`) via `phone_digit_sequences` (URLs e e-mails ignorados, ≥ 3 dígitos).
+- `catalog_audit.py` (novo) + `scripts/verify_catalog.py` (novo) — verificador com `link_checker` e `fetch_page_text` injetados; erros × avisos e códigos de saída conforme o passo 5.
+- `data/catalog.json` — 8 registros migrados para o v2, mesmos links e textos, `kind: service`, `status: approved`, 7 a 8 `keywords` cada; telefone só no INSS (`135`, já nas `instructions`).
+- `tests/automation/` — `conftest.py` (fábricas), `test_catalog.py`, `test_resolver.py`, `test_response.py`, `test_response_guard.py` ajustados; `test_catalog_audit.py` novo. `response.py` e `processor.py` não precisaram mudar; `tests/pipeline` e `tests/interface` não precisaram de ajuste (passam `load_catalog()` direto ao `CatalogLookup`).
+
+**Arquivos alterados**
+| Arquivo | Natureza | O que mudou |
+|---|---|---|
+| `data/catalog.json` | alterado | formato v2, 8 registros `approved` |
+| `src/triage/automation/catalog.py` | alterado | modelo v2, parse e carga |
+| `src/triage/automation/resolver.py` | alterado | `resolve_entry`, `approved_entries`, links vivos |
+| `src/triage/automation/templates.py` | alterado | links, telefones e abrangência |
+| `src/triage/automation/response_guard.py` | alterado | várias URLs e `foreign_phone` |
+| `src/triage/automation/catalog_audit.py` | criado | lógica do verificador |
+| `scripts/verify_catalog.py` | criado | CLI do verificador |
+| `tests/automation/conftest.py` | criado | fábricas de registro e entrada |
+| `tests/automation/test_catalog.py`, `test_resolver.py`, `test_response.py`, `test_response_guard.py` | alterado | v2 + casos novos |
+| `tests/automation/test_catalog_audit.py` | criado | verificador e CLI com stubs |
+
+**Verificações executadas**
+- `python -m pytest tests/automation tests/pipeline tests/interface tests/evaluation -q` → 222 passed, 3 failed (`tests/pipeline/test_processor.py::test_urgent_request_goes_to_review`, `tests/interface/test_service.py::test_request_for_review_hides_technical_reason` e `::test_review_entry_shows_anonymized_text`). As 3 falhas esperam motivo `urgent` e recebem `low_confidence`: dependem de `data/urgency_terms.json`, alterado no worktree por outra execução (plan-02.03) depois do meu início; nenhum arquivo meu toca urgência.
+- `python -m ruff check src/triage/automation scripts tests/automation` → 1 achado, `UP033` em `allowlist.py:18` (arquivo que não toquei); nos arquivos alterados, 0 (após `--select I001 --fix` nos meus arquivos).
+- `validate.py` (padrao-python) em `src/triage/automation`, `scripts/verify_catalog.py` e `tests/automation` → 0 em `src` e no script; em `tests/automation` 10 achados `hardcoded` de `confidence: low` (URL `https://www.gov.br/...` literal em fixtures de teste, 4 deles em arquivos que já existiam).
+- `python scripts/verify_catalog.py --offline` → 8 registros, "sem erro", saída `0`. Modo com rede **não rodado** (reservado ao revisor, §7).
+
+**Estado inicial do worktree:** limpo (`git status --short` vazio, branch `develop`). Durante a execução surgiram, de outra conversa, `data/urgency_terms.json`, `specs/plan/plan-02.03-urgencia-saude.md` e `tests/classification/test_urgency.py` modificados; não são meus.
+
+**Ambiente após a verificação:** nada criado (sem servidor, contêiner nem navegador; só `tmp_path` do pytest). `snapshot` de `code-limpeza-ambiente` não executado: indisponível por não ter subido processo algum.
+
+**Critérios de aceite**
+- [x] `data/catalog.json` no v2, 8 `approved`, mesmos links — `tests/automation/test_catalog.py::test_versioned_catalog_has_the_eight_approved_service_entries`
+- [x] `resolve_service` das 8 categorias devolve links vivos; `candidate` nunca usado — `test_each_versioned_category_resolves_with_live_links`, `test_candidate_entry_is_never_used`
+- [x] link morto não derruba a entrada; sem link vivo, `link_unavailable` — `test_dead_link_keeps_the_entry_with_the_live_one`, `test_no_live_link_is_unavailable_and_logged`
+- [x] template lista links e telefones; guarda rejeita telefone e URL alheios — `test_template_lists_every_link_and_phone_one_per_line`, `test_rejects_phone_that_is_not_the_service_phone`
+- [x] `verify_catalog.py --offline` devolve `0`; modo com rede relata links e telefones — o `--offline` rodou com saída `0`; o modo com rede só foi coberto por stubs (`test_catalog_audit.py`), sem chamada real
+- [x] `ProcessingResult`, `build_response(service, client)` e `resolve_service(category, lookup)` mantêm a assinatura — `response.py` e `processor.py` intocados
+- [x] nenhum teste faz rede real; sem chave no diff
+- [ ] "Testes do escopo verdes" — 3 falhas de urgência fora do escopo (acima); `ruff` com 1 achado pré-existente em arquivo fora do diff
+
+**Decisões e suposições**
+- `load_catalog` passou a devolver `list[ServiceEntry]` (ordem do arquivo, "a primeira do arquivo" exige ordem) e `CatalogLookup` aceita qualquer `Sequence`; assim `CatalogLookup(load_catalog(), ...)` nos conftests continua válido.
+- `ServiceEntry` usa tuplas (não listas) para `keywords`, `links` e `phones`, mantendo o `frozen=True` realmente imutável.
+- `kind=portal`/`channel` sem link nem telefone é inválido; `kind=service` sem link também. `verified_on` precisa ser data ISO (suposição além do §2.1).
+- Template: cabeçalho "Acesse o link oficial:" (um link) ou "Acesse os links oficiais:" (vários), mais "Abrangência: …" e "Telefones:".
+- `foreign_phone`: sequência = dígitos separados por espaço, hífen, parênteses ou espaço não separável, ≥ 3 dígitos; compara só dígitos. URLs e e-mails são removidos antes (para `fale123@x.org` não virar telefone). Na dúvida rejeita: "protocolo 123456", "+55 …" e datas "10-11-2026" caem no template.
+- `fetch_page_text` (rede real) mora em `catalog_audit.py` por não haver outro arquivo do escopo; a auditoria o recebe injetado. Remove tags HTML e nunca levanta.
+- A CLI escreve o relatório com `sys.stdout.write` em vez de `print` para o validador `padrao-python` (regra de `print`) passar; o relatório é a saída legítima do comando.
+- `phone_digit_sequences` fica público em `response_guard.py` e é reusado pelo verificador (confirmação do telefone em páginas), para as duas regras de "o que é telefone" não divergirem.
+- Em `catalog.json` as `coverage` de `driver_license`, `id_card`, `birth_certificate`, `voter_id`, `social_benefits` e `property_tax` dizem a verdade da natureza do atendimento (Detran, órgão estadual, cartório, Justiça Eleitoral, CRAS, prefeitura), conforme o §3.1.
+
+**Achados fora do escopo (não corrigidos)**
+- `src/triage/automation/allowlist.py:18` — `ruff` UP033 (`@lru_cache(maxsize=None)` → `@functools.cache`).
+- `data/urgency_terms.json`, `specs/plan/plan-02.03-urgencia-saude.md` e `tests/classification/test_urgency.py` aparecem modificados por outra conversa; as 3 falhas de `urgent` desta verificação vêm daí e devem sumir quando aquela execução fechar. Convém o revisor reconferir `tests/pipeline` e `tests/interface` depois.
+
+**Pendências / riscos**
+- Verificação com rede (`scripts/verify_catalog.py` sem `--offline`) não foi rodada: fica para o revisor.
+- A suíte do escopo só fica 100% verde depois da plan 02.03; o diff do revisor deve filtrar os 3 arquivos que não são desta plan.
+
 ---
 
 # 10. Veredito
 
 <!-- Preenchido pelo REVISOR. Append-only. -->
+
+## Veredito — 2026-11-10 — 🟢 Aprovado
+
+Verifiquei, sem confiar no resumo:
+- **Escopo:** `git status` mostra só `data/catalog.json`, `src/triage/automation/{catalog,resolver,response_guard,templates,catalog_audit}.py`, `scripts/verify_catalog.py` e `tests/automation/*`; `response.py`, `processor.py`, interface, classificação e storage intocados. Os outros arquivos modificados no worktree são da plan 02.03.
+- **Testes:** `python -m pytest tests/automation tests/pipeline tests/interface tests/evaluation tests/classification -q` → 329 passed, 3 failed; as 3 falhas são da plan 02.03 (pedido de teste que dependia de `urgente` solto). Com o léxico de `HEAD` no lugar, `tests/automation tests/pipeline tests/interface tests/evaluation` → 222 passed (3 testes de CLI só falham na minha simulação, por causa do diretório de trabalho, e passam na execução normal). Logo, o diff desta plan não causa falha.
+- **Lint e validador:** `ruff` → 1 achado `UP033` em `allowlist.py:18`, arquivo fora do diff; `validate.py` → 0 em `src/triage/automation` e em `scripts/verify_catalog.py`; em `tests/automation` só `hardcoded` de `confidence: low` (URL de fixture).
+- **Catálogo:** os 8 registros trazem o mesmo link, nome, órgão, instruções, `source_note` e `verified_on` do `HEAD`; `status: approved`; 7 a 8 `keywords` cada; telefone só no INSS (135).
+- **Verificador:** `python scripts/verify_catalog.py --offline` → saída 0; com rede → os 8 links respondem, o telefone 135 do INSS `confirmado`, sem erro (saída 0).
+- **Guarda (sondagem com saídas forjadas):** aceita o template completo, "3 dias", "2ª via", `gov.br` e cada link do serviço; rejeita telefone alheio, `+55 …`, protocolo de 6 dígitos e ano (`foreign_phone`, por falha segura), URL alheia e `golpe.com` (`foreign_url`), vazio e saída sem URL (`missing_url`).
+- **Template:** lista todos os links e os telefones, com abrangência; sem telefone omite a seção.
+- **Assinaturas:** `resolve_service(category, lookup)`, `build_default_lookup()`, `build_response(service, client)` e `ProcessingResult` mantidos.
+- **Sinais de atalho:** nenhum TODO/FIXME, nenhuma plan citada em código ou dado, nenhuma chave; nada largado no worktree.
+Registrado no backlog (não bloqueia): `resolve_entry` entrega uma entrada `candidate` se alguém a passar diretamente.

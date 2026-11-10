@@ -14,8 +14,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 ██████░░░░ 60% · 12/20 itens ✅
 
 ## Agora
-- 🟡 · plan-02.03 · R02.3 · "Detectar urgência de saúde e parar de tratar \"urgente\" de cortesia como emergência"
-- 🟡 · plan-03.03 · R03.3 · Evoluir o catálogo para vários links e telefones por serviço, com aprovação e verificação
+- 🔵 · plan-02.03 · R02.3 · "Detectar urgência de saúde e parar de tratar \"urgente\" de cortesia como emergência"
 
 ## Próximas
 - 🔴 · plan-03.04 · R03.4 · Carregar no catálogo a lista aprovada de fontes públicas (saúde, educação, veículos e prefeitura de São Paulo)
@@ -28,13 +27,12 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 ## Por família
 | FF | Família | Itens ✅/total | Progresso | Plans abertas |
 |---|---|---|---|---|
-| 01 | Núcleo do robô | 4/4 | █████ | 1 |
+| 01 | Núcleo do robô | 4/4 | █████ | 0 |
 | 02 | Classificação | 2/4 | ██░░░ | 2 |
 | 03 | Automação | 2/7 | █░░░░ | 5 |
 | 04 | Operação e interface | 3/4 | ███░░ | 1 |
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
-- 🟢 plan-01.04 · Ampliar a anonimização para nome, endereço, CEP, RG, data e documentos — aguardando síntese
-- 📋 18 achado(s) no `00-backlog`
-- ⚠️ 1 problema(s) de família/item — rode `generate_summary.py --check`
+- 🟢 plan-03.03 · Evoluir o catálogo para vários links e telefones por serviço, com aprovação e verificação — aguardando síntese
+- 📋 20 achado(s) no `00-backlog`
