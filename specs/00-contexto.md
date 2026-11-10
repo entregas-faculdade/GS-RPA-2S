@@ -99,7 +99,7 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 | `triage.ingestion` | etapa 1 | ler txt/csv/json, validar formato, sanitizar |
 | `triage.privacy` | etapa 1 | anonimizar PII (CPF, telefone, e-mail, nome, endereço, CEP, RG, data, documentos) |
 | `triage.classification` | etapa 2 | regex + TF-IDF, score de confiança, decisão de revisão |
-| `triage.automation` | etapa 3 | catálogo, allowlist, verificação de links, resposta (+ LLM opcional) |
+| `triage.automation` | etapa 3 | catálogo, allowlist, verificação de links, localizador de fontes, resposta (+ LLM opcional) |
 | `triage.storage` | transversal | SQLite: idempotência, fila de revisão, feedback |
 | `triage.interface` | borda | Streamlit sobre o núcleo |
 | `triage.pipeline` | orquestração | encadeia as etapas, retry, idempotência e relatório de execução |

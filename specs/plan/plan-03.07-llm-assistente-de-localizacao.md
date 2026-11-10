@@ -54,7 +54,7 @@ Estado atual: `OpenAICompatibleClient.rewrite(prompt)`, `build_llm_client(settin
 | ADR | [[005-llm-apenas-reformula-resposta]] · [[003-seguranca-sem-autenticacao]] | decisão a ser **restringida** e a regra de dado pessoal |
 | Spec fixa | [[03.02-resposta-final-e-llm]] | cliente, guarda, motivos de fallback |
 | Spec fixa | [[01.03-anonimizacao-de-pii]] | limites residuais da anonimização |
-| Spec fixa | `specs/03.03-localizador-de-servicos.md` (ou a plan-03.05 se ainda não sintetizada) e `specs/arquitetura/04.03-orquestracao-rpa.md` (ou a plan-03.06) | localizador e degraus |
+| Spec fixa | `specs/03.03-localizador-de-servicos.md` e `specs/arquitetura/04.03-orquestracao-rpa.md` (ou a plan-03.06) | localizador e degraus |
 | Spec fixa | `specs/03.04-agente-llm.md` (ou a plan-03.08, se ainda não sintetizada) | arquivos do agente, composição do prompt, linter e cliente `complete` |
 | Contexto | [[00-contexto]] · [[00-knowledge]] | sempre |
 | Skill | `padrao-escrita` + `padrao-python` · `cyber-ia` | injeção de prompt, saída não confiável |

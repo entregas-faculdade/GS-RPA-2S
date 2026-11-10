@@ -4,11 +4,11 @@ familia: "03"
 item: "R03.6"
 titulo: "Responder em degraus no pipeline: serviço, canal geral, \"não tenho a informação\" e telefones de emergência"
 dominio: "Automação"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[04.03-orquestracao-rpa]]", "[[04.02-interface]]", "[[03.02-resposta-final-e-llm]]", "[[02.02-confianca-e-revisao-humana]]"]
-depende_de: "plan-03.05-localizador-de-servicos — precisa estar 🟢"
+depende_de: "—"
 destino_sintese: "specs/arquitetura/04.03-orquestracao-rpa.md"
 ---
 
@@ -20,7 +20,7 @@ pedido urgente, mostra os telefones de emergência aprovados, sem nunca inventar
 # 2. Contexto
 Fluxo atual (`pipeline/processor.py::_triage`): classifica; se a decisão não é `auto_answer`, o pedido vai à revisão e o
 cidadão vê só "Encaminhamos seu pedido para atendimento humano." ([[04.02-interface]] §2.2). Pedidos como "alvará" ou
-"buraco na rua" (`out_of_catalog`) e o pedido de saúde urgente não recebem nenhuma ajuda. O localizador (plan anterior)
+"buraco na rua" (`out_of_catalog`) e o pedido de saúde urgente não recebem nenhuma ajuda. O localizador ([[03.03-localizador-de-servicos]])
 acha a fonte aprovada por texto; o catálogo v2 traz links, telefones e a área `safety` com os canais de emergência.
 
 Decisões do grupo: o sistema só **roteia**; critério é ser serviço público; **sem fonte efetiva, o cidadão é informado de que
@@ -77,7 +77,7 @@ Textos fixos em português, nunca gerados por LLM:
 | Spec fixa | [[04.02-interface]] | desfechos mostrados ao cidadão |
 | Spec fixa | [[03.02-resposta-final-e-llm]] · [[03.01-catalogo-e-allowlist]] | template, guarda e catálogo v2 |
 | Spec fixa | [[02.02-confianca-e-revisao-humana]] | motivos de revisão e ordem dos gatilhos |
-| Spec fixa | [[03.03-localizador-de-servicos]] (após a síntese da plan anterior; antes, a própria plan-03.05) | contrato do localizador |
+| Spec fixa | [[03.03-localizador-de-servicos]] | contrato do localizador |
 | ADR | [[003-seguranca-sem-autenticacao]] · [[005-llm-apenas-reformula-resposta]] | só texto anonimizado; link só do catálogo |
 | Contexto | [[00-contexto]] · [[00-knowledge]] | sempre |
 | Skill | `padrao-escrita` + `padrao-python` | limiares; função ≤ 40 linhas (a `_triage` hoje é curta: dividir) |
