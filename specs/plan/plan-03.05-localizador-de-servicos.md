@@ -4,11 +4,11 @@ familia: "03"
 item: "R03.5"
 titulo: "Criar o localizador determinístico de fontes aprovadas por texto do pedido, com medição"
 dominio: "Automação"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[03.01-catalogo-e-allowlist]]", "[[02.01-classificacao]]", "[[005-llm-apenas-reformula-resposta]]"]
-depende_de: "plan-03.04-catalogo-sao-paulo e plan-03.09-verificacao-de-links-prefeitura — precisam estar 🟢 (as duas mexem em config.py e no catálogo)"
+depende_de: "—"
 destino_sintese: "specs/03.03-localizador-de-servicos.md"
 ---
 
@@ -26,7 +26,7 @@ Princípio de segurança: o localizador só devolve registros `approved` do cat�
 LLM, é medível e reprodutível ([[005-llm-apenas-reformula-resposta]]).
 
 Padrões existentes a reusar: `fold` (`triage.classification.preprocessing`) normaliza texto; `scikit-learn` já é
-dependência; `Settings` (`triage/config.py`) lê limiares do ambiente; `CatalogLookup.approved_entries()` (plan-03.03)
+dependência; `Settings` (`triage/config.py`) lê limiares do ambiente; `CatalogLookup.approved_entries()` ([[03.01-catalogo-e-allowlist]])
 entrega as entradas.
 
 # 3. Escopo
