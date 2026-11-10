@@ -4,7 +4,7 @@ familia: "03"
 item: "R03.2"
 titulo: "Montar a resposta final ao cidadão, com LLM opcional e caminho seguro"
 dominio: "Automação"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Média"
 tags: ["plan"]
 relacionados: ["[[005-llm-apenas-reformula-resposta]]", "[[003-seguranca-sem-autenticacao]]"]
