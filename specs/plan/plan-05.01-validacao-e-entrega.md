@@ -4,7 +4,7 @@ familia: "05"
 item: "R05.1"
 titulo: "Validar com amostra rotulada, documentar evidências e preparar a entrega"
 dominio: "Validação e entrega"
-status: "🟡 Em execução"
+status: "🟢 Aprovada"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[00-fundacao-tecnologica]]", "[[005-llm-apenas-reformula-resposta]]", "[[003-seguranca-sem-autenticacao]]"]
@@ -94,8 +94,90 @@ notebook, quadro de temas). Se os limiares mudaram, atualizar também `specs/02.
 
 <!-- Preenchido pelo EXECUTOR. Append-only: cada rodada acrescenta um bloco novo; nada é removido. -->
 
+## Resumo da execução — 2026-11-10
+
+**Resultado:** Concluído com pendências
+
+**O que foi feito**
+- `src/triage/evaluation/metrics.py` — funções puras: `accuracy`, `confusion_matrix`, `per_class_metrics` (precisão/recall/F1/suporte), `review_rate`, `automatic_coverage`, `automatic_accuracy`; entrada inconsistente (tamanhos, amostra vazia, rótulo fora das classes) levanta `ValueError`. `__init__.py` reexporta.
+- `tests/evaluation/test_metrics.py` — 16 testes com amostras de resultado conhecido (valores calculados à mão), incluindo classe sem previsão/sem exemplo e entradas inválidas.
+- `notebooks/evidence.ipynb` — seções na ordem da §5.2: (1) ponta a ponta sobre `data/samples` (+ segunda execução provando idempotência), (2) métricas sobre `split=test` sem LLM, (3) análise de erros, (4) cinco casos de falha, (5) limites. Executado com `jupyter nbconvert --execute --inplace`; 0 células sem execução, 0 erros; o notebook treina o modelo em memória e remove `output/notebook-evidence` ao fim.
+- Limiares: **mantidos** (0,60 / 0,15); motivo registrado no notebook (0 erro entre os 31 respondidos sozinhos; ajustar olhando o próprio teste o contaminaria). `config.py` não foi tocado.
+- `README.md` — integrantes `<preencher>`, problema e público, diagrama da fundação, instalar/rodar, chaves (`.env.example`), estrutura de pastas, quadro de temas, resultados com ponteiro ao notebook, parágrafo de proteção de dados, ética e ODS (16 e 10 "a confirmar com o grupo").
+- `docs/quadro-de-temas.md` — 4 temas (Automação/RPA, NLP, Regras/regex, Anonimização de PII) com onde entram, o que resolvem e a justificativa da combinação.
+- `data/labeled/README.md` — não alterado: a descrição (180 pedidos, 14 train/6 test por categoria) confere com o arquivo.
+
+**Arquivos alterados**
+| Arquivo | Natureza | O que mudou |
+|---|---|---|
+| `src/triage/evaluation/__init__.py` | criado | reexporta as métricas |
+| `src/triage/evaluation/metrics.py` | criado | métricas puras |
+| `tests/evaluation/test_metrics.py` | criado | 16 testes das métricas |
+| `notebooks/evidence.ipynb` | criado | notebook de evidências, executado, com saídas salvas |
+| `README.md` | criado | documentação de entrega |
+| `docs/quadro-de-temas.md` | criado | quadro de temas |
+| `specs/plan/plan-05.01-validacao-e-entrega.md` | alterado | este resumo e `status: "🟠 Em revisão"` |
+
+**Verificações executadas**
+- `python -m pytest tests/evaluation -q` → 16 passed.
+- `python -m pytest -q` (suíte inteira, por ser a plan de fechamento; nível `completa` da §7) → 376 passed.
+- `python -m ruff check src/triage/evaluation tests/evaluation notebooks` → All checks passed.
+- `python -m ruff check run.py src tests` → **9 erros em 8 arquivos que esta plan não tocou** (ver Achados); nos arquivos criados: 0.
+- `padrao-python/scripts/validate.py src/triage/evaluation` e `tests/evaluation` → `findings: []` (após anotar `-> None` nos testes).
+- `jupyter nbconvert --to notebook --execute --inplace notebooks/evidence.ipynb` → concluiu; 1ª tentativa falhou por `ZMQError: timed out` ao subir o kernel (infraestrutura do Jupyter, nada do notebook) e a repetição passou.
+- Conferência cruzada independente (script à parte sobre o CSV, modelo treinado com `scripts/train_model.py`): 54 pedidos, acurácia 0,8148, revisão 0,4259, 31 respondidos sozinhos com acerto 1,0, motivos `low_confidence` 16 / `out_of_catalog` 6 / `urgent` 1 → idênticos aos do notebook.
+- README seguido em cópia do repositório (sem `.git` e sem `output/`) com venv nova: `pip install -r requirements.txt` → `python scripts/train_model.py` → `python run.py --input data/samples --output out` → exit 0, `answered 4 / queued_for_review 4 / rejected 7`.
+- `grep -rn -i "api_key|secret|password"` em README, docs, notebook, `evaluation` e testes → só os nomes de variável `LLM_API_KEY` no README e a palavra "Secretaria" na saída do notebook; nenhum valor. Notebook sem caminho absoluto nem nome de usuário (grep em `Igor`, `Users`: 0).
+
+**Estado inicial do worktree:** `git status --short` vazio (branch `develop`, limpa).
+
+**Ambiente após a verificação:** a tarefa criou `output/` (modelo treinado por `scripts/train_model.py` para a conferência cruzada; `output/notebook-evidence` do notebook), a cópia + venv do teste do README no scratchpad, e `.pytest_cache`/`.ruff_cache`. Tudo removido ao fim (`output/` não existia antes). Nenhum servidor, contêiner ou banco largado. `snapshot` da skill `code-limpeza-ambiente`: não rodado (nada subiu em segundo plano; confirmei à mão). A verificação visual de `streamlit run app.py` (§7) **não foi feita**: é do revisor, e o Streamlit não foi iniciado.
+
+**Critérios de aceite**
+- [x] Notebook executa do início ao fim e as saídas estão salvas — evidência: `nbconvert --execute` sem erro, 0 células sem execução. Ressalva: o kernel `python3` desta máquina é o 3.11.9 (`language_info` do notebook), não o 3.14 do projeto; deu os mesmos números.
+- [x] Métricas com tamanho da amostra (54), por classe, matriz de confusão — evidência: células 7–9 do notebook.
+- [x] ≥ 3 casos de falha com log e caminho seguro — evidência: seção 4 (pasta ausente → exit 2; JSON inválido → `invalid_input`; link fora do ar → `link_unavailable`; resposta vazia do LLM → template + `llm_invalid_response`; modelo ausente → revisão).
+- [x] Análise de erros e limites sem afirmação não medida — evidência: seções 3 e 5; a "causa provável" está rotulada como hipótese e apoiada na coluna "fora do vocabulário", medida.
+- [x] README permite rodar sem ajuda — evidência: teste em venv nova acima. Ressalva: segui os passos de instalação e do robô; o `streamlit run app.py` não foi aberto.
+- [x] Quadro de temas com 4 temas, cada um com função no fluxo — `docs/quadro-de-temas.md`.
+- [x] Nenhuma chave, PII real ou `.env` no diff — evidência: greps acima; `git status` só com os arquivos da §3.1 e a plan.
+- [x] Ambiente e worktree limpos — evidência: `output/` e caches removidos; `git status --short` lista só os 5 itens novos e a plan.
+- [ ] Testes do escopo verdes; `ruff` sem violação — motivo: testes e `ruff` dos arquivos alterados verdes, mas `python -m ruff check run.py src tests` falha em arquivos fora do escopo (9 erros; ver Achados).
+- [x] Nenhum dado pessoal real, chave ou `.env` no diff.
+
+**Decisões e suposições**
+- Limiares mantidos e sem tabela antes/depois: não rodei varredura de limiares sobre o `split=test` para não ajustar no próprio teste; se o revisor quiser a varredura, deve ser sobre validação cruzada do treino (fora desta plan).
+- O notebook treina o modelo em memória (`train`) em vez de depender de `output/models/classifier.joblib`, para rodar em ambiente limpo sem tocar `output/`. O README manda treinar o modelo antes do robô porque `run.py` o lê do disco.
+- Caso "link fora do ar": usei o `check_link` real contra `http://127.0.0.1:9/` (retorna `ConnectTimeout`, com retry real) em vez de um verificador falso; "arquivo ausente" foi a pasta de entrada inexistente via `run.main` (exit 2), que é o caso de arquivo ausente que o código trata.
+- A seção 1 verifica os links do catálogo na rede de verdade; sem rede os pedidos vão à revisão (dito no notebook). As saídas salvas são de uma execução com rede (4 links "no ar").
+- Os 5 grupos de causa da análise de erros são interpretação minha; marcada como hipótese no notebook.
+- Os números do README (81,5%, 42,6%, 57,4%, 100% de 31) são texto fixo copiado da execução; se o modelo ou o CSV mudarem, README e notebook precisam ser atualizados juntos.
+- Python: o README diz "verificado com 3.14", conforme `00-contexto` §8.
+
+**Achados fora do escopo (não corrigidos)**
+- `python -m ruff check run.py src tests` falha em 9 pontos pré-existentes: `src/triage/automation/allowlist.py:18` e `src/triage/classification/urgency.py:16` (UP033), `src/triage/ingestion/sanitizer.py:3` (I001), `src/triage/storage/repository.py:38` (UP017), `tests/classification/test_decision.py:3`, `tests/classification/test_model.py:3`, `tests/ingestion/test_sanitizer.py:3`, `tests/storage/test_repository.py:1` (I001) e `tests/storage/test_repository.py:158` (SIM117). `ruff check .` acusa 14 (inclui `scripts/`/outros). Isso impede o "ruff verde" do §7 da plan e do `00-contexto`; a correção toca código de plans anteriores.
+- `.env.example` não lista `CONFIDENCE_MIN` e `AMBIGUITY_MARGIN`, que `config.py` lê; o README os documenta como opcionais.
+- Os `specs/02.02` e `specs/05.01` ainda dependem da síntese do revisor; como os limiares não mudaram, `02.02` não precisa de atualização.
+
+**Pendências / riscos**
+- Os 9 erros de `ruff` acima precisam de decisão do revisor (corrigir em demanda própria ou aceitar).
+- Verificação visual do Streamlit não feita (item de §7, uso do revisor).
+- O kernel do notebook foi o Python 3.11.9; reexecutar em 3.14 (versão do projeto) pode alterar saídas se houver diferença de biblioteca. Os números conferiram com o script rodado no 3.14.
+- A amostra é pequena e sintética (54 pedidos); o README e o notebook dizem isso, mas a nota de "evidências" depende de o grupo aceitar essa limitação.
+- Placeholders `<preencher>` (integrantes) e ODS "a confirmar com o grupo" continuam abertos por instrução da plan.
+
 ---
 
 # 10. Veredito
 
 <!-- Preenchido pelo REVISOR. Append-only: um bloco por rodada, com o que foi verificado e como. -->
+
+## Veredito — 2026-11-10 — 🟢 Aprovado
+
+**Verificado (nível completa, como a §7 declara), com saída real:** `git status`/`git diff` (só `README.md`, `docs/quadro-de-temas.md`, `notebooks/evidence.ipynb`, `src/triage/evaluation/` e `tests/evaluation/`; `config.py` e `data/labeled/README.md` intactos, coerente com limiares mantidos) · leitura integral de `metrics.py`, do README, do quadro de temas e das células de texto do notebook · `python -m pytest -q` (suíte inteira) → 376 passed · `python -m ruff check --no-cache src/triage/evaluation tests/evaluation notebooks` → All checks passed · `python -m ruff check .` → 14 erros, **todos fora do escopo** (`.githooks/verify_commit.py` e 8 arquivos das plans 01 a 04, já nos itens 1 e 14 do `00-backlog`), nenhum em arquivo desta plan · `padrao-python/scripts/validate.py` em `src/triage/evaluation` e `tests/evaluation` → `findings: []` · **notebook:** `jupyter nbconvert --execute` para arquivo temporário concluiu sem erro e reproduziu as saídas do versionado; versionado com 16 células de código, todas executadas e 0 erros; busca por nome de usuário, caminho absoluto, chave, CPF e e-mail nas saídas → 0 · **conferência cruzada independente** (script à parte sobre o `split=test`, modelo treinado por `scripts/train_model.py`): 54 pedidos, acurácia 0,8148, revisão 0,4259, 31 respondidos sozinhos com 31 acertos, motivos `low_confidence` 16 / `out_of_catalog` 6 / `urgent` 1 → idênticos ao notebook e ao README · **README em ambiente novo:** cópia do repositório, venv Python 3.14.0 novo, `pip install -r requirements-dev.txt` sem erro, `python scripts/train_model.py`, `python run.py --input data/samples --output out` → código 0 com `answered 4 / queued_for_review 4 / rejected 7`, segunda execução com `skipped_duplicate 15`, relatórios gerados, e `pytest -q` na cópia → 376 passed · `streamlit run app.py` na cópia → `/_stcore/health` 200 e `/` 200, processo encerrado e nenhum restou · textos de análise de erros e de limites escritos só com o que foi medido, a causa dos erros marcada como hipótese, e o aviso de amostra pequena e sintética no README e no notebook · limiares mantidos com motivo registrado (nenhum erro entre os respondidos sozinhos; ajustar olhando o próprio teste o contaminaria), então `specs/02.02` não precisa mudar · removi `output/`, caches e `__pycache__` do repositório.
+
+**Limites da verificação:** a conferência visual da interface em navegador real não foi feita (só saúde do servidor e o `AppTest` da 04.02); o kernel do notebook versionado é o Python 3.11.9, e o projeto verifica com 3.14, mas os números conferem no 3.14.
+
+**Decisões do executor aceitas:** notebook treina o modelo em memória para rodar em ambiente limpo; caso "arquivo ausente" demonstrado pela pasta de entrada inexistente; limiares mantidos sem tabela antes/depois, para não ajustar no conjunto de teste; placeholders `<preencher>` e ODS "a confirmar com o grupo" mantidos por instrução da plan.
+
+**Achados:** nenhum que reprove.

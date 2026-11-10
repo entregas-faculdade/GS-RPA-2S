@@ -54,7 +54,7 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-05.01-validacao-e-entrega](plan/plan-05.01-validacao-e-entrega.md) | Validar com amostra rotulada, documentar evidências e preparar a entrega | 04.02 | 🟡 Em execução | `specs/05.01-validacao-e-entrega.md` |
+| 1 | [plan-05.01-validacao-e-entrega](plan/plan-05.01-validacao-e-entrega.md) | Validar com amostra rotulada, documentar evidências e preparar a entrega | 04.02 | 🟢 Aprovada | `specs/05.01-validacao-e-entrega.md` |
 
 ---
 

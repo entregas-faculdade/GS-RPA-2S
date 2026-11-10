@@ -14,7 +14,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 █████████░ 90% · 10/11 itens ✅
 
 ## Agora
-- 🟡 · plan-05.01 · R05.1 · Validar com amostra rotulada, documentar evidências e preparar a entrega
+—
 
 ## Próximas
 —
@@ -25,10 +25,9 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 01 | Núcleo do robô | 3/3 | █████ | 0 |
 | 02 | Classificação | 2/2 | █████ | 0 |
 | 03 | Automação | 2/2 | █████ | 0 |
-| 04 | Operação e interface | 3/3 | █████ | 1 |
+| 04 | Operação e interface | 3/3 | █████ | 0 |
 | 05 | Validação e entrega | 0/1 | ░░░░░ | 1 |
 
 ## Atenção
-- 🟢 plan-04.02 · Criar a interface Streamlit de atendimento, fila de revisão e feedback — aguardando síntese
+- 🟢 plan-05.01 · Validar com amostra rotulada, documentar evidências e preparar a entrega — aguardando síntese
 - 📋 16 achado(s) no `00-backlog`
-- ⚠️ 1 problema(s) de família/item — rode `generate_summary.py --check`
