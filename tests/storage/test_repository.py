@@ -60,6 +60,21 @@ def test_already_processed_before_and_after_save(repository: Repository) -> None
     assert repository.already_processed(record.request_hash) is True
 
 
+def test_get_request_returns_saved_record(repository: Repository) -> None:
+    record = _record(status="queued_for_review")
+    repository.save_request(record, anonymized=True)
+
+    assert repository.get_request(record.request_hash) == record
+
+
+def test_get_request_unknown_hash_returns_none(repository: Repository) -> None:
+    assert repository.get_request(request_hash("nunca gravado")) is None
+
+
+def test_get_request_with_sql_text_as_hash_is_data(repository: Repository) -> None:
+    assert repository.get_request("x' OR '1'='1") is None
+
+
 def test_save_same_hash_twice_does_not_duplicate(repository: Repository, db_path: Path) -> None:
     record = _record()
     repository.save_request(record, anonymized=True)

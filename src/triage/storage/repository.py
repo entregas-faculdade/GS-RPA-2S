@@ -50,6 +50,16 @@ class Repository:
             row = connection.execute("SELECT 1 FROM requests WHERE hash = ?", (request_hash,)).fetchone()
         return row is not None
 
+    def get_request(self, request_hash: str) -> RequestRecord | None:
+        """Devolve o pedido gravado com esse hash, ou `None` se ele não existe."""
+        with session(self._path) as connection:
+            row = connection.execute(
+                "SELECT hash, anonymized_text, status, category, confidence, review_reason "
+                "FROM requests WHERE hash = ?",
+                (request_hash,),
+            ).fetchone()
+        return None if row is None else RequestRecord(*row)
+
     def save_request(self, record: RequestRecord, *, anonymized: bool) -> None:
         """Grava o pedido; o mesmo hash gravado de novo é ignorado, nunca erro."""
         if anonymized is not True:

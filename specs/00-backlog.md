@@ -77,6 +77,8 @@ via normal.
 | 12 | `pipeline/processor.py` (`_store`) — `save_request` e `enqueue_review` são duas transações: se a fila falhar de forma persistente depois de o pedido ser gravado, a segunda execução o vê como duplicado e o caminho seguro (`route_to_safe_review`) não o enfileira, então ele some da revisão | execução | 2026-11-10 | médio |
 | 13 | `classification/model.py` (`DEFAULT_MODEL_PATH`) — o modelo é lido de `output/models/` relativo à pasta atual e ignora `--output`; sem `scripts/train_model.py` antes, o `run.py` encaminha tudo à revisão (`low_confidence`); documentar o passo no README de entrega | execução | 2026-11-10 | baixo |
 | 14 | `python -m ruff check run.py src tests` com o ruff 0.17.4 fixado acusa 9 erros em arquivos de plans anteriores (I001 em `sanitizer.py`, `test_decision.py`, `test_model.py`, `test_sanitizer.py` e `test_repository.py`; UP033 em `allowlist.py` e `urgency.py`; UP017 em `repository.py`; SIM117 em `test_repository.py:143`), 8 corrigíveis com `--fix` | execução | 2026-11-10 | baixo |
+| 15 | `pipeline/processor.py` (`process_request`) — pedido repetido volta como `skipped_duplicate` sem texto de resposta, então a interface só diz "já registrado"; oferecer um modo que devolva a resposta já decidida sem regravar | execução | 2026-11-10 | baixo |
+| 16 | `interface/service.py` (`send_feedback`) — "uma avaliação por resposta" é controlada só em memória do serviço: reiniciar o app permite avaliar de novo o mesmo pedido, e o storage aceita feedbacks repetidos para o mesmo hash | execução | 2026-11-10 | baixo |
 
 ---
 
