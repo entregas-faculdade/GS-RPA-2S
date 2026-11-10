@@ -62,7 +62,7 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 - Regras universais de código: [`AGENTS.md`](../AGENTS.md) e skills `padrao-escrita` e `padrao-python` — SRP,
   função ≤ 40 linhas, aninhamento ≤ 3, ≤ 4 parâmetros, zero hardcoded, nenhuma exceção engolida.
 - **Dado pessoal real nunca entra** no repositório, em log ou em API. Só dados sintéticos ou públicos.
-- **PII (CPF, telefone, e-mail) é anonimizada antes de qualquer log ou chamada a API** ([[003-seguranca-sem-autenticacao]]).
+- **PII (CPF, telefone, e-mail, nome, endereço, CEP, RG, data e documentos) é anonimizada antes de qualquer log ou chamada a API** ([[003-seguranca-sem-autenticacao]]).
 - **Segredos só em `.env`** (fora do Git); `.env.example` sem valor.
 - **O robô só responde com link da allowlist** de domínios do catálogo (`.gov.br` e órgãos oficiais).
 - **O LLM apenas reformula** a resposta já decidida; nunca classifica nem escolhe URL ([[005-llm-apenas-reformula-resposta]]).
@@ -97,7 +97,7 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 | Pacote | Papel | Responsabilidade |
 |---|---|---|
 | `triage.ingestion` | etapa 1 | ler txt/csv/json, validar formato, sanitizar |
-| `triage.privacy` | etapa 1 | anonimizar CPF/telefone/e-mail |
+| `triage.privacy` | etapa 1 | anonimizar PII (CPF, telefone, e-mail, nome, endereço, CEP, RG, data, documentos) |
 | `triage.classification` | etapa 2 | regex + TF-IDF, score de confiança, decisão de revisão |
 | `triage.automation` | etapa 3 | catálogo, allowlist, verificação de links, resposta (+ LLM opcional) |
 | `triage.storage` | transversal | SQLite: idempotência, fila de revisão, feedback |
