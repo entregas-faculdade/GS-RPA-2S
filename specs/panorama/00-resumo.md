@@ -11,7 +11,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 # Panorama
 
 ## Progresso
-██████░░░░ 63% · 14/22 itens ✅
+██████░░░░ 68% · 15/22 itens ✅
 
 ## Agora
 —
@@ -30,10 +30,9 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 |---|---|---|---|---|
 | 01 | Núcleo do robô | 4/4 | █████ | 0 |
 | 02 | Classificação | 3/4 | ███░░ | 1 |
-| 03 | Automação | 3/9 | █░░░░ | 6 |
+| 03 | Automação | 4/9 | ██░░░ | 5 |
 | 04 | Operação e interface | 3/4 | ███░░ | 1 |
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
-- 🟢 plan-03.04 · Carregar no catálogo a lista aprovada de fontes públicas (saúde, educação, veículos e prefeitura de São Paulo) — aguardando síntese
 - 📋 20 achado(s) no `00-backlog`
