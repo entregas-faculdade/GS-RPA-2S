@@ -17,7 +17,6 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 —
 
 ## Próximas
-- 🔴 · plan-03.09 · R03.9 · Identificar o verificador de links e aceitar links bloqueados ao robô, validados manualmente
 - 🔴 · plan-03.05 · R03.5 · Criar o localizador determinístico de fontes aprovadas por texto do pedido, com medição
 - 🔴 · plan-03.06 · R03.6 · "Responder em degraus no pipeline: serviço, canal geral, \"não tenho a informação\" e telefones de emergência"
 - 🔴 · plan-03.08 · R03.8 · Definir o agente LLM em arquivos versionados (persona, regras, fluxo e parâmetros) com validador
@@ -34,4 +33,5 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
+- 🟢 plan-03.09 · Identificar o verificador de links e aceitar links bloqueados ao robô, validados manualmente — aguardando síntese
 - 📋 22 achado(s) no `00-backlog`

@@ -3,6 +3,7 @@
 import argparse
 import logging
 import sys
+from functools import partial
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
@@ -10,11 +11,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from triage.automation.allowlist import load_allowed_suffixes
 from triage.automation.catalog import (
     CATALOG_PATH,
+    DEFAULT_MAX_AGE_DAYS,
     CatalogFileError,
     read_catalog_records,
 )
 from triage.automation.catalog_audit import (
-    DEFAULT_MAX_AGE_DAYS,
     LEVEL_ERROR,
     LEVEL_OK,
     AuditOptions,
@@ -23,7 +24,8 @@ from triage.automation.catalog_audit import (
     fetch_page_text,
     has_errors,
 )
-from triage.automation.link_check import check_link
+from triage.automation.link_check import build_link_checker
+from triage.config import load_settings
 
 EXIT_OK = 0
 EXIT_ERRORS = 1
@@ -54,9 +56,10 @@ def main(argv: list[str] | None = None) -> int:
     except CatalogFileError as error:
         logger.error("%s", error)
         return EXIT_ERRORS
+    user_agent = load_settings().link_check_user_agent
     options = AuditOptions(
-        link_checker=check_link,
-        fetch_page_text=fetch_page_text,
+        link_checker=build_link_checker(user_agent),
+        fetch_page_text=partial(fetch_page_text, user_agent=user_agent),
         max_age_days=args.max_age_days,
         offline=args.offline,
     )

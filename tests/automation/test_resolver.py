@@ -2,13 +2,15 @@
 
 import logging
 from collections.abc import Callable
+from dataclasses import replace
+from datetime import date
 
 import pytest
 
 from triage.automation.allowlist import load_allowed_suffixes
 from triage.automation.catalog import ServiceEntry, load_catalog
 from triage.automation.link_check import LinkStatus
-from triage.automation.resolver import CatalogLookup, resolve_service
+from triage.automation.resolver import CatalogLookup, ManualCheckPolicy, resolve_service
 
 SUFFIXES = frozenset({"gov.br"})
 GOOD_URL = "https://www.gov.br/inss"
@@ -28,7 +30,7 @@ class RecordingChecker:
         return LinkStatus(True, 200, None)
 
 
-def _lookup(checker: RecordingChecker, *entries: ServiceEntry) -> CatalogLookup:
+def _lookup(checker: Callable[[str], LinkStatus], *entries: ServiceEntry) -> CatalogLookup:
     return CatalogLookup(entries, SUFFIXES, checker)
 
 
@@ -136,6 +138,83 @@ def test_module_function_defaults_to_versioned_catalog(monkeypatch: pytest.Monke
     monkeypatch.setattr("triage.automation.resolver.check_link", RecordingChecker())
     resolution = resolve_service("other")
     assert resolution.reason == "out_of_catalog"
+
+
+TODAY = date(2026, 11, 10)
+POLICY = ManualCheckPolicy(max_age_days=180, today=lambda: TODAY)
+BLOCKED_URL = "https://www.gov.br/bloqueado"
+
+
+def _status_checker(status: LinkStatus) -> Callable[[str], LinkStatus]:
+    return lambda url: status
+
+
+def _attested(make_entry: Callable[..., ServiceEntry], manual_check_on: str | None) -> ServiceEntry:
+    entry = make_entry()
+    link = replace(entry.links[0], url=BLOCKED_URL, manual_check_on=manual_check_on)
+    return replace(entry, links=(link,))
+
+
+def _resolve_attested(status: LinkStatus, entry: ServiceEntry) -> tuple[object, object]:
+    resolution = CatalogLookup((entry,), SUFFIXES, _status_checker(status), POLICY).resolve("social_security")
+    return resolution.service, resolution.reason
+
+
+def test_403_with_valid_manual_check_keeps_the_link_and_warns(
+    caplog: pytest.LogCaptureFixture, make_entry: Callable[..., ServiceEntry]
+) -> None:
+    entry = _attested(make_entry, "2026-11-01")
+    with caplog.at_level(logging.WARNING, logger="triage.automation"):
+        service, reason = _resolve_attested(LinkStatus(False, 403, "HTTP 403"), entry)
+    assert (service, reason) == (entry, None)
+    assert any("validação manual" in record.getMessage() for record in caplog.records)
+
+
+def test_manual_check_exactly_at_the_age_limit_is_valid(make_entry: Callable[..., ServiceEntry]) -> None:
+    entry = _attested(make_entry, "2026-05-14")
+    assert _resolve_attested(LinkStatus(False, 403, "HTTP 403"), entry)[1] is None
+
+
+def test_403_with_expired_manual_check_drops_the_link(
+    caplog: pytest.LogCaptureFixture, make_entry: Callable[..., ServiceEntry]
+) -> None:
+    entry = _attested(make_entry, "2026-05-13")
+    with caplog.at_level(logging.WARNING, logger="triage.automation"):
+        assert _resolve_attested(LinkStatus(False, 403, "HTTP 403"), entry) == (None, "link_unavailable")
+    assert any("vencido" in record.getMessage() for record in caplog.records)
+
+
+def test_403_without_manual_check_drops_the_link(make_entry: Callable[..., ServiceEntry]) -> None:
+    entry = _attested(make_entry, None)
+    assert _resolve_attested(LinkStatus(False, 403, "HTTP 403"), entry) == (None, "link_unavailable")
+
+
+def test_future_manual_check_is_not_valid(make_entry: Callable[..., ServiceEntry]) -> None:
+    entry = _attested(make_entry, "2026-12-01")
+    assert _resolve_attested(LinkStatus(False, 403, "HTTP 403"), entry) == (None, "link_unavailable")
+
+
+@pytest.mark.parametrize(
+    "status",
+    [
+        LinkStatus(False, 404, "HTTP 404"),
+        LinkStatus(False, 503, "HTTP 503"),
+        LinkStatus(False, None, "Timeout"),
+        LinkStatus(False, None, "ConnectionError"),
+        LinkStatus(False, None, "SSLError"),
+    ],
+)
+def test_valid_manual_check_never_rescues_failures_other_than_403(
+    status: LinkStatus, make_entry: Callable[..., ServiceEntry]
+) -> None:
+    entry = _attested(make_entry, "2026-11-09")
+    assert _resolve_attested(status, entry) == (None, "link_unavailable")
+
+
+def test_manual_check_does_not_bypass_the_allowlist(make_entry: Callable[..., ServiceEntry]) -> None:
+    entry = make_entry(links=(("Falso", "https://gov.br.evil.com"),))
+    entry = replace(entry, links=(replace(entry.links[0], manual_check_on="2026-11-09"),))
+    assert _resolve_attested(LinkStatus(False, 403, "HTTP 403"), entry) == (None, "link_unavailable")
 
 
 def test_each_versioned_category_resolves_with_live_links() -> None:

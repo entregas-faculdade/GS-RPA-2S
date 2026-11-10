@@ -54,7 +54,7 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-03.09-verificacao-de-links-prefeitura](plan/plan-03.09-verificacao-de-links-prefeitura.md) | Identificar o verificador de links e aceitar links bloqueados ao robô, validados à mão | 03.04 (+ seção 7 marcada) | 🔴 A executar | `specs/03.01-catalogo-e-allowlist.md` |
+| 1 | [plan-03.09-verificacao-de-links-prefeitura](plan/plan-03.09-verificacao-de-links-prefeitura.md) | Identificar o verificador de links e aceitar links bloqueados ao robô, validados à mão | 03.04 (+ seção 7 marcada) | 🟢 Aprovada | `specs/03.01-catalogo-e-allowlist.md` |
 | 2 | [plan-03.05-localizador-de-servicos](plan/plan-03.05-localizador-de-servicos.md) | Criar o localizador determinístico de fontes aprovadas, com medição | 03.09 | 🔴 A executar | `specs/03.03-localizador-de-servicos.md` |
 | 3 | [plan-03.06-resposta-em-degraus](plan/plan-03.06-resposta-em-degraus.md) | Responder em degraus: serviço, canal geral, "não tenho a informação" e emergência | 03.05 | 🔴 A executar | `specs/arquitetura/04.03-orquestracao-rpa.md` |
 | 4 | [plan-03.08-agente-llm](plan/plan-03.08-agente-llm.md) | Definir o agente LLM em arquivos versionados (persona, regras, fluxo, parâmetros) com validador | 03.06 | 🔴 A executar | `specs/03.04-agente-llm.md` |

@@ -14,6 +14,7 @@ SCOPES = frozenset({"federal", "state", "municipal"})
 AREAS = frozenset({"health", "education", "vehicles", "city", "documents", "social", "tax", "safety"})
 STATUS_APPROVED = "approved"
 STATUSES = frozenset({STATUS_APPROVED, "candidate"})
+DEFAULT_MAX_AGE_DAYS = 180
 
 logger = logging.getLogger("triage.automation")
 
@@ -28,10 +29,11 @@ class CatalogRecordError(ValueError):
 
 @dataclass(frozen=True)
 class Link:
-    """Página oficial de uma fonte."""
+    """Página oficial de uma fonte; `manual_check_on` é a data (ISO) em que uma pessoa a abriu e atestou."""
 
     label: str
     url: str
+    manual_check_on: str | None = None
 
 
 @dataclass(frozen=True)
@@ -110,6 +112,34 @@ def _items(record: dict, name: str, item_type: type) -> tuple:
     return tuple(items)
 
 
+def _manual_check_on(raw: dict) -> str | None:
+    if "manual_check_on" not in raw:
+        return None
+    value = _text(raw, "manual_check_on")
+    try:
+        date.fromisoformat(value)
+    except ValueError as error:
+        raise CatalogRecordError(f"manual_check_on inválido: {value!r}") from error
+    return value
+
+
+def _links(record: dict) -> tuple[Link, ...]:
+    links = []
+    for raw in _list_field(record, "links"):
+        if not isinstance(raw, dict):
+            raise CatalogRecordError("campo links deve ser lista de objetos")
+        links.append(Link(_text(raw, "label"), _text(raw, "url"), _manual_check_on(raw)))
+    return tuple(links)
+
+
+def manual_check_valid(link: Link, today: date, max_age_days: int) -> bool:
+    """O atestado manual do link existe e não é futuro nem mais velho que `max_age_days`?"""
+    if link.manual_check_on is None:
+        return False
+    age_days = (today - date.fromisoformat(link.manual_check_on)).days
+    return 0 <= age_days <= max_age_days
+
+
 def _validate_shape(entry: ServiceEntry) -> None:
     """Regras que cruzam campos: o que cada `kind` exige e a data de verificação."""
     if entry.kind == KIND_SERVICE and not entry.links:
@@ -137,7 +167,7 @@ def parse_entry(record: object) -> ServiceEntry:
         agency=_text(record, "agency"),
         instructions=_text(record, "instructions"),
         keywords=_keywords(record),
-        links=_items(record, "links", Link),
+        links=_links(record),
         phones=_items(record, "phones", Phone),
         source_note=_text(record, "source_note"),
         verified_on=_text(record, "verified_on"),

@@ -93,6 +93,21 @@ def test_invalid_records_are_skipped_with_log(
     assert caplog.records
 
 
+def test_link_manual_check_date_is_loaded_and_optional(tmp_path: Path, make_record: Callable[..., dict]) -> None:
+    links = [{"label": "A", "url": "https://www.gov.br/a", "manual_check_on": "2026-11-10"}, {"label": "B", "url": "https://www.gov.br/b"}]
+    entry = load_catalog(_write(tmp_path, [make_record(links=links)]))[0]
+    assert [link.manual_check_on for link in entry.links] == ["2026-11-10", None]
+
+
+@pytest.mark.parametrize("bad_date", ["ontem", "2026-13-40", "", 20261110, None])
+def test_invalid_manual_check_date_invalidates_the_record(
+    tmp_path: Path, make_record: Callable[..., dict], bad_date: object
+) -> None:
+    links = [{"label": "A", "url": "https://www.gov.br/a", "manual_check_on": bad_date}]
+    path = _write(tmp_path, [make_record(links=links), make_record(id="good")])
+    assert [entry.id for entry in load_catalog(path)] == ["good"]
+
+
 @pytest.mark.parametrize("broken", [{"category": "incompleto"}, "texto"])
 def test_incomplete_or_non_object_records_are_skipped(
     tmp_path: Path, make_record: Callable[..., dict], broken: object

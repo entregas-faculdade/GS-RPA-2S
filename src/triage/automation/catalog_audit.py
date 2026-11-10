@@ -10,18 +10,21 @@ import requests
 
 from triage.automation.allowlist import is_allowed
 from triage.automation.catalog import (
+    DEFAULT_MAX_AGE_DAYS,
     STATUS_APPROVED,
     CatalogRecordError,
+    Link,
     ServiceEntry,
+    manual_check_valid,
     parse_entry,
 )
-from triage.automation.link_check import LinkStatus
+from triage.automation.link_check import HTTP_FORBIDDEN, LinkStatus
 from triage.automation.response_guard import phone_digit_sequences
+from triage.config import DEFAULT_LINK_CHECK_USER_AGENT
 
 LEVEL_OK = "ok"
 LEVEL_WARNING = "warning"
 LEVEL_ERROR = "error"
-DEFAULT_MAX_AGE_DAYS = 180
 PAGE_TIMEOUT_SECONDS = 10.0
 MAX_PAGE_CHARS = 2_000_000
 TAG_PATTERN = re.compile(r"<[^>]+>")
@@ -50,10 +53,10 @@ class AuditOptions:
     today: date = field(default_factory=date.today)
 
 
-def fetch_page_text(url: str) -> str | None:
+def fetch_page_text(url: str, user_agent: str = DEFAULT_LINK_CHECK_USER_AGENT) -> str | None:
     """Texto da página (tags removidas), ou `None` se ela não responder; nunca levanta exceção de rede."""
     try:
-        response = requests.get(url, timeout=PAGE_TIMEOUT_SECONDS)
+        response = requests.get(url, timeout=PAGE_TIMEOUT_SECONDS, headers={"User-Agent": user_agent})
     except requests.RequestException as error:
         logger.warning("Página indisponível para conferir telefone (%s)", type(error).__name__)
         return None
@@ -98,9 +101,9 @@ class CatalogAuditor:
 
     def _audit_entry(self, entry: ServiceEntry) -> list[Check]:
         checks = self._check_allowlist(entry)
-        usable_urls = [link.url for link in entry.links if is_allowed(link.url, self._allowed_suffixes)]
+        usable_links = [link for link in entry.links if is_allowed(link.url, self._allowed_suffixes)]
         if not self._options.offline:
-            live_urls, link_checks = self._check_links(entry, usable_urls)
+            live_urls, link_checks = self._check_links(entry, usable_links)
             checks.extend(link_checks)
             checks.extend(self._check_phones(entry, live_urls))
         checks.append(self._check_age(entry))
@@ -123,20 +126,47 @@ class CatalogAuditor:
             self._pages[url] = self._options.fetch_page_text(url)
         return self._pages[url]
 
-    def _check_links(self, entry: ServiceEntry, urls: list[str]) -> tuple[list[str], list[Check]]:
-        """Verifica cada link permitido; devolve os vivos e os resultados (o resumo da entrada vem por último)."""
-        statuses = {url: self._status(url) for url in urls}
-        live_urls = [url for url, status in statuses.items() if status.ok]
-        checks = [
-            Check(entry.id, "link", LEVEL_OK if status.ok else LEVEL_WARNING, f"{url}: {'responde' if status.ok else status.error}")
-            for url, status in statuses.items()
-        ]
-        if entry.links and not live_urls:
-            level = LEVEL_ERROR if entry.status == STATUS_APPROVED else LEVEL_WARNING
-            checks.append(Check(entry.id, "links", level, "nenhum link vivo"))
-        elif len(live_urls) < len(entry.links):
-            checks.append(Check(entry.id, "links", LEVEL_WARNING, f"{len(live_urls)} de {len(entry.links)} links vivos"))
+    def _manual_check(self, entry: ServiceEntry, link: Link, status: LinkStatus) -> Check | None:
+        """Aviso para link bloqueado ao robô (HTTP 403) que tem atestado manual; `None` se não se aplica."""
+        if status.status_code != HTTP_FORBIDDEN or link.manual_check_on is None:
+            return None
+        if manual_check_valid(link, self._options.today, self._options.max_age_days):
+            detail = f"{link.url}: bloqueado ao robô (HTTP 403); atestado manual de {link.manual_check_on}"
+        else:
+            detail = f"{link.url}: atestado manual de {link.manual_check_on} vencido (limite {self._options.max_age_days} dias)"
+        return Check(entry.id, "link", LEVEL_WARNING, detail)
+
+    def _check_links(self, entry: ServiceEntry, links: list[Link]) -> tuple[list[str], list[Check]]:
+        """Verifica cada link permitido; devolve os vivos e os resultados (o resumo da entrada vem por último).
+
+        Link com atestado manual vigente conta como utilizável (o resolvedor o aceita), mas não como vivo:
+        a página não foi lida, então não confirma telefone.
+        """
+        live_urls: list[str] = []
+        accepted = 0
+        checks: list[Check] = []
+        for link in links:
+            status = self._status(link.url)
+            manual = self._manual_check(entry, link, status)
+            if status.ok:
+                live_urls.append(link.url)
+                checks.append(Check(entry.id, "link", LEVEL_OK, f"{link.url}: responde"))
+            elif manual is not None:
+                accepted += manual_check_valid(link, self._options.today, self._options.max_age_days)
+                checks.append(manual)
+            else:
+                checks.append(Check(entry.id, "link", LEVEL_WARNING, f"{link.url}: {status.error}"))
+        checks.extend(self._links_summary(entry, len(live_urls) + accepted))
         return live_urls, checks
+
+    @staticmethod
+    def _links_summary(entry: ServiceEntry, usable: int) -> list[Check]:
+        if entry.links and not usable:
+            level = LEVEL_ERROR if entry.status == STATUS_APPROVED else LEVEL_WARNING
+            return [Check(entry.id, "links", level, "nenhum link vivo")]
+        if usable < len(entry.links):
+            return [Check(entry.id, "links", LEVEL_WARNING, f"{usable} de {len(entry.links)} links vivos")]
+        return []
 
     def _check_phones(self, entry: ServiceEntry, live_urls: list[str]) -> list[Check]:
         """Confere cada telefone no texto das páginas vivas; nunca é erro (a página pode ser dinâmica ou recusar robô)."""

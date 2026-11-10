@@ -2,6 +2,7 @@
 
 import json
 from collections import defaultdict
+from datetime import date
 
 import pytest
 
@@ -83,3 +84,11 @@ def test_keywords_are_not_shared_across_areas_except_documented() -> None:
             areas_by_keyword[keyword.strip().lower()].add(entry.area)
     shared = {keyword for keyword, areas in areas_by_keyword.items() if len(areas) > 1}
     assert shared - set(SHARED_KEYWORDS_ACROSS_AREAS) == set()
+
+
+def test_manual_checks_only_sit_on_allowed_links_with_a_valid_past_date() -> None:
+    today = date.today()
+    for entry in load_catalog():
+        for link in (link for link in entry.links if link.manual_check_on):
+            assert is_allowed(link.url), (entry.id, link.url)
+            assert date.fromisoformat(link.manual_check_on) <= today, (entry.id, link.url)

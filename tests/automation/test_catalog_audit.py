@@ -39,6 +39,20 @@ def _options(pages: dict[str, str | None] | None = None, **overrides: object) ->
     return AuditOptions(**{**values, **overrides})
 
 
+BLOCKED_URL = "https://www.prefeitura.gov.br/bloqueada"
+
+
+def _blocked_checker(url: str) -> LinkStatus:
+    return LinkStatus(False, 403, "HTTP 403") if url == BLOCKED_URL else LinkStatus(True, 200, None)
+
+
+def _blocked_record(make_record: Callable[..., dict], manual_check_on: str | None, **overrides: object) -> dict:
+    link: dict = {"label": "Bloqueada", "url": BLOCKED_URL}
+    if manual_check_on is not None:
+        link["manual_check_on"] = manual_check_on
+    return make_record(links=[link], **overrides)
+
+
 def _find(checks: list[Check], name: str) -> list[Check]:
     return [check for check in checks if check.name == name]
 
@@ -95,6 +109,71 @@ def test_some_dead_links_are_a_warning(make_record: Callable[..., dict]) -> None
     checks = audit_catalog([record], SUFFIXES, _options(link_checker=_checker(frozenset({dead}))))
     assert _find(checks, "links")[0].level == "warning"
     assert not has_errors(checks)
+
+
+def test_blocked_link_with_valid_manual_check_is_a_warning_with_the_date(make_record: Callable[..., dict]) -> None:
+    record = _blocked_record(make_record, "2026-11-01")
+    checks = audit_catalog([record], SUFFIXES, _options(link_checker=_blocked_checker))
+    link = _find(checks, "link")[0]
+    assert (link.level, "2026-11-01" in link.detail, "atestado manual" in link.detail) == ("warning", True, True)
+    assert not _find(checks, "links")
+    assert not has_errors(checks)
+
+
+def test_blocked_link_with_expired_manual_check_is_a_warning_and_leaves_an_approved_entry_without_link(
+    make_record: Callable[..., dict],
+) -> None:
+    record = _blocked_record(make_record, "2026-01-01")
+    checks = audit_catalog([record], SUFFIXES, _options(link_checker=_blocked_checker))
+    link = _find(checks, "link")[0]
+    assert (link.level, "vencido" in link.detail) == ("warning", True)
+    assert _find(checks, "links")[0].level == "error"
+
+
+def test_expired_manual_check_of_a_candidate_never_errors(make_record: Callable[..., dict]) -> None:
+    record = _blocked_record(make_record, "2026-01-01", status="candidate")
+    checks = audit_catalog([record], SUFFIXES, _options(link_checker=_blocked_checker))
+    assert _find(checks, "link")[0].level == "warning"
+    assert not has_errors(checks)
+
+
+def test_manual_check_uses_the_max_age_option(make_record: Callable[..., dict]) -> None:
+    record = _blocked_record(make_record, "2026-01-01")
+    checks = audit_catalog([record], SUFFIXES, _options(link_checker=_blocked_checker, max_age_days=365))
+    assert "vencido" not in _find(checks, "link")[0].detail
+    assert not has_errors(checks)
+
+
+def test_blocked_link_without_manual_check_is_a_plain_warning(make_record: Callable[..., dict]) -> None:
+    record = _blocked_record(make_record, None, status="candidate")
+    link = _find(audit_catalog([record], SUFFIXES, _options(link_checker=_blocked_checker)), "link")[0]
+    assert (link.level, link.detail.endswith("HTTP 403")) == ("warning", True)
+
+
+def test_manual_check_is_ignored_for_failures_other_than_403(make_record: Callable[..., dict]) -> None:
+    record = _blocked_record(make_record, "2026-11-01")
+    checks = audit_catalog([record], SUFFIXES, _options(link_checker=_checker(frozenset({BLOCKED_URL}))))
+    assert "atestado" not in _find(checks, "link")[0].detail
+    assert _find(checks, "links")[0].level == "error"
+
+
+def test_manually_checked_link_does_not_confirm_phones(make_record: Callable[..., dict]) -> None:
+    record = _blocked_record(make_record, "2026-11-01", phones=[{"label": "Central", "number": "156"}])
+    pages = {BLOCKED_URL: "Ligue 156"}
+    phone = _find(audit_catalog([record], SUFFIXES, _options(pages, link_checker=_blocked_checker)), "phone")[0]
+    assert (phone.level, "não confirmado" in phone.detail) == ("warning", True)
+
+
+def test_fetch_page_text_sends_the_user_agent(monkeypatch: pytest.MonkeyPatch) -> None:
+    sent: dict = {}
+
+    def fake_get(_url: str, **kwargs: object) -> object:
+        sent.update(kwargs)
+        raise catalog_audit.requests.ConnectionError("fora do ar")
+
+    monkeypatch.setattr(catalog_audit.requests, "get", fake_get)
+    catalog_audit.fetch_page_text(GOOD_URL, "Robo-Teste/1.0")
+    assert sent["headers"] == {"User-Agent": "Robo-Teste/1.0"}
 
 
 def test_schema_error_and_duplicate_id_are_errors(make_record: Callable[..., dict]) -> None:

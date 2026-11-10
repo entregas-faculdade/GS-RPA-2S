@@ -418,9 +418,9 @@
       }
     ],
     "phones": [],
-    "source_note": "Linha F09 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). O 0800 61 61 61 da lista é do INEP e não aparece nas páginas do MEC; ficou de fora. Rebaixado a candidate: o link gov.br/mec/pt-br não respondeu ao verificador em 2026-11-10 (ConnectionError, HEAD reiniciado pelo servidor); volta a approved quando responder.",
+    "source_note": "Linha F09 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). O 0800 61 61 61 da lista é do INEP e não aparece nas páginas do MEC; ficou de fora. Link verificado em 2026-11-10 com o User-Agent identificado do projeto.",
     "verified_on": "2026-11-10",
-    "status": "candidate"
+    "status": "approved"
   },
   {
     "id": "enem",
@@ -492,9 +492,9 @@
       }
     ],
     "phones": [],
-    "source_note": "Linha F12 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Rebaixado a candidate: o link gov.br/mec/pt-br/pe-de-meia não respondeu ao verificador em 2026-11-10 (ConnectionError, HEAD reiniciado pelo servidor); volta a approved quando responder.",
+    "source_note": "Linha F12 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Link verificado em 2026-11-10 com o User-Agent identificado do projeto.",
     "verified_on": "2026-11-10",
-    "status": "candidate"
+    "status": "approved"
   },
   {
     "id": "senatran",

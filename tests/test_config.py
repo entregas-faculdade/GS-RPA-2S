@@ -4,9 +4,9 @@ from pathlib import Path
 
 import pytest
 
-from triage.config import load_settings
+from triage.config import DEFAULT_LINK_CHECK_USER_AGENT, load_settings
 
-ENV_KEYS = ("LLM_ENABLED", "LLM_BASE_URL", "LLM_MODEL", "LLM_API_KEY", "LOG_LEVEL")
+ENV_KEYS = ("LLM_ENABLED", "LLM_BASE_URL", "LLM_MODEL", "LLM_API_KEY", "LOG_LEVEL", "LINK_CHECK_USER_AGENT")
 
 
 @pytest.fixture(autouse=True)
@@ -53,3 +53,17 @@ def test_settings_are_immutable(tmp_path: Path) -> None:
 
     with pytest.raises(AttributeError):
         settings.log_level = "DEBUG"
+
+
+def test_link_check_user_agent_defaults_to_the_project_name(tmp_path: Path) -> None:
+    assert load_settings(tmp_path / "missing.env").link_check_user_agent == DEFAULT_LINK_CHECK_USER_AGENT
+
+
+def test_link_check_user_agent_comes_from_the_environment(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    monkeypatch.setenv("LINK_CHECK_USER_AGENT", " Robo-Teste/1.0 ")
+    assert load_settings(tmp_path / "missing.env").link_check_user_agent == "Robo-Teste/1.0"
+
+
+def test_blank_link_check_user_agent_falls_back_to_the_default(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    monkeypatch.setenv("LINK_CHECK_USER_AGENT", "   ")
+    assert load_settings(tmp_path / "missing.env").link_check_user_agent == DEFAULT_LINK_CHECK_USER_AGENT
