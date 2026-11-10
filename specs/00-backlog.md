@@ -70,6 +70,9 @@ via normal.
 | 5 | `tests/storage/test_hashing.py:13` — `test_hash_ignores_unicode_composition` compara "ã" composto com "a" + acento combinante, indistinguíveis no editor; escrever as duas formas com escapes Unicode para a intenção ficar legível | execução | 2026-11-09 | baixo |
 | 6 | `requirements.txt` — `joblib` é importado direto em `classification/model.py` mas não está fixado (vem de transitiva do scikit-learn), e o ambiente local roda scikit-learn 1.8.0 contra o 1.9.1 fixado; modelo `.joblib` treinado numa versão pode não carregar em outra | execução | 2026-11-09 | baixo |
 | 7 | `.env.example` não lista `CONFIDENCE_MIN` e `AMBIGUITY_MARGIN`, lidos por `config.py` | execução | 2026-11-09 | baixo |
+| 8 | `automation/link_check.py:38-40` — `requests` segue redirecionamentos e a URL final não é validada contra a allowlist: uma URL `gov.br` que redirecione para fora do domínio passa no `check_link` | execução | 2026-11-09 | médio |
+| 9 | `data/catalog.json` — `birth_certificate` aponta para uma notícia de 2021 (o `gov.br/mdh` recusa o cliente `requests`) e `voter_id` e `property_tax` para o hub genérico `gov.br/pt-br/servicos` e `tse.jus.br` está fora da allowlist; decisão do usuário: incluir `tse.jus.br` e uma URL específica de título de eleitor, ou manter o hub | execução | 2026-11-09 | baixo |
+| 10 | `automation/link_check.py` — `gov.br/mdh` (e talvez outros órgãos) devolve 403 ao `User-Agent` padrão do `requests` e `gov.br/mre` derrubou a conexão numa tentativa; um `User-Agent` identificado no `check_link` pode ser preciso para o catálogo crescer | execução | 2026-11-09 | baixo |
 
 ---
 

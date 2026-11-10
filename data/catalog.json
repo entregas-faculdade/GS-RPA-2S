@@ -1,0 +1,74 @@
+[
+  {
+    "category": "driver_license",
+    "display_name": "Carteira Nacional de Habilitação (CNH)",
+    "agency": "Secretaria Nacional de Trânsito (Senatran) e Detrans estaduais",
+    "url": "https://www.gov.br/pt-br/servicos/emitir-a-carteira-nacional-de-habilitacao-digital-cnh-e",
+    "instructions": "A página do gov.br explica como emitir a CNH digital. Primeira habilitação, renovação e segunda via são atendidas pelo Detran do seu estado, com login gov.br.",
+    "source_note": "Página de serviço no portal gov.br; a renovação em si é feita no Detran de cada estado.",
+    "verified_on": "2026-11-09"
+  },
+  {
+    "category": "cpf_registration",
+    "display_name": "Cadastro de Pessoas Físicas (CPF)",
+    "agency": "Receita Federal",
+    "url": "https://www.gov.br/pt-br/servicos/inscrever-no-cpf",
+    "instructions": "A inscrição no CPF é gratuita pela internet. Tenha em mãos um documento oficial com foto; se ele não trouxer filiação e data de nascimento, leve também a certidão de nascimento ou de casamento.",
+    "source_note": "Página de serviço no portal gov.br (Receita Federal).",
+    "verified_on": "2026-11-09"
+  },
+  {
+    "category": "id_card",
+    "display_name": "Carteira de Identidade Nacional (CIN, antigo RG)",
+    "agency": "Governo Digital e órgãos de identificação dos estados",
+    "url": "https://www.gov.br/governodigital/pt-br/identidade/cin",
+    "instructions": "A página explica como solicitar a Carteira de Identidade Nacional. O atendimento é feito pelo órgão de identificação do seu estado, em geral com agendamento.",
+    "source_note": "Página institucional da CIN no portal gov.br (Governo Digital).",
+    "verified_on": "2026-11-09"
+  },
+  {
+    "category": "birth_certificate",
+    "display_name": "Certidão de nascimento e registro civil",
+    "agency": "Governo Federal e cartórios de registro civil",
+    "url": "https://www.gov.br/pt-br/noticias/assistencia-social/2021/11/emissao-gratuita-da-certidao-de-nascimento-e-garantida-por-lei-federal",
+    "instructions": "A página do gov.br explica que o registro de nascimento e a primeira certidão são gratuitos. Segunda via de certidão se pede ao cartório onde o registro foi feito.",
+    "source_note": "Não há serviço federal específico de segunda via; usada a notícia oficial do gov.br sobre a gratuidade da certidão (2021). As páginas do ministério (gov.br/mdh) recusam clientes automatizados com HTTP 403.",
+    "verified_on": "2026-11-09"
+  },
+  {
+    "category": "voter_id",
+    "display_name": "Título de eleitor",
+    "agency": "Justiça Eleitoral (TSE e TREs)",
+    "url": "https://www.gov.br/pt-br/servicos",
+    "instructions": "Busque por \"título de eleitor\" no catálogo de serviços do gov.br. O primeiro título, a transferência e a regularização são feitos pela Justiça Eleitoral (aplicativo e-Título).",
+    "source_note": "Sem página nacional de título de eleitor no gov.br; usado o catálogo geral de serviços. O domínio tse.jus.br não está na allowlist.",
+    "verified_on": "2026-11-09"
+  },
+  {
+    "category": "social_benefits",
+    "display_name": "Cadastro Único e benefícios sociais (Bolsa Família)",
+    "agency": "Ministério do Desenvolvimento e Assistência Social, Família e Combate à Fome",
+    "url": "https://www.gov.br/mds/pt-br/acoes-e-programas/cadastro-unico",
+    "instructions": "O Cadastro Único é a porta de entrada para o Bolsa Família e outros benefícios. A inscrição e a atualização são feitas no CRAS ou na assistência social do seu município.",
+    "source_note": "Página do Cadastro Único no portal gov.br (MDS).",
+    "verified_on": "2026-11-09"
+  },
+  {
+    "category": "social_security",
+    "display_name": "Aposentadorias e benefícios do INSS",
+    "agency": "Instituto Nacional do Seguro Social (INSS)",
+    "url": "https://www.gov.br/inss/pt-br/servicos/aposentadorias",
+    "instructions": "A página lista os tipos de aposentadoria. O pedido e o acompanhamento são feitos pelo Meu INSS, com conta gov.br, ou pela Central 135.",
+    "source_note": "Página de serviços de aposentadoria no portal gov.br (INSS).",
+    "verified_on": "2026-11-09"
+  },
+  {
+    "category": "property_tax",
+    "display_name": "IPTU (imposto predial e territorial urbano)",
+    "agency": "Prefeitura do município do imóvel",
+    "url": "https://www.gov.br/pt-br/servicos",
+    "instructions": "O IPTU é um imposto municipal: segunda via, parcelamento e isenção são tratados no site da prefeitura da cidade do imóvel. Busque \"IPTU\" no catálogo de serviços do gov.br para achar o caminho.",
+    "source_note": "Sem página federal de IPTU; usado o catálogo geral de serviços do gov.br.",
+    "verified_on": "2026-11-09"
+  }
+]
