@@ -11,7 +11,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 # Panorama
 
 ## Progresso
-█████████░ 90% · 10/11 itens ✅
+██████████ 100% · 11/11 itens ✅
 
 ## Agora
 —
@@ -26,8 +26,9 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 02 | Classificação | 2/2 | █████ | 0 |
 | 03 | Automação | 2/2 | █████ | 0 |
 | 04 | Operação e interface | 3/3 | █████ | 0 |
-| 05 | Validação e entrega | 0/1 | ░░░░░ | 1 |
+| 05 | Validação e entrega | 1/1 | █████ | 1 |
 
 ## Atenção
 - 🟢 plan-05.01 · Validar com amostra rotulada, documentar evidências e preparar a entrega — aguardando síntese
 - 📋 16 achado(s) no `00-backlog`
+- ⚠️ 1 problema(s) de família/item — rode `generate_summary.py --check`

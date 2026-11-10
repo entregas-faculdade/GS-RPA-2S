@@ -90,7 +90,7 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 - ✅ **R04.3** Orquestração RPA — lote, retry, agendamento e relatório de execução (✅ 2026-11-10)
 
 ## 05 · Validação e entrega
-- 🔷 **R05.1** Validação e entrega — métricas, notebook de evidências e README
+- ✅ **R05.1** Validação e entrega — métricas, notebook de evidências e README (✅ 2026-11-10)
 
 <!-- Exemplo (comentado: não conta como item real)
 ## 02 · Base de dados
