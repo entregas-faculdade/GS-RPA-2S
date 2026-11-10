@@ -179,5 +179,1243 @@
     "source_note": "Sem página federal de IPTU; usado o catálogo geral de serviços do gov.br.",
     "verified_on": "2026-11-09",
     "status": "approved"
+  },
+  {
+    "id": "gov_portal",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "documents",
+    "display_name": "Portal gov.br",
+    "agency": "Governo Federal",
+    "instructions": "Portal geral dos serviços federais. Use a busca do portal para achar o serviço que você precisa.",
+    "keywords": ["gov.br", "portal gov.br", "servicos federais", "portal do governo federal", "conta gov.br", "servicos do governo"],
+    "links": [
+      {
+        "label": "Portal gov.br",
+        "url": "https://www.gov.br/pt-br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F01 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). O 135 da lista original é do INSS e não foi usado aqui.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "health_ministry",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "health",
+    "display_name": "Ministério da Saúde e SUS",
+    "agency": "Ministério da Saúde",
+    "instructions": "Reúne informações sobre o SUS, cadastros nacionais e campanhas de saúde. O Disque Saúde atende pelo 136.",
+    "keywords": ["sus", "sistema unico de saude", "ministerio da saude", "cartao sus", "disque saude", "atendimento no sus", "saude publica"],
+    "links": [
+      {
+        "label": "Ministério da Saúde",
+        "url": "https://www.gov.br/saude/pt-br"
+      },
+      {
+        "label": "SUS",
+        "url": "https://www.gov.br/saude/pt-br/sus"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Disque Saúde",
+        "number": "136"
+      }
+    ],
+    "source_note": "Linha F02 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). 136 é código oficial de atendimento.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "meu_sus_digital",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "health",
+    "display_name": "Meu SUS Digital",
+    "agency": "Ministério da Saúde",
+    "instructions": "Aplicativo e portal para consultar seu histórico de saúde e a carteira de vacinação, com conta gov.br.",
+    "keywords": ["meu sus digital", "historico de saude", "carteira de vacinacao", "carteira de vacina digital", "app do sus", "conecte sus", "resultado de exames sus"],
+    "links": [
+      {
+        "label": "Meu SUS Digital (gov.br)",
+        "url": "https://www.gov.br/saude/pt-br/composicao/seidigi/meususdigital"
+      },
+      {
+        "label": "Meu SUS Digital",
+        "url": "https://meususdigital.saude.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F03 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "popular_pharmacy",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "health",
+    "display_name": "Farmácia Popular",
+    "agency": "Ministério da Saúde",
+    "instructions": "Programa que oferece medicamentos gratuitos ou com desconto. A página explica como funciona.",
+    "keywords": ["farmacia popular", "remedio gratuito", "medicamento gratuito", "remedio com desconto", "remedio de graca", "medicamento pelo sus"],
+    "links": [
+      {
+        "label": "Farmácia Popular",
+        "url": "https://www.gov.br/saude/pt-br/composicao/sectics/farmacia-popular"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F04 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "vaccination",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "health",
+    "display_name": "Vacinação",
+    "agency": "Ministério da Saúde",
+    "instructions": "Veja o calendário de vacinação e as dúvidas mais comuns. A vacina em si é aplicada nos postos de saúde.",
+    "keywords": ["vacinacao", "calendario de vacinacao", "vacina", "vacinas", "tomar vacina", "dose da vacina", "campanha de vacinacao"],
+    "links": [
+      {
+        "label": "Vacinação",
+        "url": "https://www.gov.br/saude/pt-br/vacinacao"
+      },
+      {
+        "label": "Calendário de vacinação",
+        "url": "https://www.gov.br/saude/pt-br/vacinacao/calendario"
+      },
+      {
+        "label": "Perguntas frequentes sobre vacinação",
+        "url": "https://www.gov.br/saude/pt-br/vacinacao/faq"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F05 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "sus_ombudsman",
+    "category": null,
+    "kind": "channel",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "health",
+    "display_name": "Ouvidoria-Geral do SUS",
+    "agency": "Ministério da Saúde",
+    "instructions": "Canal para reclamações, denúncias e sugestões sobre o atendimento do SUS. Também atende pelo 136.",
+    "keywords": ["ouvidoria do sus", "reclamar do sus", "reclamacao sus", "denuncia sus", "elogio sus", "ouvsus", "sugestao sus"],
+    "links": [
+      {
+        "label": "Ouvidoria-Geral do SUS",
+        "url": "https://www.gov.br/saude/pt-br/canais-de-atendimento/ouvsus"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Disque Saúde",
+        "number": "136"
+      }
+    ],
+    "source_note": "Linha F06 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). 136 é código oficial de atendimento.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "anvisa",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "health",
+    "display_name": "ANVISA",
+    "agency": "Agência Nacional de Vigilância Sanitária",
+    "instructions": "Informações sobre medicamentos, alimentos e cosméticos. A página de atendimento da ANVISA traz o telefone e os canais de contato.",
+    "keywords": ["anvisa", "vigilancia sanitaria", "registro de medicamento", "denuncia de produto", "cosmeticos", "bula de remedio", "alimento vencido"],
+    "links": [
+      {
+        "label": "ANVISA",
+        "url": "https://www.gov.br/anvisa/pt-br"
+      },
+      {
+        "label": "Canais de atendimento da ANVISA",
+        "url": "https://www.gov.br/anvisa/pt-br/canais_atendimento"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Central de atendimento da ANVISA",
+        "number": "0800 642 9782"
+      }
+    ],
+    "source_note": "Linha F07 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). A página de atendimento foi achada nos links do site oficial da ANVISA e mostra o 0800 642 9782.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "inep",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "education",
+    "display_name": "INEP",
+    "agency": "Instituto Nacional de Estudos e Pesquisas Educacionais (INEP)",
+    "instructions": "Órgão responsável pelos exames nacionais, como o ENEM. A página Fale Conosco traz o telefone de atendimento.",
+    "keywords": ["inep", "exames nacionais", "encceja", "enade", "saeb", "atendimento do inep", "resultado de exame nacional"],
+    "links": [
+      {
+        "label": "INEP",
+        "url": "https://www.gov.br/inep/pt-br"
+      },
+      {
+        "label": "Fale conosco do INEP",
+        "url": "https://www.gov.br/inep/pt-br/canais-de-atendimento/fale-conosco"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Central do INEP",
+        "number": "0800 61 61 61"
+      }
+    ],
+    "source_note": "Linha F08 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). O Fale Conosco foi achado nos links do site oficial do INEP e mostra o 0800 616161.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "mec",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "education",
+    "display_name": "Ministério da Educação (MEC)",
+    "agency": "Ministério da Educação",
+    "instructions": "Portal do MEC com informações sobre educação, programas de acesso e bolsas.",
+    "keywords": ["mec", "ministerio da educacao", "programas do mec", "bolsa de estudo", "educacao basica", "educacao superior", "politica educacional"],
+    "links": [
+      {
+        "label": "Ministério da Educação",
+        "url": "https://www.gov.br/mec/pt-br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F09 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). O 0800 61 61 61 da lista é do INEP e não aparece nas páginas do MEC; ficou de fora. Rebaixado a candidate: o link gov.br/mec/pt-br não respondeu ao verificador em 2026-11-10 (ConnectionError, HEAD reiniciado pelo servidor); volta a approved quando responder.",
+    "verified_on": "2026-11-10",
+    "status": "candidate"
+  },
+  {
+    "id": "enem",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "education",
+    "display_name": "ENEM",
+    "agency": "INEP",
+    "instructions": "Página oficial do Exame Nacional do Ensino Médio, com as informações de cada edição.",
+    "keywords": ["enem", "exame nacional do ensino medio", "inscricao no enem", "nota do enem", "gabarito do enem", "prova do enem", "isencao do enem"],
+    "links": [
+      {
+        "label": "ENEM",
+        "url": "https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enem"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F10 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "higher_education_access",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "education",
+    "display_name": "SISU, ProUni e FIES",
+    "agency": "Ministério da Educação",
+    "instructions": "Portal de acesso ao ensino superior: vagas pelo SISU, bolsas pelo ProUni e financiamento pelo FIES.",
+    "keywords": ["sisu", "prouni", "fies", "faculdade", "ensino superior", "bolsa na faculdade", "financiamento estudantil", "entrar na faculdade"],
+    "links": [
+      {
+        "label": "SISU",
+        "url": "https://acessounico.mec.gov.br/sisu"
+      },
+      {
+        "label": "ProUni",
+        "url": "https://acessounico.mec.gov.br/prouni"
+      },
+      {
+        "label": "FIES",
+        "url": "https://acessounico.mec.gov.br/fies"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F11 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "pe_de_meia",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "education",
+    "display_name": "Pé-de-Meia",
+    "agency": "Ministério da Educação",
+    "instructions": "Programa de incentivo financeiro para estudantes do ensino médio. A página explica quem tem direito.",
+    "keywords": ["pe de meia", "pe-de-meia", "incentivo ao ensino medio", "poupanca do estudante", "ajuda para estudante do ensino medio", "incentivo financeiro estudante"],
+    "links": [
+      {
+        "label": "Pé-de-Meia",
+        "url": "https://www.gov.br/mec/pt-br/pe-de-meia"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F12 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Rebaixado a candidate: o link gov.br/mec/pt-br/pe-de-meia não respondeu ao verificador em 2026-11-10 (ConnectionError, HEAD reiniciado pelo servidor); volta a approved quando responder.",
+    "verified_on": "2026-11-10",
+    "status": "candidate"
+  },
+  {
+    "id": "senatran",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "vehicles",
+    "display_name": "Senatran: trânsito nacional",
+    "agency": "Secretaria Nacional de Trânsito (Senatran)",
+    "instructions": "Informações nacionais de trânsito: CNH do Brasil, documento digital do veículo e infrações. O atendimento é feito pelo Detran do estado.",
+    "keywords": ["senatran", "cnh do brasil", "carteira digital de transito", "cdt", "renainf", "infracoes de transito", "documento do veiculo"],
+    "links": [
+      {
+        "label": "Senatran",
+        "url": "https://www.gov.br/transportes/pt-br/assuntos/senatran"
+      },
+      {
+        "label": "CNH do Brasil",
+        "url": "https://www.gov.br/transportes/pt-br/cnh-do-brasil"
+      },
+      {
+        "label": "Veículos (Senatran)",
+        "url": "https://www.gov.br/transportes/pt-br/assuntos/transito/senatran/veiculos"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F13 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "federal_revenue",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "tax",
+    "display_name": "Receita Federal",
+    "agency": "Receita Federal",
+    "instructions": "Serviços de CPF, CNPJ e imposto de renda. Use as páginas abaixo para o assunto que você precisa.",
+    "keywords": ["imposto de renda", "declaracao de imposto de renda", "irpf", "cnpj", "malha fina", "restituicao", "receita federal do brasil"],
+    "links": [
+      {
+        "label": "Receita Federal",
+        "url": "https://www.gov.br/receitafederal/pt-br"
+      },
+      {
+        "label": "Meu CPF",
+        "url": "https://www.gov.br/receitafederal/pt-br/assuntos/meu-cpf"
+      },
+      {
+        "label": "Meu Imposto de Renda",
+        "url": "https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F14 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "tax_clearance",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "tax",
+    "display_name": "Certidão negativa de débitos",
+    "agency": "Receita Federal",
+    "instructions": "Página do gov.br para emitir a certidão negativa de débitos.",
+    "keywords": ["certidao negativa", "certidao negativa de debitos", "cnd", "emitir certidao negativa", "certidao de regularidade fiscal", "nada consta de debitos"],
+    "links": [
+      {
+        "label": "Emitir certidão negativa de débitos",
+        "url": "https://www.gov.br/pt-br/servicos/emitir-certidao-negativa-de-debitos"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F15 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "labor_ministry",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Trabalho e Emprego",
+    "agency": "Ministério do Trabalho e Emprego",
+    "instructions": "Portal com informações sobre carteira de trabalho digital, seguro-desemprego e abono salarial.",
+    "keywords": ["carteira de trabalho", "ctps digital", "seguro desemprego", "abono salarial", "ministerio do trabalho", "pis", "fgts", "trabalho e emprego"],
+    "links": [
+      {
+        "label": "Trabalho e Emprego",
+        "url": "https://www.gov.br/trabalho-e-emprego/pt-br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F16 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "meu_inss",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Meu INSS",
+    "agency": "Instituto Nacional do Seguro Social (INSS)",
+    "instructions": "Pedidos e consultas de aposentadoria e benefícios, com conta gov.br. A Central 135 também atende.",
+    "keywords": ["meu inss", "app do inss", "extrato do inss", "agendar inss", "pericia do inss", "consultar beneficio", "atendimento do inss"],
+    "links": [
+      {
+        "label": "Meu INSS",
+        "url": "https://meu.inss.gov.br"
+      },
+      {
+        "label": "Aposentadorias do INSS",
+        "url": "https://www.gov.br/inss/pt-br/servicos/aposentadorias"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Central do INSS",
+        "number": "135"
+      }
+    ],
+    "source_note": "Linha F17 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). O 135 foi confirmado pelo verificador na página de aposentadorias do INSS (já usada no registro social_security).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "bolsa_familia_cadunico",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Bolsa Família e Cadastro Único",
+    "agency": "Governo Federal",
+    "instructions": "Páginas do gov.br sobre como receber o Bolsa Família e consultar os dados do Cadastro Único.",
+    "keywords": ["bolsa familia", "receber bolsa familia", "consultar cadunico", "dados do cadastro unico", "cadastro unico", "beneficio social", "valor do bolsa familia"],
+    "links": [
+      {
+        "label": "Receber o Bolsa Família",
+        "url": "https://www.gov.br/pt-br/servicos/receber-o-bolsa-familia"
+      },
+      {
+        "label": "Consultar dados do Cadastro Único",
+        "url": "https://www.gov.br/pt-br/servicos/consultar-dados-do-cadastro-unico-cadunico"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F18 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "mei_das",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "tax",
+    "display_name": "DAS do MEI",
+    "agency": "Receita Federal",
+    "instructions": "Página para emitir o DAS, a guia de pagamento mensal do MEI. Ela cobre só o pagamento, não a abertura do MEI.",
+    "keywords": ["das do mei", "guia do mei", "pagar mei", "mei", "imposto do mei", "boleto do mei", "emitir das"],
+    "links": [
+      {
+        "label": "Emitir DAS do MEI",
+        "url": "https://www.gov.br/pt-br/servicos/emitir-das-para-pagamento-de-tributos-do-mei"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha F19 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Abertura de MEI: página não achada.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "sp_state_services",
+    "category": null,
+    "kind": "portal",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "documents",
+    "display_name": "Portal de serviços do Estado de SP",
+    "agency": "Governo do Estado de São Paulo",
+    "instructions": "Portal que reúne serviços do Estado de São Paulo.",
+    "keywords": ["servicos do estado de sp", "portal de servicos sp", "governo de sao paulo", "servicos estaduais", "servicos sp", "estado de sao paulo"],
+    "links": [
+      {
+        "label": "Serviços do Estado de SP",
+        "url": "https://servicos.sp.gov.br"
+      },
+      {
+        "label": "Serviços estaduais no gov.br",
+        "url": "https://www.gov.br/pt-br/servicos-estaduais"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha E01 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "sp_government",
+    "category": null,
+    "kind": "portal",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "documents",
+    "display_name": "Portal do Governo de SP",
+    "agency": "Governo do Estado de São Paulo",
+    "instructions": "Portal institucional do Governo do Estado de São Paulo.",
+    "keywords": ["portal do governo de sp", "governo do estado", "sp.gov.br", "secretarias do estado", "noticias do governo de sp", "governador de sp"],
+    "links": [
+      {
+        "label": "Governo de SP",
+        "url": "https://www.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha E02 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "poupatempo",
+    "category": null,
+    "kind": "portal",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "documents",
+    "display_name": "Poupatempo",
+    "agency": "Governo do Estado de São Paulo",
+    "instructions": "Atendimento de documentos pessoais, como RG e atestado de antecedentes. Veja os serviços e agende pelo site.",
+    "keywords": ["poupatempo", "agendar poupatempo", "servicos do poupatempo", "atestado de antecedentes", "unidade do poupatempo", "documentos em sp"],
+    "links": [
+      {
+        "label": "Poupatempo",
+        "url": "https://www.poupatempo.sp.gov.br"
+      },
+      {
+        "label": "Serviços do Poupatempo",
+        "url": "https://www.poupatempo.sp.gov.br/servicos"
+      },
+      {
+        "label": "Órgãos no Poupatempo",
+        "url": "https://www.poupatempo.sp.gov.br/orgaos/"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha E03 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "detran_sp",
+    "category": null,
+    "kind": "portal",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "vehicles",
+    "display_name": "DETRAN-SP",
+    "agency": "Departamento Estadual de Trânsito de São Paulo",
+    "instructions": "Serviços de veículos, habilitação e multas em São Paulo. Escolha a área no portal.",
+    "keywords": ["detran sp", "detran", "licenciamento", "multa de transito", "transferencia de veiculo", "habilitacao em sp", "consultar multas"],
+    "links": [
+      {
+        "label": "DETRAN-SP",
+        "url": "https://www.detran.sp.gov.br"
+      },
+      {
+        "label": "Veículos",
+        "url": "https://www.detran.sp.gov.br/wps/portal/portaldetran/cidadao/veiculos"
+      },
+      {
+        "label": "Habilitação",
+        "url": "https://www.detran.sp.gov.br/wps/portal/portaldetran/cidadao/habilitacao"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha E04 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "sefaz_sp_ipva",
+    "category": null,
+    "kind": "portal",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "tax",
+    "display_name": "SEFAZ-SP e IPVA",
+    "agency": "Secretaria da Fazenda e Planejamento de São Paulo",
+    "instructions": "Portal da Fazenda do Estado, com os serviços de IPVA e a Nota Fiscal Paulista.",
+    "keywords": ["ipva", "ipva sp", "pagar ipva", "fazenda do estado", "sefaz sp", "nota fiscal paulista", "icms"],
+    "links": [
+      {
+        "label": "Portal da Fazenda SP",
+        "url": "https://portal.fazenda.sp.gov.br"
+      },
+      {
+        "label": "Serviços de IPVA",
+        "url": "https://portal.fazenda.sp.gov.br/servicos/ipva"
+      },
+      {
+        "label": "IPVA SP",
+        "url": "https://www.ipva.fazenda.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha E05 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "sp_health_secretariat",
+    "category": null,
+    "kind": "portal",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "health",
+    "display_name": "Secretaria de Estado da Saúde de SP",
+    "agency": "Secretaria de Estado da Saúde de São Paulo",
+    "instructions": "Informações sobre hospitais estaduais e diretrizes de saúde do Estado de São Paulo.",
+    "keywords": ["secretaria da saude sp", "saude do estado de sp", "hospital estadual", "hospitais do estado", "saude sp", "diretrizes de saude"],
+    "links": [
+      {
+        "label": "Secretaria de Estado da Saúde",
+        "url": "https://www.saude.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha E06 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "seduc_sp",
+    "category": null,
+    "kind": "portal",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "education",
+    "display_name": "Secretaria da Educação do Estado de SP (SEDUC-SP)",
+    "agency": "Secretaria da Educação do Estado de São Paulo",
+    "instructions": "Informações da rede estadual de ensino e da matrícula em escola estadual.",
+    "keywords": ["seduc sp", "escola estadual", "matricula na rede estadual", "matricula escola estadual", "educacao sp", "secretaria da educacao sp", "vaga em escola estadual"],
+    "links": [
+      {
+        "label": "Secretaria da Educação",
+        "url": "https://www.educacao.sp.gov.br"
+      },
+      {
+        "label": "Matrícula",
+        "url": "https://www.educacao.sp.gov.br/matricula"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha E07 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "jucesp",
+    "category": null,
+    "kind": "portal",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "tax",
+    "display_name": "JUCESP: registro de empresas",
+    "agency": "Junta Comercial do Estado de São Paulo",
+    "instructions": "Registro de empresas no Estado de São Paulo. Não é o alvará de funcionamento, que é municipal.",
+    "keywords": ["jucesp", "junta comercial", "registro de empresa", "abrir empresa", "contrato social", "abertura de empresa sp", "registro comercial"],
+    "links": [
+      {
+        "label": "JUCESP",
+        "url": "https://www.jucesponline.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha E08 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "sp156",
+    "category": null,
+    "kind": "portal",
+    "scope": "municipal",
+    "coverage": "Cidade de São Paulo",
+    "area": "city",
+    "display_name": "SP156",
+    "agency": "Prefeitura de São Paulo",
+    "instructions": "Central de serviços da cidade: zeladoria (buraco, poda, iluminação) e outros serviços. Também atende pelo telefone 156.",
+    "keywords": ["sp156", "156", "buraco na rua", "tapa buraco", "lampada queimada", "poda de arvore", "reclamar da prefeitura", "zeladoria", "coleta de lixo"],
+    "links": [
+      {
+        "label": "SP156",
+        "url": "https://sp156.prefeitura.sp.gov.br"
+      },
+      {
+        "label": "Serviços do SP156",
+        "url": "https://sp156.prefeitura.sp.gov.br/portal/servicos"
+      },
+      {
+        "label": "Perguntas frequentes do SP156",
+        "url": "https://sp156.prefeitura.sp.gov.br/portal/perguntas-frequentes"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Central 156",
+        "number": "156"
+      }
+    ],
+    "source_note": "Linha M01 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "sme_sp",
+    "category": null,
+    "kind": "portal",
+    "scope": "municipal",
+    "coverage": "Cidade de São Paulo",
+    "area": "education",
+    "display_name": "Secretaria Municipal de Educação (SME)",
+    "agency": "Secretaria Municipal de Educação de São Paulo",
+    "instructions": "Matrícula e vaga em creche e escolas da rede municipal. Também atende pelo 156.",
+    "keywords": ["sme sp", "vaga em creche", "creche", "matricula municipal", "escola municipal", "matricula na creche", "emei", "educacao infantil"],
+    "links": [
+      {
+        "label": "SME São Paulo",
+        "url": "https://educacao.sme.prefeitura.sp.gov.br"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Central 156",
+        "number": "156"
+      }
+    ],
+    "source_note": "Linha M02 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "nfe_paulistana",
+    "category": null,
+    "kind": "portal",
+    "scope": "municipal",
+    "coverage": "Cidade de São Paulo",
+    "area": "tax",
+    "display_name": "Nota Fiscal Paulistana (NF-e)",
+    "agency": "Prefeitura de São Paulo",
+    "instructions": "Portal da nota fiscal de serviços eletrônica da cidade de São Paulo.",
+    "keywords": ["nota fiscal paulistana", "nfe sp", "nf-e de servico", "nota fiscal de servico", "emitir nota fiscal sp", "iss sao paulo", "nota fiscal da prefeitura"],
+    "links": [
+      {
+        "label": "Nota Fiscal Paulistana",
+        "url": "https://nfe.prefeitura.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha M03 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "sp_city_portal",
+    "category": null,
+    "kind": "portal",
+    "scope": "municipal",
+    "coverage": "Cidade de São Paulo",
+    "area": "city",
+    "display_name": "Portal da Prefeitura de São Paulo",
+    "agency": "Prefeitura de São Paulo",
+    "instructions": "Portal institucional da Prefeitura de São Paulo.",
+    "keywords": ["portal da prefeitura de sp", "prefeitura de sao paulo", "site da prefeitura", "secretarias municipais", "prefeito de sao paulo", "servicos da prefeitura"],
+    "links": [
+      {
+        "label": "Prefeitura de São Paulo",
+        "url": "https://www.prefeitura.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Linha M04 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Decisão do usuário pendente ([?]); o site responde HTTP 403 ao verificador.",
+    "verified_on": "2026-11-10",
+    "status": "candidate"
+  },
+  {
+    "id": "sp_finance_secretariat",
+    "category": null,
+    "kind": "portal",
+    "scope": "municipal",
+    "coverage": "Cidade de São Paulo",
+    "area": "tax",
+    "display_name": "Secretaria Municipal da Fazenda",
+    "agency": "Secretaria Municipal da Fazenda de São Paulo",
+    "instructions": "IPTU, alvará e taxas municipais. Também atende pelo 156.",
+    "keywords": ["fazenda municipal", "secretaria municipal da fazenda", "taxas municipais", "iptu sao paulo", "imposto municipal", "tributos da prefeitura"],
+    "links": [
+      {
+        "label": "Secretaria da Fazenda",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/fazenda"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Central 156",
+        "number": "156"
+      }
+    ],
+    "source_note": "Linha M05 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Decisão do usuário pendente ([?]); HTTP 403 ao verificador.",
+    "verified_on": "2026-11-10",
+    "status": "candidate"
+  },
+  {
+    "id": "sp_city_health",
+    "category": null,
+    "kind": "portal",
+    "scope": "municipal",
+    "coverage": "Cidade de São Paulo",
+    "area": "health",
+    "display_name": "Secretaria Municipal da Saúde",
+    "agency": "Secretaria Municipal da Saúde de São Paulo",
+    "instructions": "UBS, AMA e vacinação na cidade de São Paulo. Também atende pelo 156.",
+    "keywords": ["ubs", "ama", "posto de saude de sao paulo", "saude municipal", "unidade basica de saude", "vacina na prefeitura", "secretaria municipal da saude"],
+    "links": [
+      {
+        "label": "Secretaria da Saúde",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/saude"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Central 156",
+        "number": "156"
+      }
+    ],
+    "source_note": "Linha M06 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Decisão do usuário pendente ([?]); HTTP 403 ao verificador.",
+    "verified_on": "2026-11-10",
+    "status": "candidate"
+  },
+  {
+    "id": "sp_city_education_page",
+    "category": null,
+    "kind": "portal",
+    "scope": "municipal",
+    "coverage": "Cidade de São Paulo",
+    "area": "education",
+    "display_name": "Secretaria Municipal de Educação (página da secretaria)",
+    "agency": "Secretaria Municipal de Educação de São Paulo",
+    "instructions": "Página da secretaria sobre matrícula. O registro sme_sp cobre o mesmo assunto em outro endereço.",
+    "keywords": ["secretaria municipal de educacao", "matricula na prefeitura", "pagina da secretaria de educacao", "educacao municipal", "rede municipal de ensino", "inscricao escolar"],
+    "links": [
+      {
+        "label": "Secretaria de Educação",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/educacao"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Central 156",
+        "number": "156"
+      }
+    ],
+    "source_note": "Linha M07 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Decisão do usuário pendente ([?]); HTTP 403 ao verificador.",
+    "verified_on": "2026-11-10",
+    "status": "candidate"
+  },
+  {
+    "id": "police_190",
+    "category": null,
+    "kind": "channel",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "safety",
+    "display_name": "Polícia Militar (190)",
+    "agency": "Polícia Militar do Estado de São Paulo",
+    "instructions": "Em emergência policial, ligue 190.",
+    "keywords": ["policia militar", "190", "chamar a policia", "policia", "assalto", "roubo em andamento", "ocorrencia urgente"],
+    "links": [
+      {
+        "label": "Polícia Militar de SP",
+        "url": "https://www.policiamilitar.sp.gov.br"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Polícia Militar",
+        "number": "190"
+      }
+    ],
+    "source_note": "Linha S01 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). 190 é código oficial de emergência.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "fire_brigade_193",
+    "category": null,
+    "kind": "channel",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "safety",
+    "display_name": "Corpo de Bombeiros (193)",
+    "agency": "Corpo de Bombeiros",
+    "instructions": "Em emergência com fogo, resgate ou salvamento, ligue 193.",
+    "keywords": ["corpo de bombeiros", "193", "chamar os bombeiros", "bombeiro", "salvamento", "emergencia de bombeiros"],
+    "links": [],
+    "phones": [
+      {
+        "label": "Corpo de Bombeiros",
+        "number": "193"
+      }
+    ],
+    "source_note": "Linha S02 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Sem página verificável (erro de SSL em 2026-11-10); registro só com o telefone oficial 193.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "samu_192",
+    "category": null,
+    "kind": "channel",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "safety",
+    "display_name": "SAMU (192)",
+    "agency": "Serviço de Atendimento Móvel de Urgência",
+    "instructions": "Em emergência de saúde, ligue 192 para chamar uma ambulância.",
+    "keywords": ["samu", "192", "ambulancia", "chamar ambulancia", "urgencia medica", "emergencia de saude", "socorro medico"],
+    "links": [
+      {
+        "label": "SAMU 192",
+        "url": "https://www.gov.br/saude/pt-br/composicao/saes/samu-192"
+      }
+    ],
+    "phones": [
+      {
+        "label": "SAMU",
+        "number": "192"
+      }
+    ],
+    "source_note": "Linha S03 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). 192 é código oficial de emergência.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "civil_defense_199",
+    "category": null,
+    "kind": "channel",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "safety",
+    "display_name": "Defesa Civil (199)",
+    "agency": "Defesa Civil",
+    "instructions": "Em risco de enchente, deslizamento, desabamento ou outro desastre, ligue 199.",
+    "keywords": ["defesa civil", "199", "enchente", "alagamento", "deslizamento", "risco de desabamento", "desastre natural"],
+    "links": [
+      {
+        "label": "Proteção e Defesa Civil",
+        "url": "https://www.gov.br/mdr/pt-br/assuntos/protecao-e-defesa-civil"
+      },
+      {
+        "label": "Defesa Civil SP",
+        "url": "https://www.defesacivil.sp.gov.br"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Defesa Civil",
+        "number": "199"
+      }
+    ],
+    "source_note": "Linha S04 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). 199 é código oficial de atendimento.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "human_rights_100",
+    "category": null,
+    "kind": "channel",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "safety",
+    "display_name": "Disque Direitos Humanos (100)",
+    "agency": "Ministério dos Direitos Humanos e da Cidadania",
+    "instructions": "Para denunciar violação de direitos humanos, como violência contra criança, idoso ou pessoa com deficiência, ligue 100.",
+    "keywords": ["disque 100", "100", "direitos humanos", "denuncia de violencia", "violencia contra crianca", "maus tratos a idoso", "denunciar abuso"],
+    "links": [],
+    "phones": [
+      {
+        "label": "Disque Direitos Humanos",
+        "number": "100"
+      }
+    ],
+    "source_note": "Linha S05 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). A página gov.br/mdh responde HTTP 403; registro só com o telefone oficial 100.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "women_helpline_180",
+    "category": null,
+    "kind": "channel",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "safety",
+    "display_name": "Central de Atendimento à Mulher (180)",
+    "agency": "Ministério das Mulheres",
+    "instructions": "Para denunciar ou pedir orientação sobre violência contra a mulher, ligue 180.",
+    "keywords": ["ligue 180", "180", "violencia contra a mulher", "violencia domestica", "maria da penha", "denunciar agressao", "central da mulher"],
+    "links": [
+      {
+        "label": "Ligue 180",
+        "url": "https://www.gov.br/mulheres/pt-br/ligue180"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Central de Atendimento à Mulher",
+        "number": "180"
+      }
+    ],
+    "source_note": "Linha S06 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md).",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "gap_city_permit_property_tax",
+    "category": null,
+    "kind": "channel",
+    "scope": "municipal",
+    "coverage": "Cidade de São Paulo",
+    "area": "tax",
+    "display_name": "Alvará de funcionamento e IPTU municipal (caminho geral)",
+    "agency": "Prefeitura de São Paulo",
+    "instructions": "Este é o caminho geral, não a página do serviço específico: ligue para o 156 ou procure o assunto no SP156, que atende os serviços da cidade.",
+    "keywords": ["alvara de funcionamento", "alvara", "alvara da prefeitura", "segunda via do iptu sp", "iptu da prefeitura", "parcelar iptu sp", "licenca de funcionamento"],
+    "links": [
+      {
+        "label": "SP156",
+        "url": "https://sp156.prefeitura.sp.gov.br"
+      },
+      {
+        "label": "Serviços do SP156",
+        "url": "https://sp156.prefeitura.sp.gov.br/portal/servicos"
+      },
+      {
+        "label": "Perguntas frequentes do SP156",
+        "url": "https://sp156.prefeitura.sp.gov.br/portal/perguntas-frequentes"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Central 156",
+        "number": "156"
+      }
+    ],
+    "source_note": "Lacuna da seção 5 do documento aprovado: caminho geral montado só com as fontes M01 (sp156); não é a página do serviço específico.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "gap_open_business",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "tax",
+    "display_name": "Abrir MEI ou empresa (caminho geral)",
+    "agency": "Receita Federal e JUCESP",
+    "instructions": "Este é o caminho geral, não a página do serviço específico: o pagamento do MEI é feito pelo gov.br e o registro de empresas, na JUCESP.",
+    "keywords": ["abrir mei", "como abrir mei", "abrir cnpj", "abrir uma empresa", "formalizar negocio", "microempreendedor individual", "registrar empresa"],
+    "links": [
+      {
+        "label": "Emitir DAS do MEI",
+        "url": "https://www.gov.br/pt-br/servicos/emitir-das-para-pagamento-de-tributos-do-mei"
+      },
+      {
+        "label": "JUCESP",
+        "url": "https://www.jucesponline.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Lacuna da seção 5 do documento aprovado: caminho geral montado só com as fontes F19 (mei_das) e E08 (jucesp); não é a página do serviço específico.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "gap_voter_id_path",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "documents",
+    "display_name": "Título de eleitor (caminho geral)",
+    "agency": "Governo Federal e Justiça Eleitoral",
+    "instructions": "Este é o caminho geral, não a página do serviço específico: busque \"título de eleitor\" no portal gov.br.",
+    "keywords": ["titulo de eleitor", "tirar titulo de eleitor", "segunda via do titulo", "transferir titulo", "regularizar titulo", "etitulo", "justica eleitoral"],
+    "links": [
+      {
+        "label": "Portal gov.br",
+        "url": "https://www.gov.br/pt-br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Lacuna da seção 5 do documento aprovado: caminho geral montado só com as fontes F01 (gov_portal); não é a página do serviço específico.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "gap_birth_certificate_path",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "documents",
+    "display_name": "Certidão de nascimento e segunda via (caminho geral)",
+    "agency": "Governo Federal e cartórios",
+    "instructions": "Este é o caminho geral, não a página do serviço específico: busque \"certidão\" no portal gov.br. A segunda via é pedida ao cartório.",
+    "keywords": ["certidao de nascimento", "segunda via de certidao", "certidao de casamento", "certidao de obito", "pedir certidao", "registro civil de nascimento", "cartorio de registro civil"],
+    "links": [
+      {
+        "label": "Portal gov.br",
+        "url": "https://www.gov.br/pt-br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Lacuna da seção 5 do documento aprovado: caminho geral montado só com as fontes F01 (gov_portal); não é a página do serviço específico.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "gap_social_assistance_cras",
+    "category": null,
+    "kind": "channel",
+    "scope": "municipal",
+    "coverage": "Cidade de São Paulo",
+    "area": "social",
+    "display_name": "Assistência social e CRAS (caminho geral)",
+    "agency": "Governo Federal e Prefeitura de São Paulo",
+    "instructions": "Este é o caminho geral, não a página do serviço específico: veja o Cadastro Único e o Bolsa Família no gov.br e ligue para o 156 para o atendimento municipal.",
+    "keywords": ["assistencia social", "cras", "centro de referencia de assistencia social", "ajuda social", "atendimento social", "cesta basica", "vulnerabilidade social"],
+    "links": [
+      {
+        "label": "Receber o Bolsa Família",
+        "url": "https://www.gov.br/pt-br/servicos/receber-o-bolsa-familia"
+      },
+      {
+        "label": "Consultar dados do Cadastro Único",
+        "url": "https://www.gov.br/pt-br/servicos/consultar-dados-do-cadastro-unico-cadunico"
+      },
+      {
+        "label": "SP156",
+        "url": "https://sp156.prefeitura.sp.gov.br"
+      }
+    ],
+    "phones": [
+      {
+        "label": "Central 156",
+        "number": "156"
+      }
+    ],
+    "source_note": "Lacuna da seção 5 do documento aprovado: caminho geral montado só com as fontes F18 (bolsa_familia_cadunico) e M01 (sp156); não é a página do serviço específico.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "gap_sp_records_and_id",
+    "category": null,
+    "kind": "portal",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "documents",
+    "display_name": "Antecedentes criminais e segunda via do RG em SP (caminho geral)",
+    "agency": "Poupatempo",
+    "instructions": "Este é o caminho geral, não a página do serviço específico: veja os serviços do Poupatempo e agende o atendimento.",
+    "keywords": ["antecedentes criminais", "atestado de antecedentes criminais", "segunda via do rg sp", "tirar rg em sp", "rg em sao paulo", "certidao de antecedentes", "nada consta criminal"],
+    "links": [
+      {
+        "label": "Poupatempo",
+        "url": "https://www.poupatempo.sp.gov.br"
+      },
+      {
+        "label": "Serviços do Poupatempo",
+        "url": "https://www.poupatempo.sp.gov.br/servicos"
+      }
+    ],
+    "phones": [],
+    "source_note": "Lacuna da seção 5 do documento aprovado: caminho geral montado só com as fontes E03 (poupatempo); não é a página do serviço específico.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
+  },
+  {
+    "id": "gap_fire_brigade",
+    "category": null,
+    "kind": "channel",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "safety",
+    "display_name": "Bombeiros (caminho geral)",
+    "agency": "Corpo de Bombeiros",
+    "instructions": "Este é o caminho geral, não a página do serviço específico: em emergência com fogo ou resgate, ligue 193.",
+    "keywords": ["incendio", "fogo", "pegando fogo", "resgate", "vazamento de gas", "gato na arvore", "bombeiros"],
+    "links": [],
+    "phones": [
+      {
+        "label": "Corpo de Bombeiros",
+        "number": "193"
+      }
+    ],
+    "source_note": "Lacuna da seção 5 do documento aprovado: caminho geral montado só com as fontes S02 (fire_brigade_193); não é a página do serviço específico.",
+    "verified_on": "2026-11-10",
+    "status": "approved"
   }
 ]

@@ -140,7 +140,7 @@ def test_module_function_defaults_to_versioned_catalog(monkeypatch: pytest.Monke
 
 def test_each_versioned_category_resolves_with_live_links() -> None:
     lookup = CatalogLookup(load_catalog(), load_allowed_suffixes(), RecordingChecker())
-    for entry in load_catalog():
+    for entry in (entry for entry in load_catalog() if entry.category):
         resolution = lookup.resolve(entry.category)
         assert resolution.reason is None, entry.id
         assert resolution.service.links == entry.links

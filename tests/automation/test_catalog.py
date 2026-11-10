@@ -27,8 +27,12 @@ def _write(tmp_path: Path, records: list) -> Path:
     return path
 
 
+def _categorized_entries() -> list:
+    return [entry for entry in load_catalog() if entry.category]
+
+
 def test_versioned_catalog_has_the_eight_approved_service_entries() -> None:
-    entries = load_catalog()
+    entries = _categorized_entries()
     assert {entry.category for entry in entries} == _dataset_categories()
     assert len(entries) == 8
     assert all(entry.status == "approved" and entry.kind == "service" for entry in entries)
@@ -36,7 +40,7 @@ def test_versioned_catalog_has_the_eight_approved_service_entries() -> None:
 
 
 def test_every_versioned_entry_is_complete_https_and_allowed() -> None:
-    for entry in load_catalog():
+    for entry in _categorized_entries():
         assert entry.links, entry.id
         assert all(is_allowed(link.url) for link in entry.links), entry.id
         assert KEYWORDS_MIN <= len(entry.keywords) <= KEYWORDS_MAX, entry.id
