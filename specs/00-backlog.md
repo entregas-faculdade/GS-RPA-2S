@@ -72,7 +72,6 @@ via normal.
 | 7 | `.env.example` não lista `CONFIDENCE_MIN` e `AMBIGUITY_MARGIN`, lidos por `config.py` | execução | 2026-11-09 | baixo |
 | 8 | `automation/link_check.py:38-40` — `requests` segue redirecionamentos e a URL final não é validada contra a allowlist: uma URL `gov.br` que redirecione para fora do domínio passa no `check_link` | execução | 2026-11-09 | médio |
 | 9 | `data/catalog.json` — `birth_certificate` aponta para uma notícia de 2021 (o `gov.br/mdh` recusa o cliente `requests`) e `voter_id` e `property_tax` para o hub genérico `gov.br/pt-br/servicos` e `tse.jus.br` está fora da allowlist; decisão do usuário: incluir `tse.jus.br` e uma URL específica de título de eleitor, ou manter o hub | execução | 2026-11-09 | baixo |
-| 10 | `automation/link_check.py` — `gov.br/mdh` (e talvez outros órgãos) devolve 403 ao `User-Agent` padrão do `requests` e `gov.br/mre` derrubou a conexão numa tentativa; um `User-Agent` identificado no `check_link` pode ser preciso para o catálogo crescer | execução | 2026-11-09 | baixo |
 | 11 | `.env.example` não documenta que `LLM_ENABLED` é desligado por padrão nem o formato esperado de `LLM_BASE_URL` (termina em `/v1`, sem `/chat/completions`) | execução | 2026-11-09 | baixo |
 | 12 | `pipeline/processor.py` (`_store`) — `save_request` e `enqueue_review` são duas transações: se a fila falhar de forma persistente depois de o pedido ser gravado, a segunda execução o vê como duplicado e o caminho seguro (`route_to_safe_review`) não o enfileira, então ele some da revisão | execução | 2026-11-10 | médio |
 | 13 | `classification/model.py` (`DEFAULT_MODEL_PATH`) — o modelo é lido de `output/models/` relativo à pasta atual e ignora `--output`; sem `scripts/train_model.py` antes, o `run.py` encaminha tudo à revisão (`low_confidence`); documentar o passo no README de entrega | execução | 2026-11-10 | baixo |
@@ -83,6 +82,9 @@ via normal.
 | 18 | `docs/quadro-de-temas.md` ainda diz que a anonimização cobre só CPF, telefone e e-mail; atualizar para os nove tipos | revisão | 2026-11-10 | baixo |
 | 19 | `automation/resolver.py` — `resolve_entry` não confere `status`: uma entrada `candidate` passada diretamente é entregue; checar `approved` também ali | revisão | 2026-11-10 | médio |
 | 20 | `data/urgency_terms.json` — o léxico casa frases exatas: `dor muito forte no peito` e `dificuldade em respirar` não são urgentes; 6 pedidos `urgent=1` do CSV (L031, L052, L125, L131, L150, L178) nunca foram detectados por léxico | revisão | 2026-11-10 | médio |
+| 21 | `data/labeled/README.md` ainda descreve 180 pedidos, 20 por categoria e a divisão 14 train / 6 test; o CSV tem 418 linhas (40 ou mais de treino por categoria) | revisão | 2026-11-10 | baixo |
+| 22 | `classification/rules.py` — o marcador `[CPF]` aciona a regra de CPF mesmo quando o assunto é outro: L372 (certidão de nascimento) e L409 (nota fiscal) têm rótulo diferente da regra, e em uso a regra única vence o modelo; medir se a regra de CPF deve exigir o assunto e não só o marcador | revisão | 2026-11-10 | médio |
+| 23 | `AMBIGUITY_MARGIN=0,15` é inerte com `CONFIDENCE_MIN` ≥ 0,60 (a folga mínima já é 0,20); a validação cruzada deu resultado idêntico de 0,05 a 0,25. Escrever isso em `02.02` ou rever o papel do parâmetro | revisão | 2026-11-10 | baixo |
 
 ---
 

@@ -137,20 +137,26 @@ Resumo; o quadro completo, com a justificativa da combinação, está em [docs/q
 
 ## Resultados
 
-Medidos no conjunto de teste (`split=test`, **54 pedidos sintéticos**, 6 por categoria), sem LLM:
+Medidos no mesmo conjunto de teste (`split=test`, **54 pedidos sintéticos**, 6 por categoria, sem nenhuma linha alterada),
+sem LLM. O que mudou foi o treino do modelo: **antes**, 126 pedidos (14 por categoria); **depois**, 364 pedidos (pelo
+menos 40 por categoria, 44 em `other`):
 
-| Métrica | Resultado |
-|---|---|
-| Acurácia geral | 81,5% (44 de 54) |
-| Pedidos enviados à revisão humana | 42,6% (23 de 54) |
-| Cobertura automática | 57,4% (31 de 54) |
-| Acurácia entre os respondidos sozinhos | 100% (31 de 31) |
+| Métrica | Antes (126 de treino) | Depois (364 de treino) |
+|---|---|---|
+| Acurácia geral | 81,5% (44 de 54) | 88,9% (48 de 54) |
+| Pedidos enviados à revisão humana | 42,6% (23 de 54) | 33,3% (18 de 54) |
+| Cobertura automática | 57,4% (31 de 54) | 66,7% (36 de 54) |
+| Acurácia entre os respondidos sozinhos | 100% (31 de 31) | 100% (36 de 36) |
+| Confiança média dos acertos / dos erros | 0,73 / 0,26 | 0,77 / 0,31 |
 
-Os 10 erros de classificação foram todos encaminhados à revisão humana; nenhum virou resposta errada. A amostra é
-pequena e sintética (cada pedido vale cerca de 1,9 ponto percentual), então os números mostram o comportamento nesta
-amostra e não o desempenho com pedidos reais. Matriz de confusão, métricas por classe, análise dos erros, casos de
-falha tratados (arquivo ausente, JSON inválido, link fora do ar, resposta vazia do LLM, modelo ausente) e limites
-estão em [notebooks/evidence.ipynb](notebooks/evidence.ipynb).
+Os 6 erros de classificação restantes foram todos encaminhados à revisão humana; nenhum virou resposta errada. Os
+limiares `CONFIDENCE_MIN=0,60` e `AMBIGUITY_MARGIN=0,15` foram reavaliados por validação cruzada de 5 partes **só no
+treino** (364 pedidos) e **mantidos**: baixar a confiança mínima aumenta a cobertura (69,2% em 0,60; 71,2% em 0,55;
+76,9% em 0,40), mas a acurácia entre os respondidos cai (98,0%; 97,7%; 96,8%), e a folga de ambiguidade não muda o
+resultado. A amostra é pequena e sintética (cada pedido de teste vale cerca de 1,9 ponto percentual): isto descreve
+esta amostra sintética, não pedidos reais. Matriz de confusão, métricas por classe, tabela de limiares, análise dos
+erros, casos de falha tratados (arquivo ausente, JSON inválido, link fora do ar, resposta vazia do LLM, modelo ausente)
+e limites estão em [notebooks/evidence.ipynb](notebooks/evidence.ipynb).
 
 ## Proteção de dados, ética e ODS
 
