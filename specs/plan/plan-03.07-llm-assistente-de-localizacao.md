@@ -8,7 +8,7 @@ status: "🔴 A executar"
 prioridade: "Média"
 tags: ["plan"]
 relacionados: ["[[005-llm-apenas-reformula-resposta]]", "[[003-seguranca-sem-autenticacao]]", "[[03.02-resposta-final-e-llm]]"]
-depende_de: "plan-03.06-resposta-em-degraus — precisa estar 🟢"
+depende_de: "plan-03.06-resposta-em-degraus e plan-03.08-agente-llm — precisam estar 🟢"
 destino_sintese: "adr/006-llm-escolhe-apenas-entre-fontes-aprovadas.md"
 ---
 
@@ -34,7 +34,7 @@ Estado atual: `OpenAICompatibleClient.rewrite(prompt)`, `build_llm_client(settin
 
 # 3. Escopo
 ## 3.1 Dentro
-- `src/triage/automation/llm_client.py` — o que for preciso para uma segunda chamada (escolha) no mesmo cliente
+- `data/agents/triage-assistant/workflow.md` e `config.json` — a tarefa `locate` (prompt de escolha em `## Tarefa: locate` e o parâmetro `max_candidates`); o cliente já expõe `complete(task, user_message)` e o agente já existe (plan do agente)
 - `src/triage/automation/llm_locator.py` (novo) — prompt, parsing e validação da escolha
 - `src/triage/automation/finder.py` — expor as N melhores candidatas (`top_candidates`) além do melhor
 - `src/triage/automation/response.py` e `response_guard.py` — só o necessário para reformular o template com links e telefones
@@ -55,6 +55,7 @@ Estado atual: `OpenAICompatibleClient.rewrite(prompt)`, `build_llm_client(settin
 | Spec fixa | [[03.02-resposta-final-e-llm]] | cliente, guarda, motivos de fallback |
 | Spec fixa | [[01.03-anonimizacao-de-pii]] | limites residuais da anonimização |
 | Spec fixa | `specs/03.03-localizador-de-servicos.md` (ou a plan-03.05 se ainda não sintetizada) e `specs/arquitetura/04.03-orquestracao-rpa.md` (ou a plan-03.06) | localizador e degraus |
+| Spec fixa | `specs/03.04-agente-llm.md` (ou a plan-03.08, se ainda não sintetizada) | arquivos do agente, composição do prompt, linter e cliente `complete` |
 | Contexto | [[00-contexto]] · [[00-knowledge]] | sempre |
 | Skill | `padrao-escrita` + `padrao-python` · `cyber-ia` | injeção de prompt, saída não confiável |
 | Skill | `test-unitario` | testes com cliente falso |
@@ -66,7 +67,7 @@ Estado atual: `OpenAICompatibleClient.rewrite(prompt)`, `build_llm_client(settin
    cliente montado.
 2. [dirigido] **Candidatas.** O localizador expõe as até 5 melhores entradas aprovadas (ordenadas por pontuação, sem
    limiar mínimo; filtro de entrada **sem** `status` aprovado é impossível por construção).
-3. [dirigido] **Escolha pelo LLM.** Quando o localizador não resolveu (`None`) **e** o modo está ligado, o pipeline envia ao
+3. [dirigido] **Escolha pelo LLM.** O prompt vem do agente (`workflow.md`, `## Tarefa: locate`, mais regras e identidade) e a chamada é `complete("locate", ...)`; nenhum texto de prompt fica em constante no código, e o linter do agente passa a exigir a seção `locate`. Quando o localizador não resolveu (`None`) **e** o modo está ligado, o pipeline envia ao
    LLM o texto **anonimizado** (dentro de delimitadores, tratado como dado e não instrução) e a lista das candidatas
    (`id`, nome, órgão). A resposta esperada é um JSON `{"id": "<id da lista>"}` ou `{"id": "none"}`. Validar rigidamente:
    JSON válido, chave `id`, valor igual a um `id` da lista ou `none`; **qualquer outra coisa** (texto livre, id fora da lista,
@@ -106,7 +107,7 @@ Estado atual: `OpenAICompatibleClient.rewrite(prompt)`, `build_llm_client(settin
 
 # 8. Destino da síntese
 **Destino:** `adr/006-llm-escolhe-apenas-entre-fontes-aprovadas.md` (ADR nova, que **restringe** a 005) e as regras de
-cliente, guarda e interruptores em `specs/03.02-resposta-final-e-llm.md`.
+cliente, guarda e interruptores em `specs/03.02-resposta-final-e-llm.md`; a tarefa `locate` entra em `specs/03.04-agente-llm.md`.
 
 Condição de ADR atendida: há duas opções reais (LLM só reformula × LLM escolhe entre ids aprovados), a escolhida tem custo
 (texto anonimizado sai do computador) e voltar atrás é caro (os usuários passariam a depender do modo). A ADR traz

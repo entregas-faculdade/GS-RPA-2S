@@ -8,7 +8,7 @@ status: "🔴 A executar"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[03.01-catalogo-e-allowlist]]", "[[02.01-classificacao]]", "[[005-llm-apenas-reformula-resposta]]"]
-depende_de: "plan-03.04-catalogo-sao-paulo — precisa estar 🟢"
+depende_de: "plan-03.04-catalogo-sao-paulo e plan-03.09-verificacao-de-links-prefeitura — precisam estar 🟢 (as duas mexem em config.py e no catálogo)"
 destino_sintese: "specs/03.03-localizador-de-servicos.md"
 ---
 
