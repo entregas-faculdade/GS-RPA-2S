@@ -81,7 +81,7 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 - ✅ **R02.1** Classificador — conjunto rotulado sintético, regex e TF-IDF (✅ 2026-11-09)
 - ✅ **R02.2** Confiança e revisão humana — limiares e gatilhos (✅ 2026-11-09)
 - ✅ **R02.3** Urgência de saúde — termos de emergência e "urgente" de cortesia (✅ 2026-11-10)
-- 🔷 **R02.4** Dataset ampliado e calibração — treino ≥ 40 por categoria e limiares por validação cruzada
+- ✅ **R02.4** Dataset ampliado e calibração — treino ≥ 40 por categoria e limiares por validação cruzada (✅ 2026-11-10)
 
 ## 03 · Automação
 - ✅ **R03.1** Catálogo e allowlist — links oficiais verificados (✅ 2026-11-09)

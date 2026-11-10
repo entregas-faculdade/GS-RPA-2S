@@ -11,7 +11,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 # Panorama
 
 ## Progresso
-██████░░░░ 68% · 15/22 itens ✅
+███████░░░ 72% · 16/22 itens ✅
 
 ## Agora
 —
@@ -28,11 +28,10 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | FF | Família | Itens ✅/total | Progresso | Plans abertas |
 |---|---|---|---|---|
 | 01 | Núcleo do robô | 4/4 | █████ | 0 |
-| 02 | Classificação | 3/4 | ███░░ | 1 |
+| 02 | Classificação | 4/4 | █████ | 0 |
 | 03 | Automação | 4/9 | ██░░░ | 5 |
 | 04 | Operação e interface | 3/4 | ███░░ | 1 |
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
-- 🟢 plan-02.04 · Ampliar o conjunto rotulado de treino e recalibrar a confiança por validação cruzada — aguardando síntese
 - 📋 22 achado(s) no `00-backlog`
