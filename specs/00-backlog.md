@@ -74,6 +74,9 @@ via normal.
 | 9 | `data/catalog.json` — `birth_certificate` aponta para uma notícia de 2021 (o `gov.br/mdh` recusa o cliente `requests`) e `voter_id` e `property_tax` para o hub genérico `gov.br/pt-br/servicos` e `tse.jus.br` está fora da allowlist; decisão do usuário: incluir `tse.jus.br` e uma URL específica de título de eleitor, ou manter o hub | execução | 2026-11-09 | baixo |
 | 10 | `automation/link_check.py` — `gov.br/mdh` (e talvez outros órgãos) devolve 403 ao `User-Agent` padrão do `requests` e `gov.br/mre` derrubou a conexão numa tentativa; um `User-Agent` identificado no `check_link` pode ser preciso para o catálogo crescer | execução | 2026-11-09 | baixo |
 | 11 | `.env.example` não documenta que `LLM_ENABLED` é desligado por padrão nem o formato esperado de `LLM_BASE_URL` (termina em `/v1`, sem `/chat/completions`) | execução | 2026-11-09 | baixo |
+| 12 | `pipeline/processor.py` (`_store`) — `save_request` e `enqueue_review` são duas transações: se a fila falhar de forma persistente depois de o pedido ser gravado, a segunda execução o vê como duplicado e o caminho seguro (`route_to_safe_review`) não o enfileira, então ele some da revisão | execução | 2026-11-10 | médio |
+| 13 | `classification/model.py` (`DEFAULT_MODEL_PATH`) — o modelo é lido de `output/models/` relativo à pasta atual e ignora `--output`; sem `scripts/train_model.py` antes, o `run.py` encaminha tudo à revisão (`low_confidence`); documentar o passo no README de entrega | execução | 2026-11-10 | baixo |
+| 14 | `python -m ruff check run.py src tests` com o ruff 0.17.4 fixado acusa 9 erros em arquivos de plans anteriores (I001 em `sanitizer.py`, `test_decision.py`, `test_model.py`, `test_sanitizer.py` e `test_repository.py`; UP033 em `allowlist.py` e `urgency.py`; UP017 em `repository.py`; SIM117 em `test_repository.py:143`), 8 corrigíveis com `--fix` | execução | 2026-11-10 | baixo |
 
 ---
 
