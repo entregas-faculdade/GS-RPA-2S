@@ -1,4 +1,4 @@
-"""Guarda da saída do LLM: limites e falsos positivos da regra de URL."""
+"""Guarda da saída do LLM: limites e falsos positivos das regras de URL, telefone e âncora."""
 
 import dataclasses
 
@@ -10,9 +10,9 @@ from triage.automation.response_guard import (
     REJECT_EMPTY,
     REJECT_FOREIGN_PHONE,
     REJECT_FOREIGN_URL,
-    REJECT_MISSING_URL,
+    REJECT_MISSING_ANCHOR,
     REJECT_TOO_LONG,
-    validate_llm_output,
+    validate_rag_output,
 )
 
 URL = "https://www.gov.br/inss"
@@ -56,19 +56,19 @@ SERVICE = ServiceEntry(
     ],
 )
 def test_accepts_text_that_keeps_the_service_url(text: str) -> None:
-    assert validate_llm_output(text, SERVICE) is None
+    assert validate_rag_output(text, (SERVICE,)) is None
 
 
 @pytest.mark.parametrize("text", ["", "   \n\t"])
 def test_rejects_empty_text(text: str) -> None:
-    assert validate_llm_output(text, SERVICE) == REJECT_EMPTY
+    assert validate_rag_output(text, (SERVICE,)) == REJECT_EMPTY
 
 
 def test_length_limit_is_inclusive() -> None:
     at_limit = f"{URL} " + "a" * (MAX_RESPONSE_LENGTH - len(URL) - 1)
     assert len(at_limit) == MAX_RESPONSE_LENGTH
-    assert validate_llm_output(at_limit, SERVICE) is None
-    assert validate_llm_output(at_limit + "a", SERVICE) == REJECT_TOO_LONG
+    assert validate_rag_output(at_limit, (SERVICE,)) is None
+    assert validate_rag_output(at_limit + "a", (SERVICE,)) == REJECT_TOO_LONG
 
 
 @pytest.mark.parametrize(
@@ -89,7 +89,7 @@ def test_length_limit_is_inclusive() -> None:
     ],
 )
 def test_rejects_any_url_different_from_the_service_url(text: str) -> None:
-    assert validate_llm_output(text, SERVICE) == REJECT_FOREIGN_URL
+    assert validate_rag_output(text, (SERVICE,)) == REJECT_FOREIGN_URL
 
 
 @pytest.mark.parametrize(
@@ -103,24 +103,51 @@ def test_rejects_any_url_different_from_the_service_url(text: str) -> None:
     ],
 )
 def test_rejects_phone_that_is_not_the_service_phone(text: str) -> None:
-    assert validate_llm_output(text, SERVICE) == REJECT_FOREIGN_PHONE
+    assert validate_rag_output(text, (SERVICE,)) == REJECT_FOREIGN_PHONE
 
 
 def test_phones_inside_urls_and_emails_are_not_phones() -> None:
     text = f"Veja https://www.gov.br/inss e escreva a fale123456@example.org. {URL}"
-    assert validate_llm_output(text, SERVICE) is None
+    assert validate_rag_output(text, (SERVICE,)) is None
 
 
 def test_service_without_phones_rejects_any_phone() -> None:
     service = dataclasses.replace(SERVICE, phones=())
-    assert validate_llm_output(f"Ligue 135 e acesse {URL}", service) == REJECT_FOREIGN_PHONE
+    assert validate_rag_output(f"Ligue 135 e acesse {URL}", (service,)) == REJECT_FOREIGN_PHONE
 
 
 def test_phone_only_service_accepts_its_phone_and_rejects_any_url() -> None:
     service = dataclasses.replace(SERVICE, links=(), phones=(Phone("Central 156", "156"),))
-    assert validate_llm_output("Ligue 156 para falar com a central.", service) is None
-    assert validate_llm_output(f"Ligue 156 ou acesse {URL}", service) == REJECT_FOREIGN_URL
+    assert validate_rag_output("Ligue 156 para falar com a central.", (service,)) is None
+    assert validate_rag_output(f"Ligue 156 ou acesse {URL}", (service,)) == REJECT_FOREIGN_URL
 
 
-def test_rejects_text_without_the_service_url() -> None:
-    assert validate_llm_output("Procure o INSS no site do governo.", SERVICE) == REJECT_MISSING_URL
+def test_rejects_text_without_any_link_or_phone_of_the_sources() -> None:
+    assert validate_rag_output("Procure o INSS no site do governo.", (SERVICE,)) == REJECT_MISSING_ANCHOR
+
+
+def test_a_phone_of_the_sources_is_enough_of_an_anchor() -> None:
+    assert validate_rag_output("Ligue 135 para falar com o INSS.", (SERVICE,)) is None
+
+
+OTHER_SOURCE = dataclasses.replace(
+    SERVICE,
+    id="other",
+    links=(Link("Outro", "https://www.saude.gov.br/outro"),),
+    phones=(Phone("Disque", "136"),),
+)
+
+
+def test_with_several_sources_any_link_or_phone_of_any_of_them_is_valid() -> None:
+    sources = (SERVICE, OTHER_SOURCE)
+    assert validate_rag_output(f"Acesse {URL} ou https://www.saude.gov.br/outro. Ligue 136.", sources) is None
+
+
+def test_a_link_or_phone_of_a_source_that_was_not_sent_is_foreign() -> None:
+    assert validate_rag_output(f"Acesse {URL} ou https://www.saude.gov.br/outro", (SERVICE,)) == REJECT_FOREIGN_URL
+    assert validate_rag_output(f"Acesse {URL} e ligue 136", (SERVICE,)) == REJECT_FOREIGN_PHONE
+
+
+def test_a_bare_host_of_any_source_is_accepted() -> None:
+    assert validate_rag_output(f"No saude.gov.br ou em {URL}", (SERVICE, OTHER_SOURCE)) is None
+    assert validate_rag_output(f"No saude.gov.br ou em {URL}", (SERVICE,)) == REJECT_FOREIGN_URL

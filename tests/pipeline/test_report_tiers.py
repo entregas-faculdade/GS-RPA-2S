@@ -27,12 +27,12 @@ def test_report_counts_answered_by_tier() -> None:
 
     report = _report(results)
 
-    assert report.tiers == {"catalog": 2, "finder": 1, "finder_llm": 0}
-    assert report.to_dict()["tiers"] == {"catalog": 2, "finder": 1, "finder_llm": 0}
+    assert report.tiers == {"catalog": 2, "finder": 1}
+    assert report.to_dict()["tiers"] == {"catalog": 2, "finder": 1}
 
 
 def test_report_without_answers_has_zero_tiers() -> None:
-    assert _report([ProcessingResult("skipped_duplicate")]).tiers == {"catalog": 0, "finder": 0, "finder_llm": 0}
+    assert _report([ProcessingResult("skipped_duplicate")]).tiers == {"catalog": 0, "finder": 0}
 
 
 def test_markdown_shows_the_tier_table() -> None:
@@ -48,25 +48,3 @@ def test_report_never_carries_response_text() -> None:
 
     assert "texto da resposta" not in json.dumps(report.to_dict(), ensure_ascii=False)
     assert "texto da resposta" not in render_markdown(report)
-
-
-def test_report_counts_the_llm_assisted_tier_and_tiers_sum_to_the_answered() -> None:
-    results = [
-        _answered("catalog"),
-        _answered("finder"),
-        _answered("finder_llm"),
-        _answered("finder_llm"),
-        ProcessingResult("queued_for_review", reason="out_of_catalog", response_text="não tenho"),
-    ]
-
-    report = _report(results)
-
-    assert report.tiers == {"catalog": 1, "finder": 1, "finder_llm": 2}
-    assert sum(report.tiers.values()) == report.totals["answered"] == 4
-    assert report.to_dict()["tiers"]["finder_llm"] == 2
-
-
-def test_markdown_shows_the_llm_assisted_tier() -> None:
-    markdown = render_markdown(_report([_answered("finder_llm")]))
-
-    assert "| fonte escolhida pelo assistente de localização | 1 |" in markdown

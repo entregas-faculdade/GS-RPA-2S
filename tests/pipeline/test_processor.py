@@ -1,11 +1,13 @@
 """`process_request`: ordem das etapas, caminhos de revisão e privacidade do que é gravado."""
 
+import dataclasses
 import sqlite3
 from collections.abc import Callable
 from pathlib import Path
 
 import pytest
 
+from triage.automation.finder import ServiceFinder
 from triage.automation.llm_client import LlmUnavailable
 from triage.ingestion import Rejection, Request
 from triage.pipeline import Deps, process_request
@@ -79,7 +81,9 @@ def test_failing_llm_falls_back_to_template(make_deps: Callable[..., Deps]) -> N
         def complete(self, task: str, user_message: str) -> str:
             raise LlmUnavailable("Timeout")
 
-    deps = make_deps(llm_client=BrokenClient())
+    enabled = dataclasses.replace(make_deps().settings, llm_enabled=True)
+    finder = ServiceFinder(make_deps().lookup.approved_entries(), enabled)
+    deps = make_deps(llm_client=BrokenClient(), settings=enabled, finder=finder)
 
     result = process_request(_request(), deps)
 

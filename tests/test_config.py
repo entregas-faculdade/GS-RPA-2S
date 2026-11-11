@@ -88,7 +88,6 @@ def test_shipped_config_equals_the_code_defaults(missing_env: Path) -> None:
     settings = load_settings(missing_env)
 
     assert settings.llm_enabled is False
-    assert settings.llm_assist_locate is False
     assert settings.llm_agent_id == "triage-assistant"
     assert settings.log_level == DEFAULT_LOG_LEVEL
     assert (settings.confidence_min, settings.ambiguity_margin) == (CONFIDENCE_MIN, AMBIGUITY_MARGIN)
@@ -110,7 +109,7 @@ def test_reads_every_section(tmp_path: Path) -> None:
     def change(data: dict[str, Any]) -> None:
         data["log_level"] = " DEBUG "
         data["llm"].update(
-            enabled=True, base_url=" http://x ", model="m", agent_id=" outro ", fallback_models=["a"], assist_locate=True
+            enabled=True, base_url=" http://x ", model="m", agent_id=" outro ", fallback_models=["a"]
         )
         data["triage"].update(confidence_min=0.8, ambiguity_margin=0.3)
         data["finder"].update(min_score=0.4, margin=0.2)
@@ -118,7 +117,7 @@ def test_reads_every_section(tmp_path: Path) -> None:
 
     settings = _load(tmp_path, change)
 
-    assert (settings.log_level, settings.llm_enabled, settings.llm_assist_locate) == ("DEBUG", True, True)
+    assert (settings.log_level, settings.llm_enabled) == ("DEBUG", True)
     assert (settings.llm_base_url, settings.llm_model, settings.llm_agent_id) == ("http://x", "m", "outro")
     assert settings.llm_fallback_models == ("a",)
     assert (settings.confidence_min, settings.ambiguity_margin) == (0.8, 0.3)
@@ -169,7 +168,6 @@ FIELD_DEFAULTS = {
     "llm.model": ("llm_model", ""),
     "llm.agent_id": ("llm_agent_id", "triage-assistant"),
     "llm.fallback_models": ("llm_fallback_models", ()),
-    "llm.assist_locate": ("llm_assist_locate", False),
     "triage.confidence_min": ("confidence_min", CONFIDENCE_MIN),
     "triage.ambiguity_margin": ("ambiguity_margin", AMBIGUITY_MARGIN),
     "finder.min_score": ("finder_min_score", FINDER_MIN_SCORE),
@@ -218,7 +216,6 @@ WRONG_TYPES = [
     ("llm.agent_id", "   "),
     ("llm.fallback_models", "a,b"),
     ("llm.fallback_models", ["a", 2]),
-    ("llm.assist_locate", "false"),
     ("triage.confidence_min", "0.8"),
     ("triage.ambiguity_margin", True),
     ("finder.min_score", None),

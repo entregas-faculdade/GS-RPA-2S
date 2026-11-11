@@ -1,19 +1,13 @@
-"""Resposta final: template como padrão e todo caminho de falha do LLM caindo nele."""
+"""Resposta final: template como padrão e o marcador de resposta redigida pelo LLM."""
 
 import dataclasses
-import logging
-
-import pytest
 
 from triage.automation.catalog import Link, Phone, ServiceEntry
-from triage.automation.llm_client import LlmInvalidResponse, LlmUnavailable
 from triage.automation.response import (
-    FALLBACK_LLM_INVALID_RESPONSE,
     FALLBACK_LLM_OUTPUT_REJECTED,
-    FALLBACK_LLM_UNAVAILABLE,
+    build_llm_response,
     build_response,
 )
-from triage.automation.response_guard import MAX_RESPONSE_LENGTH
 from triage.automation.templates import render_template
 
 URL = "https://www.gov.br/inss"
@@ -35,18 +29,6 @@ SERVICE = ServiceEntry(
     status="approved",
 )
 TEMPLATE = render_template(SERVICE)
-
-
-class StubClient:
-    def __init__(self, answer: str | BaseException) -> None:
-        self.answer = answer
-        self.calls: list[tuple[str, str]] = []
-
-    def complete(self, task: str, user_message: str) -> str:
-        self.calls.append((task, user_message))
-        if isinstance(self.answer, BaseException):
-            raise self.answer
-        return self.answer
 
 
 def test_template_has_service_name_agency_coverage_instructions_and_link() -> None:
@@ -78,40 +60,16 @@ def test_template_without_links_shows_only_phones() -> None:
     assert "https://" not in text
 
 
-def test_without_client_the_template_answers_and_no_fallback_is_reported() -> None:
+def test_build_response_is_the_template_without_llm_and_without_reason() -> None:
     response = build_response(SERVICE)
     assert (response.text, response.used_llm, response.fallback_reason) == (TEMPLATE, False, None)
 
 
-def test_valid_llm_answer_is_used() -> None:
-    answer = f"Olá! Para a sua aposentadoria, acesse {URL}."
-    response = build_response(SERVICE, StubClient(answer))
-    assert (response.text, response.used_llm, response.fallback_reason) == (answer, True, None)
+def test_build_response_carries_the_reason_the_llm_did_not_answer() -> None:
+    response = build_response(SERVICE, FALLBACK_LLM_OUTPUT_REJECTED)
+    assert (response.text, response.used_llm, response.fallback_reason) == (TEMPLATE, False, FALLBACK_LLM_OUTPUT_REJECTED)
 
 
-def test_client_gets_the_rewrite_task_with_only_the_template_text() -> None:
-    client = StubClient(f"Acesse {URL}")
-    build_response(SERVICE, client)
-    assert client.calls == [("rewrite", TEMPLATE)]
-
-
-@pytest.mark.parametrize(
-    ("answer", "reason"),
-    [
-        (LlmUnavailable("Timeout"), FALLBACK_LLM_UNAVAILABLE),
-        (LlmInvalidResponse("sem choices"), FALLBACK_LLM_INVALID_RESPONSE),
-        ("", FALLBACK_LLM_OUTPUT_REJECTED),
-        ("   ", FALLBACK_LLM_OUTPUT_REJECTED),
-        ("Acesse https://www.golpe.com.br/inss agora", FALLBACK_LLM_OUTPUT_REJECTED),
-        (f"{URL} ou https://www.gov.br/outro", FALLBACK_LLM_OUTPUT_REJECTED),
-        ("Procure o INSS no site do governo.", FALLBACK_LLM_OUTPUT_REJECTED),
-        (f"{URL} " + "x" * MAX_RESPONSE_LENGTH, FALLBACK_LLM_OUTPUT_REJECTED),
-    ],
-)
-def test_every_failure_falls_back_to_template_with_reason_and_log(
-    answer: str | BaseException, reason: str, caplog: pytest.LogCaptureFixture
-) -> None:
-    with caplog.at_level(logging.WARNING, logger="triage.automation"):
-        response = build_response(SERVICE, StubClient(answer))
-    assert (response.text, response.used_llm, response.fallback_reason) == (TEMPLATE, False, reason)
-    assert any(record.levelno == logging.WARNING for record in caplog.records)
+def test_llm_response_is_marked_as_written_by_the_llm() -> None:
+    response = build_llm_response("Olá!")
+    assert (response.text, response.used_llm, response.fallback_reason) == ("Olá!", True, None)

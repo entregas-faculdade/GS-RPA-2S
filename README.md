@@ -28,7 +28,7 @@ flowchart LR
   B --> C[2 Classificação regex + TF-IDF + confiança]
   C -->|alta confiança| D[3 Catálogo + allowlist → link]
   C -->|baixa, ambígua, urgente, fora do catálogo| H[Fila de revisão humana]
-  D --> L[LLM opcional reformula a resposta]
+  D --> L[LLM opcional redige a resposta sobre as fontes do catálogo]
   L --> R[Resposta + feedback 👍/👎]
   D --> R
   R --> G[Log + relatório de execução]
@@ -104,26 +104,22 @@ Para ligar o LLM:
 | `llm.base_url`, `llm.model` | provedor (formato `/chat/completions`) e modelo principal |
 | `llm.fallback_models` | lista de modelos alternativos, tentados na ordem se o principal falhar; pode ser vazia |
 | `llm.agent_id` | agente em `data/agents/<id>/` (padrão `triage-assistant`) |
-| `llm.assist_locate` | liga o assistente de localização (modo b, abaixo); exige `llm.enabled`; padrão desligado |
 | `triage.confidence_min`, `triage.ambiguity_margin` | limiares da revisão humana (padrão `0.60` e `0.15`), em [0, 1] |
 | `finder.min_score`, `finder.margin` | limiares do localizador de fontes (padrão `0.25` e `0.15`), em [0, 1] |
 | `link_check.user_agent` | identificação do verificador de links (nome do projeto; não imita navegador) |
 
-O LLM tem **dois modos**, independentes e sempre sob o `llm.enabled`:
+**Fluxo único.** Com `llm.enabled: true`, a resposta é **redigida pelo LLM** a partir da pergunta **anonimizada** e das
+**fontes aprovadas recuperadas do catálogo** (o catálogo é o RAG do agente): para cada fonte, nome, órgão, abrangência,
+instruções, links e telefones, exatamente como estão no catálogo, só com link no ar. O LLM nunca decide a categoria nem
+recebe o texto bruto. A saída passa por uma guarda: todo link e todo telefone têm de ser de uma das fontes enviadas, e ao
+menos um deles tem de aparecer; saída vazia, longa demais ou com link ou telefone alheio é descartada e responde o
+texto-modelo do catálogo (ou "não tenho a informação"), com o motivo no log e no relatório. Se o LLM disser
+`NENHUMA_FONTE`, vale o texto-modelo no degrau 1 e "não tenho a informação" nos degraus 2 e 3. Urgência, pedido ambíguo
+e modelo ausente nunca chamam o LLM.
 
-| Modo | Interruptor | O que envia ao provedor |
-|---|---|---|
-| **(a) Reformulação** | `llm.enabled: true` | só o texto-modelo da resposta já decidida (links e telefones do catálogo); **nunca** o pedido do cidadão |
-| **(b) Assistente de localização** | `llm.enabled: true` **e** `llm.assist_locate: true` (padrão `false`) | o texto do pedido **anonimizado** e uma lista de até 5 fontes aprovadas (`id`, nome, órgão) |
-
-**(a) Reformulação.** O LLM só reescreve a resposta que o robô já decidiu. Se ele falhar, vier vazio ou trouxer link ou
-telefone fora do esperado, vale o texto-modelo e o motivo vai para o log.
-
-**(b) Assistente de localização.** Quando o localizador determinístico não acha a fonte, o LLM escolhe **um `id` de uma
-lista fechada** de fontes aprovadas, em JSON (`{"id": "<id>"}` ou `{"id": "none"}`). Qualquer outra saída (texto livre, id fora
-da lista, JSON inválido, vazio, timeout) vira "não tenho a informação". O LLM nunca escreve link, telefone nem órgão: o texto
-mostrado vem do catálogo aprovado. Como esse modo **envia o texto anonimizado do cidadão para fora do computador**, ele é
-opt-in e vem desligado.
+**O que vai ao provedor.** Com o LLM ligado, **toda** pergunta anonimizada (ex.: `[NOME] pergunta...`) e as fontes
+candidatas saem do computador rumo ao provedor. Sem `llm.enabled` (o padrão) nada sai: o projeto roda e é avaliado
+sem LLM, com a resposta determinística por texto-modelo.
 
 **Risco residual.** A anonimização reduz o risco, mas não o elimina: nome fora da lista de prenomes, endereço sem número e
 cidade ou bairro podem passar (limites em `specs/01.03-anonimizacao-de-pii.md`). **Nenhum dado pessoal real deve ser digitado**
@@ -138,10 +134,10 @@ O comportamento do LLM não está no código: o **agente** é definido por arqui
 | `data/agents/global_rules.md` | regras que valem para todo agente |
 | `data/agents/<id>/identity.md` | persona e tom de voz |
 | `data/agents/<id>/rules.md` | limites rígidos |
-| `data/agents/<id>/workflow.md` | uma seção `## Tarefa: <nome>` por tarefa (hoje, `rewrite` e `locate`) |
+| `data/agents/<id>/workflow.md` | uma seção `## Tarefa: <nome>` por tarefa (hoje, `answer`) |
 | `data/agents/<id>/config.json` | temperatura, `max_tokens`, timeout e política de tentativas |
 
-**`.env` × versionado:** o `.env` guarda só a chave (`LLM_API_KEY`); provedor, modelos, `llm.agent_id` e os interruptores
+**`.env` × versionado:** o `.env` guarda só a chave (`LLM_API_KEY`); provedor, modelos, `llm.agent_id` e o interruptor `llm.enabled`
 ficam em `config/settings.json`; o comportamento do agente fica nos arquivos acima. Provedor e modelo se trocam só em
 `config/settings.json`: Groq e OpenRouter, por exemplo, falam o mesmo formato de chat.
 
@@ -160,8 +156,7 @@ Em `config/settings.json`:
   "base_url": "https://openrouter.ai/api/v1",
   "model": "deepseek/deepseek-v4-flash",
   "fallback_models": ["deepseek/deepseek-v4-flash-0731", "deepseek/deepseek-v3.2", "minimax/minimax-m3:free", "openrouter/free"],
-  "agent_id": "triage-assistant",
-  "assist_locate": false
+  "agent_id": "triage-assistant"
 }
 ```
 
@@ -239,6 +234,6 @@ finalidade). A anonimização usa regex, contexto e uma lista de prenomes, sem m
 Limites declarados (risco residual): nome fora de contexto e fora da lista pode passar; endereço sem logradouro
 passa; cidade, estado e bairro não são mascarados. Do ponto de vista ético, o robô só responde com links de domínios oficiais da allowlist, prefere pedir
 **revisão humana** a arriscar uma resposta errada (urgência, dúvida e fora do catálogo vão para uma pessoa) e deixa
-claro que é um protótipo; o LLM, se ligado, apenas reformula o que já foi decidido. Como candidatos a ODS, o
+claro que é um protótipo; o LLM, se ligado, só redige sobre fontes aprovadas do catálogo e sob uma guarda de saída. Como candidatos a ODS, o
 **ODS 16** (instituições eficazes e acesso à informação) e o **ODS 10** (redução das desigualdades, ao facilitar o
 acesso a serviços para quem não sabe a qual órgão recorrer) — *a confirmar com o grupo*.

@@ -75,9 +75,9 @@ def test_config_problems_are_reported(
     assert any(message in problem for problem in lint_agent(DEFAULT_AGENT_ID, agents_dir))
 
 
-def test_missing_rewrite_section_is_reported(agents_dir: Path, agent_dir: Path) -> None:
+def test_missing_answer_section_is_reported(agents_dir: Path, agent_dir: Path) -> None:
     (agent_dir / "workflow.md").write_text("## Tarefa: outra\ntexto\n", encoding="utf-8")
-    assert any("Tarefa: rewrite" in problem for problem in lint_agent(DEFAULT_AGENT_ID, agents_dir))
+    assert any("Tarefa: answer" in problem for problem in lint_agent(DEFAULT_AGENT_ID, agents_dir))
 
 
 @pytest.mark.parametrize(
@@ -105,7 +105,7 @@ def test_plain_words_about_keys_are_not_reported(agents_dir: Path, agent_dir: Pa
 def test_all_problems_come_back_together(agents_dir: Path, agent_dir: Path) -> None:
     (agent_dir / "identity.md").unlink()
     (agent_dir / "workflow.md").write_text("sem seção", encoding="utf-8")
-    assert len(lint_agent(DEFAULT_AGENT_ID, agents_dir)) == 3
+    assert len(lint_agent(DEFAULT_AGENT_ID, agents_dir)) == 2
 
 
 def test_cli_exits_zero_for_the_real_agent(capsys: pytest.CaptureFixture[str]) -> None:
@@ -120,7 +120,3 @@ def test_cli_exits_one_and_lists_the_problem(
     assert _load_script().main(["--agents-dir", str(agents_dir)]) == 1
     assert "JSON inválido" in capsys.readouterr().out
 
-
-def test_missing_locate_section_is_reported(agents_dir: Path, agent_dir: Path) -> None:
-    (agent_dir / "workflow.md").write_text("## Tarefa: rewrite\n\ntexto\n", encoding="utf-8")
-    assert any("Tarefa: locate" in problem for problem in lint_agent(DEFAULT_AGENT_ID, agents_dir))

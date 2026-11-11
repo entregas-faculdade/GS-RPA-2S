@@ -15,7 +15,6 @@ from triage.pipeline.processor import (
     STATUS_SKIPPED_DUPLICATE,
     TIER_CATALOG,
     TIER_FINDER,
-    TIER_FINDER_LLM,
     ProcessingResult,
 )
 from triage.storage.schema import (
@@ -38,7 +37,6 @@ LINK_LABELS = {LINK_OK: "no ar", LINK_UNAVAILABLE: "fora do ar"}
 TIER_LABELS = {
     TIER_CATALOG: "serviço específico do catálogo",
     TIER_FINDER: "fonte achada pelo localizador",
-    TIER_FINDER_LLM: "fonte escolhida pelo assistente de localização",
 }
 FILE_TIMESTAMP_FORMAT ="%Y%m%dT%H%M%S"
 
@@ -128,7 +126,7 @@ def render_markdown(report: RunReport) -> str:
         *_table("Links do catálogo (por pedido)", links),
         "## LLM",
         "",
-        f"- Respostas reformuladas pelo LLM: {report.llm['used']}",
+        f"- Respostas redigidas pelo LLM: {report.llm['used']}",
         f"- Fallbacks para o template: {report.llm['fallbacks'] or 'nenhum'}",
         "",
     ]

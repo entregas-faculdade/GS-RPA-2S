@@ -123,7 +123,10 @@ def build_llm_client(settings: Settings) -> LlmClient | None:
     if not settings.llm_enabled:
         return None
     if not (settings.llm_base_url and settings.llm_model and settings.llm_api_key):
-        logger.warning("LLM habilitado, mas LLM_BASE_URL, LLM_MODEL ou LLM_API_KEY está vazio; usando o template")
+        logger.warning(
+            "LLM habilitado, mas llm.base_url ou llm.model (config/settings.json) ou LLM_API_KEY (.env) está vazio; "
+            "usando o template"
+        )
         return None
     agent = _load_valid_agent(settings.llm_agent_id)
     if agent is None:

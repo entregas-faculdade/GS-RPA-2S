@@ -46,7 +46,6 @@ class Settings:
     link_check_user_agent: str = DEFAULT_LINK_CHECK_USER_AGENT
     llm_agent_id: str = DEFAULT_AGENT_ID
     llm_fallback_models: tuple[str, ...] = ()
-    llm_assist_locate: bool = False
 
 
 def _read_config(config_path: Path) -> dict[str, Any]:
@@ -124,7 +123,6 @@ def _llm_settings(data: dict[str, Any]) -> dict[str, Any]:
         "llm_model": _text(llm, "llm.model", ""),
         "llm_agent_id": _text(llm, "llm.agent_id", DEFAULT_AGENT_ID, required=True),
         "llm_fallback_models": _text_list(llm, "llm.fallback_models"),
-        "llm_assist_locate": _flag(llm, "llm.assist_locate", False),
     }
 
 

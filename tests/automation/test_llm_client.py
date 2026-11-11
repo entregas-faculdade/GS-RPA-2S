@@ -73,7 +73,7 @@ def _patch_post(monkeypatch: pytest.MonkeyPatch, *outcomes: Any) -> FakePost:
 
 def test_posts_chat_completion_with_timeout_and_key_only_in_header(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = _patch_post(monkeypatch, _ok("  texto reformulado  "))
-    assert _client().complete("rewrite", "texto X") == "texto reformulado"
+    assert _client().complete("answer", "texto X") == "texto reformulado"
     call = fake.calls[0]
     assert call["url"] == "https://llm.example/v1/chat/completions"
     assert call["headers"] == {"Authorization": f"Bearer {PROVIDER_CREDENTIAL}"}
@@ -83,10 +83,10 @@ def test_posts_chat_completion_with_timeout_and_key_only_in_header(monkeypatch: 
 
 def test_request_sends_the_composed_system_prompt_and_the_agent_parameters(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = _patch_post(monkeypatch, _ok("ok"))
-    _client().complete("rewrite", "texto X")
+    _client().complete("answer", "texto X")
     call = fake.calls[0]
     assert call["json"]["messages"] == [
-        {"role": "system", "content": compose_system_prompt(AGENT, "rewrite")},
+        {"role": "system", "content": compose_system_prompt(AGENT, "answer")},
         {"role": "user", "content": "texto X"},
     ]
     assert call["json"]["temperature"] == AGENT.params.temperature
@@ -99,7 +99,7 @@ def test_retry_attempts_come_from_the_agent(monkeypatch: pytest.MonkeyPatch) -> 
     client = OpenAICompatibleClient("https://llm.example/v1", PROVIDER_CREDENTIAL, ("modelo-x",), more_attempts)
     fake = _patch_post(monkeypatch, FakeResponse(503), FakeResponse(503), FakeResponse(503))
     with pytest.raises(LlmUnavailable):
-        client.complete("rewrite", "p")
+        client.complete("answer", "p")
     assert len(fake.calls) == 3
 
 
@@ -121,12 +121,12 @@ def test_retry_attempts_come_from_the_agent(monkeypatch: pytest.MonkeyPatch) -> 
 def test_malformed_or_empty_answer_is_invalid_response(monkeypatch: pytest.MonkeyPatch, response: FakeResponse) -> None:
     _patch_post(monkeypatch, response)
     with pytest.raises(LlmInvalidResponse):
-        _client().complete("rewrite", "p")
+        _client().complete("answer", "p")
 
 
 def test_transient_failure_is_retried_then_succeeds(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = _patch_post(monkeypatch, requests.Timeout("lento"), _ok("ok"))
-    assert _client().complete("rewrite", "p") == "ok"
+    assert _client().complete("answer", "p") == "ok"
     assert len(fake.calls) == 2
 
 
@@ -134,21 +134,21 @@ def test_transient_failure_is_retried_then_succeeds(monkeypatch: pytest.MonkeyPa
 def test_persistent_transient_failure_is_unavailable(monkeypatch: pytest.MonkeyPatch, failure: Any) -> None:
     fake = _patch_post(monkeypatch, failure, failure)
     with pytest.raises(LlmUnavailable):
-        _client().complete("rewrite", "p")
+        _client().complete("answer", "p")
     assert len(fake.calls) == 2
 
 
 def test_client_error_is_unavailable_without_retry(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = _patch_post(monkeypatch, FakeResponse(401))
     with pytest.raises(LlmUnavailable):
-        _client().complete("rewrite", "p")
+        _client().complete("answer", "p")
     assert len(fake.calls) == 1
 
 
 def test_api_key_never_reaches_logs_or_exceptions(monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture) -> None:
     _patch_post(monkeypatch, FakeResponse(503), FakeResponse(503))
     with caplog.at_level(logging.DEBUG), pytest.raises(LlmUnavailable) as raised:
-        _client().complete("rewrite", "p")
+        _client().complete("answer", "p")
     assert PROVIDER_CREDENTIAL not in caplog.text
     assert PROVIDER_CREDENTIAL not in str(raised.value)
     assert PROVIDER_CREDENTIAL not in repr(raised.value.__cause__)
@@ -159,7 +159,7 @@ def test_falls_back_to_the_next_model_when_the_first_fails(
 ) -> None:
     fake = _patch_post(monkeypatch, FakeResponse(401), _ok("do segundo"))
     with caplog.at_level(logging.WARNING, logger="triage.automation"):
-        assert _client("principal", "reserva").complete("rewrite", "TEXTO-SIGILOSO") == "do segundo"
+        assert _client("principal", "reserva").complete("answer", "TEXTO-SIGILOSO") == "do segundo"
     assert [call["json"]["model"] for call in fake.calls] == ["principal", "reserva"]
     assert "principal" in caplog.text
     assert "TEXTO-SIGILOSO" not in caplog.text
@@ -168,20 +168,20 @@ def test_falls_back_to_the_next_model_when_the_first_fails(
 
 def test_invalid_response_also_passes_to_the_next_model(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = _patch_post(monkeypatch, _ok(""), _ok("do segundo"))
-    assert _client("principal", "reserva").complete("rewrite", "p") == "do segundo"
+    assert _client("principal", "reserva").complete("answer", "p") == "do segundo"
     assert len(fake.calls) == 2
 
 
 def test_models_are_tried_in_order_and_the_last_error_is_raised_when_all_fail(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = _patch_post(monkeypatch, FakeResponse(401), FakeResponse(403), _ok(None))
     with pytest.raises(LlmInvalidResponse):
-        _client("a", "b", "c").complete("rewrite", "p")
+        _client("a", "b", "c").complete("answer", "p")
     assert [call["json"]["model"] for call in fake.calls] == ["a", "b", "c"]
 
 
 def test_a_working_first_model_does_not_touch_the_alternatives(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = _patch_post(monkeypatch, _ok("ok"))
-    _client("principal", "reserva").complete("rewrite", "p")
+    _client("principal", "reserva").complete("answer", "p")
     assert len(fake.calls) == 1
 
 
@@ -211,7 +211,7 @@ def test_factory_passes_the_primary_model_then_the_alternatives(monkeypatch: pyt
     fake = _patch_post(monkeypatch, FakeResponse(401), _ok("do segundo"))
     client = build_llm_client(replace(SETTINGS, llm_fallback_models=("reserva",)))
     assert client is not None
-    assert client.complete("rewrite", "p") == "do segundo"
+    assert client.complete("answer", "p") == "do segundo"
     assert [call["json"]["model"] for call in fake.calls] == ["modelo-x", "reserva"]
 
 
