@@ -1,0 +1,10 @@
+{
+  "temperature": 0.2,
+  "max_tokens": 600,
+  "timeout_seconds": 15,
+  "retries": {
+    "attempts": 2,
+    "base_delay_seconds": 1,
+    "max_delay_seconds": 4
+  }
+}

@@ -118,3 +118,4 @@ dívida — é exatamente para isso que ele existe.
 - **Nunca referencie um item daqui dentro do código.** Vale a mesma regra da plan: comentário não cita
   `backlog #3` (norma completa em `padrao-escrita`, `references/comentarios.md`).
 - **Item que já está numa plan não fica aqui.** Um dos dois é a verdade — e é o [[00-indice]].
+| 27 | `automation/llm_client.py` — `OpenAICompatibleClient` aceita `models` vazio e `complete` levanta `TypeError` (`raise None`), calado por `type: ignore[misc]`; inalcançável pela fábrica, mas a classe é pública: validar na construção com erro próprio | revisão | 2026-11-10 | baixo |

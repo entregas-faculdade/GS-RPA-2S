@@ -5,24 +5,20 @@ from typing import Protocol
 
 import requests
 
+from triage.agent import (
+    AgentDefinition,
+    AgentError,
+    compose_system_prompt,
+    lint_agent,
+    load_agent,
+)
 from triage.automation.link_check import SERVER_ERROR_MIN, TransientHttpError
 from triage.common.retry import RetryPolicy, retry_with_backoff
 from triage.config import Settings
 
-REQUEST_TIMEOUT_SECONDS = 15.0
-RETRY_ATTEMPTS = 2
-RETRY_BASE_DELAY_SECONDS = 1.0
-RETRY_MAX_DELAY_SECONDS = 4.0
-SAMPLING_TEMPERATURE = 0.2
 CLIENT_ERROR_MIN = 400
 CHAT_PATH = "/chat/completions"
-
-DEFAULT_RETRY_POLICY = RetryPolicy(
-    attempts=RETRY_ATTEMPTS,
-    base_delay=RETRY_BASE_DELAY_SECONDS,
-    max_delay=RETRY_MAX_DELAY_SECONDS,
-    transient=(requests.Timeout, requests.ConnectionError, TransientHttpError),
-)
+TRANSIENT_ERRORS = (requests.Timeout, requests.ConnectionError, TransientHttpError)
 
 logger = logging.getLogger("triage.automation")
 
@@ -36,9 +32,9 @@ class LlmInvalidResponse(Exception):
 
 
 class LlmClient(Protocol):
-    """Contrato mínimo do cliente: recebe um prompt e devolve o texto reformulado."""
+    """Contrato mínimo do cliente: executa uma tarefa do agente sobre a mensagem e devolve o texto."""
 
-    def rewrite(self, prompt: str) -> str: ...
+    def complete(self, task: str, user_message: str) -> str: ...
 
 
 def _extract_content(payload: object) -> str:
@@ -53,28 +49,33 @@ def _extract_content(payload: object) -> str:
 
 
 class OpenAICompatibleClient:
-    """Chama `{base_url}/chat/completions`; a chave só viaja no header `Authorization`."""
+    """Chama `{base_url}/chat/completions` com o agente; a chave só viaja no header `Authorization`.
 
-    def __init__(
-        self,
-        base_url: str,
-        model: str,
-        api_key: str,
-        retry_policy: RetryPolicy = DEFAULT_RETRY_POLICY,
-    ) -> None:
+    `models` é o modelo principal seguido dos alternativos, tentados nesta ordem quando um falha.
+    """
+
+    def __init__(self, base_url: str, api_key: str, models: tuple[str, ...], agent: AgentDefinition) -> None:
         self._url = base_url.rstrip("/") + CHAT_PATH
-        self._model = model
         self._headers = {"Authorization": f"Bearer {api_key}"}
-        self._retry_policy = retry_policy
+        self._models = models
+        self._agent = agent
+        self._retry_policy = RetryPolicy(
+            attempts=agent.params.attempts,
+            base_delay=agent.params.base_delay_seconds,
+            max_delay=agent.params.max_delay_seconds,
+            transient=TRANSIENT_ERRORS,
+        )
 
-    def _post(self, prompt: str) -> object:
+    def _post(self, model: str, system_prompt: str, user_message: str) -> object:
         """Uma tentativa: 5xx é transitório (repete); 4xx é definitivo; corpo não JSON é resposta inválida."""
+        params = self._agent.params
         body = {
-            "model": self._model,
-            "messages": [{"role": "user", "content": prompt}],
-            "temperature": SAMPLING_TEMPERATURE,
+            "model": model,
+            "messages": [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_message}],
+            "temperature": params.temperature,
+            "max_tokens": params.max_tokens,
         }
-        response = requests.post(self._url, headers=self._headers, json=body, timeout=REQUEST_TIMEOUT_SECONDS)
+        response = requests.post(self._url, headers=self._headers, json=body, timeout=params.timeout_seconds)
         if response.status_code >= SERVER_ERROR_MIN:
             raise TransientHttpError(response.status_code)
         if response.status_code >= CLIENT_ERROR_MIN:
@@ -84,20 +85,48 @@ class OpenAICompatibleClient:
         except ValueError as error:
             raise LlmInvalidResponse("corpo da resposta não é JSON") from error
 
-    def rewrite(self, prompt: str) -> str:
-        """Devolve o texto reformulado ou levanta `LlmUnavailable` / `LlmInvalidResponse`."""
+    def _complete_with(self, model: str, system_prompt: str, user_message: str) -> str:
         try:
-            payload = retry_with_backoff(lambda: self._post(prompt), self._retry_policy)
+            payload = retry_with_backoff(lambda: self._post(model, system_prompt, user_message), self._retry_policy)
         except (requests.RequestException, TransientHttpError) as error:
             raise LlmUnavailable(type(error).__name__) from error
         return _extract_content(payload)
 
+    def complete(self, task: str, user_message: str) -> str:
+        """Devolve o texto da tarefa ou levanta `LlmUnavailable` / `LlmInvalidResponse` quando todos os modelos falham."""
+        system_prompt = compose_system_prompt(self._agent, task)
+        last_error: LlmUnavailable | LlmInvalidResponse | None = None
+        for index, model in enumerate(self._models):
+            try:
+                return self._complete_with(model, system_prompt, user_message)
+            except (LlmUnavailable, LlmInvalidResponse) as error:
+                last_error = error
+                logger.warning("Modelo %s (%d/%d) falhou: %s", model, index + 1, len(self._models), error)
+        raise last_error  # type: ignore[misc]  # `models` nunca é vazio: o cliente só nasce com o modelo principal
+
+
+def _load_valid_agent(agent_id: str) -> AgentDefinition | None:
+    """Agente validado pelo linter e carregado; qualquer defeito é registrado (sem prompt) e devolve `None`."""
+    problems = lint_agent(agent_id)
+    if problems:
+        logger.error("Agente LLM '%s' inválido (%s); LLM desligado, o template responde", agent_id, "; ".join(problems))
+        return None
+    try:
+        return load_agent(agent_id)
+    except AgentError as error:
+        logger.error("Agente LLM '%s' não carregou (%s); LLM desligado, o template responde", agent_id, error)
+        return None
+
 
 def build_llm_client(settings: Settings) -> LlmClient | None:
-    """Cliente só com o LLM habilitado e configurado por completo; senão `None` (o template responde)."""
+    """Cliente só com o LLM habilitado, configurado por completo e com agente válido; senão `None`."""
     if not settings.llm_enabled:
         return None
     if not (settings.llm_base_url and settings.llm_model and settings.llm_api_key):
         logger.warning("LLM habilitado, mas LLM_BASE_URL, LLM_MODEL ou LLM_API_KEY está vazio; usando o template")
         return None
-    return OpenAICompatibleClient(settings.llm_base_url, settings.llm_model, settings.llm_api_key)
+    agent = _load_valid_agent(settings.llm_agent_id)
+    if agent is None:
+        return None
+    models = (settings.llm_model, *settings.llm_fallback_models)
+    return OpenAICompatibleClient(settings.llm_base_url, settings.llm_api_key, models, agent)

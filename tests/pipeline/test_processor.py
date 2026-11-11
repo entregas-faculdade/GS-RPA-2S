@@ -76,7 +76,7 @@ def test_unavailable_link_goes_to_review_with_that_reason(make_deps: Callable[..
 
 def test_failing_llm_falls_back_to_template(make_deps: Callable[..., Deps]) -> None:
     class BrokenClient:
-        def rewrite(self, prompt: str) -> str:
+        def complete(self, task: str, user_message: str) -> str:
             raise LlmUnavailable("Timeout")
 
     deps = make_deps(llm_client=BrokenClient())

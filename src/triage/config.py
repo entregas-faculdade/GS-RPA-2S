@@ -7,6 +7,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from triage.agent import DEFAULT_AGENT_ID
+
 logger = logging.getLogger("triage.config")
 
 DEFAULT_DOTENV_PATH = Path(".env")
@@ -35,10 +37,17 @@ class Settings:
     finder_min_score: float = FINDER_MIN_SCORE
     finder_margin: float = FINDER_MARGIN
     link_check_user_agent: str = DEFAULT_LINK_CHECK_USER_AGENT
+    llm_agent_id: str = DEFAULT_AGENT_ID
+    llm_fallback_models: tuple[str, ...] = ()
 
 
 def _parse_bool(raw_value: str) -> bool:
     return raw_value.strip().lower() in TRUE_VALUES
+
+
+def _parse_list(raw_value: str) -> tuple[str, ...]:
+    """Itens separados por vírgula, sem espaços nas pontas e sem vazios."""
+    return tuple(item.strip() for item in raw_value.split(",") if item.strip())
 
 
 def _parse_threshold(name: str, default: float) -> float:
@@ -71,4 +80,6 @@ def load_settings(dotenv_path: Path = DEFAULT_DOTENV_PATH) -> Settings:
         finder_min_score=_parse_threshold("FINDER_MIN_SCORE", FINDER_MIN_SCORE),
         finder_margin=_parse_threshold("FINDER_MARGIN", FINDER_MARGIN),
         link_check_user_agent=os.getenv("LINK_CHECK_USER_AGENT", "").strip() or DEFAULT_LINK_CHECK_USER_AGENT,
+        llm_agent_id=os.getenv("LLM_AGENT_ID", "").strip() or DEFAULT_AGENT_ID,
+        llm_fallback_models=_parse_list(os.getenv("LLM_FALLBACK_MODELS", "")),
     )

@@ -40,10 +40,10 @@ TEMPLATE = render_template(SERVICE)
 class StubClient:
     def __init__(self, answer: str | BaseException) -> None:
         self.answer = answer
-        self.prompts: list[str] = []
+        self.calls: list[tuple[str, str]] = []
 
-    def rewrite(self, prompt: str) -> str:
-        self.prompts.append(prompt)
+    def complete(self, task: str, user_message: str) -> str:
+        self.calls.append((task, user_message))
         if isinstance(self.answer, BaseException):
             raise self.answer
         return self.answer
@@ -89,11 +89,10 @@ def test_valid_llm_answer_is_used() -> None:
     assert (response.text, response.used_llm, response.fallback_reason) == (answer, True, None)
 
 
-def test_prompt_carries_only_the_template_text() -> None:
+def test_client_gets_the_rewrite_task_with_only_the_template_text() -> None:
     client = StubClient(f"Acesse {URL}")
     build_response(SERVICE, client)
-    assert TEMPLATE in client.prompts[0]
-    assert client.prompts[0].endswith(TEMPLATE)
+    assert client.calls == [("rewrite", TEMPLATE)]
 
 
 @pytest.mark.parametrize(

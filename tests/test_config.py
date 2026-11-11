@@ -16,6 +16,8 @@ ENV_KEYS = (
     "LLM_BASE_URL",
     "LLM_MODEL",
     "LLM_API_KEY",
+    "LLM_AGENT_ID",
+    "LLM_FALLBACK_MODELS",
     "LOG_LEVEL",
     "LINK_CHECK_USER_AGENT",
     "FINDER_MIN_SCORE",
@@ -126,3 +128,37 @@ def test_finder_thresholds_accept_the_range_limits(monkeypatch: pytest.MonkeyPat
     monkeypatch.setenv("FINDER_MIN_SCORE", raw_value)
 
     assert load_settings(tmp_path / "missing.env").finder_min_score == float(raw_value)
+
+
+def test_llm_agent_and_fallback_models_default_when_unset(tmp_path: Path) -> None:
+    settings = load_settings(tmp_path / "missing.env")
+
+    assert settings.llm_agent_id == "triage-assistant"
+    assert settings.llm_fallback_models == ()
+
+
+def test_llm_agent_id_comes_from_the_environment(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    monkeypatch.setenv("LLM_AGENT_ID", " outro-agente ")
+    assert load_settings(tmp_path / "missing.env").llm_agent_id == "outro-agente"
+
+
+def test_blank_llm_agent_id_falls_back_to_the_default(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    monkeypatch.setenv("LLM_AGENT_ID", "  ")
+    assert load_settings(tmp_path / "missing.env").llm_agent_id == "triage-assistant"
+
+
+@pytest.mark.parametrize(
+    ("raw_value", "expected"),
+    [
+        ("", ()),
+        (" , ,", ()),
+        ("modelo-a", ("modelo-a",)),
+        ("modelo-a, modelo-b ,modelo-c", ("modelo-a", "modelo-b", "modelo-c")),
+        ("modelo-a,,modelo-b,", ("modelo-a", "modelo-b")),
+    ],
+)
+def test_fallback_models_are_a_trimmed_comma_separated_list(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, raw_value: str, expected: tuple[str, ...]
+) -> None:
+    monkeypatch.setenv("LLM_FALLBACK_MODELS", raw_value)
+    assert load_settings(tmp_path / "missing.env").llm_fallback_models == expected

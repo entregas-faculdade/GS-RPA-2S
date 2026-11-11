@@ -12,10 +12,7 @@ FALLBACK_LLM_UNAVAILABLE = "llm_unavailable"
 FALLBACK_LLM_INVALID_RESPONSE = "llm_invalid_response"
 FALLBACK_LLM_OUTPUT_REJECTED = "llm_output_rejected"
 
-REWRITE_INSTRUCTION = (
-    "Reescreva a resposta abaixo em português, de forma amigável e curta. "
-    "Mantenha o link e o órgão exatamente como estão e não acrescente nenhuma informação nova.\n\n"
-)
+REWRITE_TASK = "rewrite"
 
 logger = logging.getLogger("triage.automation")
 
@@ -36,14 +33,14 @@ def _template_response(text: str, reason: str | None) -> Response:
 def build_response(service: ServiceEntry, client: LlmClient | None = None) -> Response:
     """Devolve sempre uma resposta utilizável; qualquer falha do LLM cai no template, com log.
 
-    O prompt leva só a resposta-template (nenhum texto do cidadão) e a saída do LLM só vale
+    A mensagem enviada leva só a resposta-template (nenhum texto do cidadão) e a saída do LLM só vale
     se `validate_llm_output` a aprovar.
     """
     template_text = render_template(service)
     if client is None:
         return _template_response(template_text, None)
     try:
-        rewritten = client.rewrite(REWRITE_INSTRUCTION + template_text)
+        rewritten = client.complete(REWRITE_TASK, template_text)
     except LlmUnavailable as error:
         logger.warning("LLM indisponível (%s); usando o template", error)
         return _template_response(template_text, FALLBACK_LLM_UNAVAILABLE)

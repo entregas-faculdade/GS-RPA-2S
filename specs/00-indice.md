@@ -54,10 +54,9 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-03.06-resposta-em-degraus](plan/plan-03.06-resposta-em-degraus.md) | Responder em degraus: serviço, canal geral, "não tenho a informação" e emergência | — | 🟢 Aprovada | `specs/arquitetura/04.03-orquestracao-rpa.md` |
-| 2 | [plan-03.08-agente-llm](plan/plan-03.08-agente-llm.md) | Definir o agente LLM em arquivos versionados (persona, regras, fluxo, parâmetros) com validador | 03.06 | 🔴 A executar | `specs/03.04-agente-llm.md` |
-| 3 | [plan-03.07-llm-assistente-de-localizacao](plan/plan-03.07-llm-assistente-de-localizacao.md) | LLM opcional escolhe entre fontes aprovadas e melhora o texto | 03.08 | 🔴 A executar | `adr/006-llm-escolhe-apenas-entre-fontes-aprovadas.md` |
-| 4 | [plan-04.04-revisao-com-categoria-e-exportacao](plan/plan-04.04-revisao-com-categoria-e-exportacao.md) | Registrar a categoria correta na revisão e exportar pedidos anonimizados | 03.06 | 🔴 A executar | `specs/arquitetura/04.01-persistencia.md` |
+| 1 | [plan-03.08-agente-llm](plan/plan-03.08-agente-llm.md) | Definir o agente LLM em arquivos versionados (persona, regras, fluxo, parâmetros) com validador | — | 🟢 Aprovada | `specs/03.04-agente-llm.md` |
+| 2 | [plan-03.07-llm-assistente-de-localizacao](plan/plan-03.07-llm-assistente-de-localizacao.md) | LLM opcional escolhe entre fontes aprovadas e melhora o texto | 03.08 | 🔴 A executar | `adr/006-llm-escolhe-apenas-entre-fontes-aprovadas.md` |
+| 3 | [plan-04.04-revisao-com-categoria-e-exportacao](plan/plan-04.04-revisao-com-categoria-e-exportacao.md) | Registrar a categoria correta na revisão e exportar pedidos anonimizados | — | 🔴 A executar | `specs/arquitetura/04.01-persistencia.md` |
 
 ---
 

@@ -95,12 +95,46 @@ O robô funciona **sem nenhuma chave**: o LLM é opcional e vem **desligado**. P
 |---|---|
 | `LLM_ENABLED` | liga (`true`) ou desliga o LLM; padrão desligado |
 | `LLM_BASE_URL`, `LLM_MODEL`, `LLM_API_KEY` | provedor, modelo e chave do LLM (só no `.env`) |
+| `LLM_FALLBACK_MODELS` | modelos alternativos, separados por vírgula, tentados na ordem se o principal falhar; opcional |
+| `LLM_AGENT_ID` | agente em `data/agents/<id>/` (padrão `triage-assistant`); opcional |
 | `LOG_LEVEL` | nível do log (padrão `INFO`) |
 | `CONFIDENCE_MIN`, `AMBIGUITY_MARGIN` | limiares da revisão humana (padrão `0.60` e `0.15`), opcionais |
 
 O LLM só **reformula** a resposta que o robô já decidiu e recebe apenas o texto-modelo da resposta, nunca o pedido do
 cidadão. Se ele falhar, vier vazio ou trouxer um link fora do esperado, vale o texto-modelo e o motivo vai para o log.
 Nenhum dado pessoal real deve ser enviado a nenhuma API.
+
+## Agente LLM
+
+O comportamento do LLM não está no código: o **agente** é definido por arquivos versionados em `data/agents/`.
+
+| Arquivo | Papel |
+|---|---|
+| `data/agents/global_rules.md` | regras que valem para todo agente |
+| `data/agents/<id>/identity.md` | persona e tom de voz |
+| `data/agents/<id>/rules.md` | limites rígidos |
+| `data/agents/<id>/workflow.md` | uma seção `## Tarefa: <nome>` por tarefa (hoje, `rewrite`) |
+| `data/agents/<id>/config.json` | temperatura, `max_tokens`, timeout e política de tentativas |
+
+**`.env` × versionado:** o que muda por ambiente ou é segredo fica no `.env` (`LLM_ENABLED`, `LLM_BASE_URL`,
+`LLM_MODEL`, `LLM_API_KEY`, `LLM_FALLBACK_MODELS`, `LLM_AGENT_ID`); o que é comportamento do agente fica nos arquivos
+acima. Provedor e modelo se trocam só pelo `.env`: Groq e OpenRouter, por exemplo, falam o mesmo formato de chat.
+
+Exemplo **gratuito** no OpenRouter (o nome de modelo gratuito muda com o tempo; confira a lista do provedor):
+
+```
+LLM_ENABLED=true
+LLM_BASE_URL=https://openrouter.ai/api/v1
+LLM_MODEL=openrouter/free
+LLM_API_KEY=<sua chave>
+```
+
+O LLM é opcional e vem **desligado**; o robô roda e é avaliado sem ele. Agente ausente ou inválido também desliga o LLM
+(com log de erro) e o texto-modelo responde. Para validar os arquivos do agente:
+
+```powershell
+python scripts/validate_agent.py
+```
 
 ## Estrutura de pastas
 
