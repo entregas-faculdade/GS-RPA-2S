@@ -14,7 +14,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 █████████░ 96% · 27/28 itens ✅
 
 ## Agora
-- 🟡 · plan-03.13 · R03.13 · Dar memória à conversa do chat (mensagens anteriores anonimizadas) e um botão de nova conversa
+—
 
 ## Próximas
 —
@@ -29,4 +29,5 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
+- 🟢 plan-03.13 · Dar memória à conversa do chat (mensagens anteriores anonimizadas) e um botão de nova conversa — aguardando síntese
 - 📋 29 achado(s) no `00-backlog`

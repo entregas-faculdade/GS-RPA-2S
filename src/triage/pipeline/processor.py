@@ -2,6 +2,9 @@
 
 Com `llm.enabled`, o cliente e o localizador, o texto anonimizado e as fontes aprovadas do catálogo vão ao LLM,
 que redige a resposta; sem LLM (o padrão) ou em qualquer falha dele, responde o fluxo determinístico por template.
+
+Numa conversa de chat, as mensagens anteriores (anonimizadas) entram só na recuperação das fontes e na mensagem ao LLM;
+a classificação e a decisão de revisão seguem sobre a mensagem atual.
 """
 
 import logging
@@ -76,6 +79,32 @@ class ProcessingResult:
     used_llm: bool = False
     fallback_reason: str | None = None
     tier: str | None = None
+
+
+@dataclass(frozen=True)
+class Conversation:
+    """Conversa do chat: o identificador, o número da mensagem atual nela e as mensagens anteriores do cidadão.
+
+    O número vem de quem mantém a conversa e conta todas as mensagens, não só as de `messages` (que é um recorte);
+    com o identificador, é o que distingue a mesma pergunta repetida. Em `process_request`, `messages` já vem anonimizado.
+    """
+
+    id: str
+    turn: int
+    messages: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class _Turn:
+    """A mensagem atual (anonimizada) e as anteriores da conversa, já anonimizadas."""
+
+    text: str
+    history: tuple[str, ...] = ()
+
+    @property
+    def search_text(self) -> str:
+        """Texto de recuperação das fontes: a mensagem atual primeiro, depois as anteriores."""
+        return "\n".join((self.text, *self.history))
 
 
 @dataclass(frozen=True)
@@ -166,37 +195,37 @@ def _live_entries(entries: Sequence[ServiceEntry], deps: Deps) -> tuple[ServiceE
     return tuple(service for service in resolved if service is not None)
 
 
-def _catalog_sources(service: ServiceEntry, text: str, deps: Deps) -> tuple[ServiceEntry, ...]:
+def _catalog_sources(service: ServiceEntry, turn: _Turn, deps: Deps) -> tuple[ServiceEntry, ...]:
     """Degrau 1: o serviço resolvido e, depois dele, até `max_candidates - 1` candidatas do localizador (sem repetir)."""
-    candidates = deps.finder.top_candidates(text, deps.max_candidates)
+    candidates = deps.finder.top_candidates(turn.search_text, deps.max_candidates)
     others = [entry for entry in candidates if entry.id != service.id][: deps.max_candidates - 1]
     return (service, *_live_entries(others, deps))
 
 
-def _catalog_response(service: ServiceEntry, text: str, deps: Deps) -> Response:
+def _catalog_response(service: ServiceEntry, turn: _Turn, deps: Deps) -> Response:
     """Degrau 1: o LLM redige sobre as fontes; qualquer falha ou "nenhuma fonte" deixa o template do serviço responder."""
     if not _llm_ready(deps):
         return build_response(service)
-    rag = answer_with_sources(deps.llm_client, text, _catalog_sources(service, text, deps))
+    rag = answer_with_sources(deps.llm_client, turn.text, _catalog_sources(service, turn, deps), turn.history)
     if rag.text is not None:
         return build_llm_response(rag.text)
     return build_response(service, rag.fallback_reason)
 
 
-def _answer_or_review(text: str, decision: Decision, deps: Deps) -> ProcessingResult:
+def _answer_or_review(turn: _Turn, decision: Decision, deps: Deps) -> ProcessingResult:
     """Degrau 1: resolve o serviço da categoria e responde; sem serviço utilizável, revisão com a causa."""
     resolution = resolve_service(decision.category, deps.lookup)
     if resolution.service is None:
         return _failed_resolution(decision, resolution.reason)
-    return _answered(decision, _catalog_response(resolution.service, text, deps), TIER_CATALOG)
+    return _answered(decision, _catalog_response(resolution.service, turn, deps), TIER_CATALOG)
 
 
-def _gap_rag(text: str, deps: Deps) -> RagResult:
+def _gap_rag(turn: _Turn, deps: Deps) -> RagResult:
     """Degraus 2 e 3: o LLM redige sobre as candidatas vivas; sem nenhuma, não é chamado e o fluxo determinístico decide."""
-    sources = _live_entries(deps.finder.top_candidates(text, deps.max_candidates), deps)
+    sources = _live_entries(deps.finder.top_candidates(turn.search_text, deps.max_candidates), deps)
     if not sources:
         return RagResult()
-    return answer_with_sources(deps.llm_client, text, sources)
+    return answer_with_sources(deps.llm_client, turn.text, sources, turn.history)
 
 
 def _no_information(decision: Decision) -> ProcessingResult:
@@ -204,9 +233,9 @@ def _no_information(decision: Decision) -> ProcessingResult:
     return replace(review, response_text=build_no_information_message())
 
 
-def _deterministic_find(text: str, decision: Decision, deps: Deps) -> ProcessingResult:
+def _deterministic_find(turn: _Turn, decision: Decision, deps: Deps) -> ProcessingResult:
     """Localizador com limiar: fonte achada responde por template (degrau 2); sem fonte, "não tenho a informação"."""
-    match = deps.finder.find(text) if deps.finder is not None else None
+    match = deps.finder.find(turn.search_text) if deps.finder is not None else None
     if match is None:
         return _no_information(decision)
     resolution = deps.lookup.resolve_entry(match.entry)
@@ -215,14 +244,14 @@ def _deterministic_find(text: str, decision: Decision, deps: Deps) -> Processing
     return _answered(decision, build_response(resolution.service), TIER_FINDER)
 
 
-def _find_or_review(text: str, decision: Decision, deps: Deps) -> ProcessingResult:
+def _find_or_review(turn: _Turn, decision: Decision, deps: Deps) -> ProcessingResult:
     """Degraus 2 e 3: com LLM, ele redige sobre as candidatas; sem LLM ou em falha, decide o localizador determinístico."""
-    rag = _gap_rag(text, deps) if _llm_ready(deps) else RagResult()
+    rag = _gap_rag(turn, deps) if _llm_ready(deps) else RagResult()
     if rag.text is not None:
         return _answered(decision, build_llm_response(rag.text), TIER_FINDER)
     if rag.no_source:
         return _no_information(decision)
-    return replace(_deterministic_find(text, decision, deps), fallback_reason=rag.fallback_reason)
+    return replace(_deterministic_find(turn, decision, deps), fallback_reason=rag.fallback_reason)
 
 
 def _urgent_review(decision: Decision, deps: Deps) -> ProcessingResult:
@@ -231,16 +260,17 @@ def _urgent_review(decision: Decision, deps: Deps) -> ProcessingResult:
     return replace(review, response_text=build_emergency_message(deps.lookup.approved_entries()))
 
 
-def _triage(text: str, deps: Deps) -> ProcessingResult:
+def _triage(turn: _Turn, deps: Deps) -> ProcessingResult:
+    """Classifica e decide só pela mensagem atual; a conversa anterior só serve à recuperação e ao LLM."""
     if deps.model is None:
         return _review(None, 0.0, SAFE_REVIEW_REASON)
-    decision = triage_decision(text, classify(text, deps.model), deps.settings)
+    decision = triage_decision(turn.text, classify(turn.text, deps.model), deps.settings)
     if decision.action == ACTION_AUTO_ANSWER:
-        return _answer_or_review(text, decision, deps)
+        return _answer_or_review(turn, decision, deps)
     if decision.reason is ReviewReason.URGENT:
         return _urgent_review(decision, deps)
     if decision.reason in FINDER_REASONS:
-        return _find_or_review(text, decision, deps)
+        return _find_or_review(turn, decision, deps)
     return _review(decision.category, decision.confidence, decision.reason.value)
 
 
@@ -255,16 +285,28 @@ def _persist(record: RequestRecord, deps: Deps) -> None:
     retry_with_backoff(lambda: _store(record, deps), deps.retry_policy, deps.sleep)
 
 
-def process_request(request: Request, deps: Deps) -> ProcessingResult:
+def message_hash(text: str, conversation: Conversation | None = None) -> str:
+    """Chave de idempotência da mensagem anonimizada: no lote, o hash do texto; no chat, também a conversa e o número.
+
+    Com a conversa e o número no hash, repetir a mesma pergunta no chat é processado e respondido, não "já registrado".
+    """
+    if conversation is None:
+        return request_hash(text)
+    return request_hash(f"{conversation.id}|{conversation.turn}|{text}")
+
+
+def process_request(request: Request, deps: Deps, conversation: Conversation | None = None) -> ProcessingResult:
     """Anonimiza → hash → duplicado? → classifica → decide → resolve e responde (ou revisão) → grava.
 
-    Só o texto anonimizado é classificado, gravado ou logado. Modelo ausente leva à revisão.
+    Só o texto anonimizado é classificado, gravado ou logado. Modelo ausente leva à revisão. `conversation`, quando
+    há, traz as mensagens anteriores **já anonimizadas**; só a mensagem atual é gravada.
     """
     text = anonymize(request.text).text
-    digest = request_hash(text)
+    digest = message_hash(text, conversation)
     if deps.repository.already_processed(digest):
         return ProcessingResult(STATUS_SKIPPED_DUPLICATE)
-    result = _triage(text, deps)
+    history = conversation.messages if conversation is not None else ()
+    result = _triage(_Turn(text, history), deps)
     record = RequestRecord(digest, text, result.status, result.category, result.confidence, result.reason)
     _persist(record, deps)
     return result

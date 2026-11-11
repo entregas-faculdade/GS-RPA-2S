@@ -1,5 +1,6 @@
 """Renderização das telas Streamlit; toda decisão fica no `AppService` e nos pacotes do núcleo."""
 
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -12,6 +13,7 @@ from triage.interface.service import (
     AppService,
     SubmitOutcome,
 )
+from triage.pipeline.processor import Conversation
 from triage.storage.schema import RATING_DOWN, RATING_UP
 
 BANNER = "Protótipo acadêmico com dados sintéticos. Não envie dados pessoais reais."
@@ -29,11 +31,13 @@ FEEDBACK_ALREADY = "Sua avaliação já foi registrada."
 CHAT_PLACEHOLDER = "Descreva o serviço público de que você precisa"
 HISTORY_KEY = "citizen_history"
 FEEDBACK_KEY = "citizen_feedback"
+CONVERSATION_KEY = "citizen_conversation"
+NEW_CONVERSATION_LABEL = "Nova conversa"
 
 
 @dataclass(frozen=True)
 class ChatTurn:
-    """Uma pergunta e o desfecho dela; existe só na sessão, para exibição."""
+    """Uma pergunta e o desfecho dela; existe só na sessão (exibição e memória da conversa)."""
 
     question: str
     outcome: SubmitOutcome
@@ -77,13 +81,31 @@ def _render_history(service: AppService) -> None:
             _render_feedback(service, turn_index, turn.outcome)
 
 
+def _reset_conversation() -> None:
+    """Nova conversa: esquece o histórico, a memória e as avaliações da tela e troca o identificador."""
+    st.session_state[HISTORY_KEY] = []
+    st.session_state[FEEDBACK_KEY] = {}
+    st.session_state[CONVERSATION_KEY] = uuid.uuid4().hex
+
+
+def _current_conversation(service: AppService) -> Conversation:
+    """A conversa para o próximo envio: identificador, número da mensagem e só as últimas mensagens anteriores."""
+    history = st.session_state.get(HISTORY_KEY, [])
+    conversation_id = st.session_state.setdefault(CONVERSATION_KEY, uuid.uuid4().hex)
+    recent = tuple(turn.question for turn in history[-service.history_turns :])
+    return Conversation(conversation_id, len(history) + 1, recent)
+
+
 def render_citizen_tab(service: AppService) -> None:
-    """Chat: a conversa fica na sessão só para exibição; cada mensagem é um pedido independente ao serviço."""
+    """Chat com memória: a conversa fica na sessão e as últimas mensagens vão ao serviço como contexto."""
+    if st.button(NEW_CONVERSATION_LABEL, key="new_conversation"):
+        _reset_conversation()
+        st.rerun()
     _render_history(service)
     message = st.chat_input(CHAT_PLACEHOLDER, key="citizen_message")
     if message is None or not message.strip():
         return
-    outcome = service.submit(message)
+    outcome = service.submit(message, _current_conversation(service))
     st.session_state.setdefault(HISTORY_KEY, []).append(ChatTurn(message, outcome))
     st.rerun()
 

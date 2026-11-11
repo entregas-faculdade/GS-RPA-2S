@@ -22,6 +22,7 @@ CONFIDENCE_MIN = 0.60
 AMBIGUITY_MARGIN = 0.15
 FINDER_MIN_SCORE = 0.25
 FINDER_MARGIN = 0.15
+CHAT_HISTORY_TURNS = 6
 DEFAULT_LINK_CHECK_USER_AGENT = "GS-RPA-Triagem/1.0 (projeto academico FIAP)"
 
 
@@ -46,6 +47,7 @@ class Settings:
     link_check_user_agent: str = DEFAULT_LINK_CHECK_USER_AGENT
     llm_agent_id: str = DEFAULT_AGENT_ID
     llm_fallback_models: tuple[str, ...] = ()
+    chat_history_turns: int = CHAT_HISTORY_TURNS
 
 
 def _read_config(config_path: Path) -> dict[str, Any]:
@@ -92,6 +94,10 @@ def _is_threshold(value: Any) -> bool:
     return isinstance(value, (int, float)) and not isinstance(value, bool) and 0.0 <= value <= 1.0
 
 
+def _is_positive_int(value: Any) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and value > 0
+
+
 def _is_text_list(value: Any) -> bool:
     return isinstance(value, list) and all(isinstance(item, str) for item in value)
 
@@ -107,6 +113,10 @@ def _flag(section: dict[str, Any], label: str, default: bool) -> bool:
 
 def _threshold(section: dict[str, Any], label: str, default: float) -> float:
     return float(_pick(section, label, default, _is_threshold))
+
+
+def _positive_int(section: dict[str, Any], label: str, default: int) -> int:
+    return _pick(section, label, default, _is_positive_int)
 
 
 def _text_list(section: dict[str, Any], label: str) -> tuple[str, ...]:
@@ -130,6 +140,7 @@ def _tuning_settings(data: dict[str, Any]) -> dict[str, Any]:
     triage = _section(data, "triage")
     finder = _section(data, "finder")
     link_check = _section(data, "link_check")
+    chat = _section(data, "chat")
     return {
         "confidence_min": _threshold(triage, "triage.confidence_min", CONFIDENCE_MIN),
         "ambiguity_margin": _threshold(triage, "triage.ambiguity_margin", AMBIGUITY_MARGIN),
@@ -138,6 +149,7 @@ def _tuning_settings(data: dict[str, Any]) -> dict[str, Any]:
         "link_check_user_agent": _text(
             link_check, "link_check.user_agent", DEFAULT_LINK_CHECK_USER_AGENT, required=True
         ),
+        "chat_history_turns": _positive_int(chat, "chat.history_turns", CHAT_HISTORY_TURNS),
     }
 
 

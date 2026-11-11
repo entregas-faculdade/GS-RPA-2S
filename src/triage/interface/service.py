@@ -3,7 +3,7 @@
 import csv
 import logging
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -18,9 +18,12 @@ from triage.pipeline.processor import (
     STATUS_ANSWERED,
     STATUS_QUEUED_FOR_REVIEW,
     STATUS_SKIPPED_DUPLICATE,
+    Conversation,
+    ProcessingResult,
+    message_hash,
 )
 from triage.privacy import anonymize
-from triage.storage import LabeledRequest, StorageError, request_hash
+from triage.storage import LabeledRequest, StorageError
 from triage.storage.schema import RATING_DOWN, RATING_UP, VALID_RATINGS
 
 logger = logging.getLogger("triage.interface")
@@ -76,17 +79,27 @@ class AppService:
         self._deps = deps
         self._rated: set[str] = set()
 
-    def submit(self, text: str) -> SubmitOutcome:
-        """Sanitiza e processa o pedido; nunca levanta exceção para a tela."""
+    @property
+    def history_turns(self) -> int:
+        """Quantas mensagens anteriores da conversa a tela deve enviar (`chat.history_turns`)."""
+        return self._deps.settings.chat_history_turns
+
+    def submit(self, text: str, conversation: Conversation | None = None) -> SubmitOutcome:
+        """Sanitiza e processa o pedido; nunca levanta exceção para a tela.
+
+        `conversation` traz as mensagens anteriores **brutas**, que só vivem na sessão: cada uma é sanitizada e
+        anonimizada aqui, e só o texto anonimizado segue ao pipeline.
+        """
         request = self._build_request(text)
         if isinstance(request, SubmitOutcome):
             return request
         try:
-            result = process_request(request, self._deps)
+            anonymized = self._anonymize_conversation(conversation)
+            result = process_request(request, self._deps, anonymized)
         except Exception as error:  # noqa: BLE001 - a tela mostra mensagem amigável, nunca traceback
             logger.error("Falha ao processar pedido da interface (%s)", type(error).__name__)
             return SubmitOutcome(KIND_ERROR, MESSAGE_ERROR)
-        return self._outcome_from(result.status, result.response_text, request.text)
+        return self._outcome_from(result, request.text, anonymized)
 
     def pending_reviews(self) -> list[ReviewEntry]:
         """Fila pendente completada com categoria, confiança e texto anonimizado de cada pedido."""
@@ -183,9 +196,29 @@ class AppService:
         return request
 
     @staticmethod
-    def _outcome_from(status: str, response_text: str | None, sanitized_text: str) -> SubmitOutcome:
+    def _anonymize_message(raw: str) -> str:
+        """Sanitiza e anonimiza uma mensagem anterior; a que passa do limite de tamanho vira vazio e é descartada."""
+        try:
+            return anonymize(sanitize(raw)).text.strip()
+        except TextTooLargeError:
+            return ""
+
+    @staticmethod
+    def _anonymize_conversation(conversation: Conversation | None) -> Conversation | None:
+        """A mesma conversa com as mensagens anteriores anonimizadas (as vazias saem)."""
+        if conversation is None:
+            return None
+        anonymized = (AppService._anonymize_message(raw) for raw in conversation.messages)
+        return replace(conversation, messages=tuple(message for message in anonymized if message))
+
+    @staticmethod
+    def _outcome_from(
+        result: ProcessingResult, sanitized_text: str, conversation: Conversation | None
+    ) -> SubmitOutcome:
+        status, response_text = result.status, result.response_text
         if status == STATUS_ANSWERED and response_text:
-            return SubmitOutcome(KIND_ANSWERED, response_text, request_hash(anonymize(sanitized_text).text))
+            digest = message_hash(anonymize(sanitized_text).text, conversation)
+            return SubmitOutcome(KIND_ANSWERED, response_text, digest)
         if status == STATUS_QUEUED_FOR_REVIEW:
             return SubmitOutcome(KIND_HUMAN_REVIEW, response_text or MESSAGE_HUMAN_REVIEW)
         if status == STATUS_SKIPPED_DUPLICATE:

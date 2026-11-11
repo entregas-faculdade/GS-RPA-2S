@@ -4,7 +4,7 @@ familia: "03"
 item: "R03.13"
 titulo: "Dar memória à conversa do chat (mensagens anteriores anonimizadas) e um botão de nova conversa"
 dominio: "Automação"
-status: "🟡 Em execução"
+status: "🟢 Aprovada"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[04.02-interface]]", "[[03.02-resposta-final-e-llm]]", "[[04.03-orquestracao-rpa]]", "[[007-llm-redige-a-resposta-com-rag-do-catalogo]]"]
@@ -127,8 +127,93 @@ Levar também: `specs/03.02` §2.2 (bloco `CONVERSA ANTERIOR`), `specs/arquitetu
 
 <!-- Preenchido pelo EXECUTOR. Append-only: cada rodada acrescenta um bloco novo; nada é removido. -->
 
+## Resumo da execução — 2026-11-11
+
+**Resultado:** Concluído com pendências
+
+**O que foi feito**
+- `chat.history_turns` (inteiro positivo, padrão 6) em `config/settings.json:11` e em `Settings.chat_history_turns` (`src/triage/config.py:25`, `:50`, `:152`), com o mesmo tratamento de campo ausente/inválido (`_is_positive_int`, `_positive_int`: `config.py:97`, `:118`). Bool, texto, decimal, zero e negativo voltam ao padrão com `WARNING`.
+- `Conversation(id, turn, messages)` e `message_hash(text, conversation)` em `src/triage/pipeline/processor.py:85` e `:288`; `process_request(request, deps, conversation=None)` (`:298`). Classificação e decisão usam só a mensagem atual (`_triage`, `:263`); a recuperação (`top_candidates` e `find`) usa `_Turn.search_text` = atual + anteriores (`:105`); `answer_with_sources` recebe o histórico. O banco grava só a mensagem atual anonimizada. Sem conversa, o `digest` continua `request_hash(texto)` e o fluxo é o mesmo de antes.
+- Bloco `CONVERSA ANTERIOR` em `src/triage/automation/rag.py:20` (delimitadores), `:66` (`_history_block`), `:72` (`build_rag_message(text, sources, history=())`), `:82` (`answer_with_sources(..., history=())`). Os quatro delimitadores são neutralizados no pedido, nas mensagens anteriores e no `content` das fontes. O bloco só existe com histórico não vazio e fica antes das fontes.
+- `AppService.submit(text, conversation=None)` (`src/triage/interface/service.py:87`): sanitiza e anonimiza cada mensagem anterior (`_anonymize_message`, `:199`; `_anonymize_conversation`, `:207`) antes de entregar ao pipeline; a anterior vazia ou acima do limite de tamanho é descartada. `AppService.history_turns` (`:83`). O hash do feedback agora vem de `message_hash` (`_outcome_from`, `:215`), o mesmo que o pipeline gravou.
+- Tela (`src/triage/interface/views.py`): identificador da conversa na sessão, `_current_conversation` (`:91`, últimas `history_turns` perguntas e número da mensagem), botão "Nova conversa" (`:99`, `:101`) e `_reset_conversation` (`:84`: limpa histórico, avaliações e troca o identificador).
+- README: seção "Conversa com memória" (`README.md:45`) com a memória, o botão e o que a mais vai ao provedor.
+- Testes novos e ajustados (sem rede), listados na tabela abaixo.
+
+**Arquivos alterados**
+| Arquivo | Natureza | O que mudou |
+|---|---|---|
+| `config/settings.json` | alterado | seção `chat.history_turns` |
+| `src/triage/config.py` | alterado | `CHAT_HISTORY_TURNS`, `Settings.chat_history_turns`, validação de inteiro positivo |
+| `src/triage/pipeline/processor.py` | alterado | `Conversation`, `_Turn`, `message_hash`, `process_request(..., conversation)`, recuperação com histórico |
+| `src/triage/automation/rag.py` | alterado | bloco `CONVERSA ANTERIOR` e neutralização dos quatro delimitadores |
+| `src/triage/interface/service.py` | alterado | `submit(text, conversation)`, anonimização das anteriores, `history_turns`, hash do feedback |
+| `src/triage/interface/views.py` | alterado | conversa na sessão, identificador, botão "Nova conversa" |
+| `README.md` | alterado | seção "Conversa com memória" |
+| `tests/pipeline/test_conversation.py` | criado | 14 testes do pipeline com conversa |
+| `tests/interface/test_service_conversation.py` | criado | 9 testes do serviço com conversa |
+| `tests/automation/test_rag.py` | alterado | 6 testes do bloco `CONVERSA ANTERIOR` |
+| `tests/interface/test_chat.py` | alterado | dublê com `history_turns` e `conversation`; 4 testes novos (últimas N, identificador e número, "Nova conversa" duas vezes), 1 teste renomeado e 2 asserções ajustadas pelo botão |
+| `tests/test_config.py` | alterado | `chat.history_turns` nos campos, tipos errados, seções e leitura completa |
+
+**Verificações executadas**
+- `git diff --stat` → 10 arquivos alterados mais 2 criados (`tests/pipeline/test_conversation.py`, `tests/interface/test_service_conversation.py`), todos dentro do §3.1.
+- `python -m pytest tests/automation tests/pipeline tests/interface tests/classification tests/test_config.py -q` → **685 passed, 1 failed**. A falha é `tests/test_config.py::test_shipped_config_equals_the_code_defaults` (`llm_enabled is False`) e **existe em HEAD** (ver Achados fora do escopo).
+- `python -m ruff check <paths do §7>` → 1 erro, `src/triage/automation/allowlist.py:18` `UP033`, arquivo que não toquei; nenhum erro novo (corrigi 2 `I001` de import meus).
+- `validate.py` do `padrao-python` nos `.py` tocados → 0 achados em `config.py`, `rag.py`, `processor.py`, `service.py`, `views.py`, `test_service_conversation.py`, `test_chat.py`, `test_config.py`; **2 achados de baixa confiança** em `tests/pipeline/test_conversation.py:26-27` (URLs `https://www.gov.br/...` de dado de teste) e os 2 de `tests/automation/test_rag.py:18-19`, que já existem em HEAD com o mesmo motivo.
+- Mutação (testes quebram quando a regra quebra): busca sem o histórico → 3 falhas; hash sem a conversa → 3; classificação com o histórico → 1; histórico sem neutralizar delimitadores → 2. Arquivos restaurados e a suíte voltou a 51/51 nos três módulos novos.
+- Sondagem no app real (`AppTest.from_file("app.py")`, pasta temporária com cópia de `data/`, cliente falso, catálogo real): 1ª mensagem "Meu nome é Maria Souza, meu CPF é 123.456.789-09 e preciso negociar o IPTU em atraso" → sem bloco; 2ª "me passe o link correto para parcelamento" → mensagem ao LLM com `<<<CONVERSA ANTERIOR` + `- Meu nome é [NOME], meu CPF é [CPF] e preciso negociar o IPTU em atraso` e a fonte `IPTU (imposto predial e territorial urbano)`; "Maria", "Souza" e "123.456.789-09" ausentes do cliente, do dump do banco e do log; a 2ª pergunta repetida foi processada (não "já registrado"); depois de "Nova conversa": 0 mensagens na tela, histórico `[]` e a 1ª mensagem seguinte sem bloco.
+- `python -m jupyter nbconvert --to notebook --execute notebooks/evidence.ipynb --output-dir <scratchpad>` → sem erro (2 execuções; saída descartada).
+
+**Estado inicial do worktree:** `git status --short` vazio (branch `develop`).
+
+**Ambiente após a verificação:** `snapshot` e `diff` da `code-limpeza-ambiente`: nenhum diretório temporário, contêiner, imagem, volume, rede nem branch novos; o diff de processos mostra só ruído do sistema (Chrome, svchost, indexador de busca e os `head`/`grep` do próprio comando). Pasta temporária da sondagem, snapshot e cópias de HEAD removidos; saída do notebook fora do repositório. O `diff` não aceitou `--tmp-prefix`; o snapshot sim.
+
+**Critérios de aceite**
+- [x] Pergunta de seguimento sem o assunto usa as mensagens anteriores — evidência: `tests/pipeline/test_conversation.py::test_follow_up_recovers_the_source_from_the_previous_message`, `tests/interface/test_service_conversation.py::test_follow_up_sends_the_anonymized_previous_message_and_recovers_the_iptu_source` (catálogo real: sozinha não recupera nada, com a anterior traz `property_tax`) e a sondagem.
+- [x] Só texto anonimizado das anteriores vai ao LLM ou ao banco; nenhum log traz texto do usuário — evidência: `test_raw_previous_message_never_reaches_the_client_the_database_or_the_log`, `test_only_the_current_message_is_stored`, `test_no_log_has_the_previous_messages`, `test_log_never_has_the_previous_messages` e a sondagem.
+- [x] Só as últimas `chat.history_turns` entram; o valor vem de `config/settings.json` — evidência: `tests/interface/test_chat.py::test_only_the_last_history_turns_questions_are_sent`, `test_history_turns_comes_from_the_settings`, `tests/test_config.py` (padrão, leitura, tipos errados, seção ausente).
+- [x] Repetir a mesma pergunta no chat é respondido; o lote continua idempotente — evidência: `test_the_same_question_is_answered_in_each_message_and_each_conversation`, `test_resending_the_same_message_of_the_same_conversation_is_a_duplicate`, `test_batch_without_a_conversation_keeps_hashing_the_text_and_deduplicating`, `test_a_request_without_a_conversation_still_deduplicates`; suíte do pipeline existente verde.
+- [x] Classificação, urgência, ambíguo e modelo ausente seguem pela mensagem atual e sem LLM — evidência: `test_classification_and_decision_see_only_the_current_message`, `test_urgent_and_ambiguous_with_a_conversation_never_call_the_client`, `test_missing_model_with_a_conversation_never_calls_the_client`.
+- [x] "Nova conversa" limpa histórico, memória e avaliações e começa outra conversa — evidência: `test_new_conversation_clears_the_screen_the_memory_and_the_ratings_and_changes_the_id`, `test_new_conversation_does_not_carry_the_old_ratings_to_the_new_answers` e a sondagem.
+- [ ] README descreve o que a mais vai ao provedor; ambiente e worktree limpos; testes do escopo, `ruff` e validador sem violação nova — README (`README.md:45`) e ambiente limpos; `ruff` sem erro novo; **parcial**: 1 teste do escopo falha (anterior à mudança) e o validador tem 2 achados de baixa confiança novos em arquivo de teste (URLs de dado de teste).
+- [x] O notebook de evidências continua executando sem erro — evidência: `nbconvert --execute` sem erro.
+
+**Decisões e suposições**
+- `Conversation` leva um campo `turn` além do identificador e das mensagens: o número da mensagem não pode vir do tamanho de `messages`, que é um recorte das últimas N; sem `turn`, da (N+1)-ª mensagem em diante a mesma pergunta repetida geraria o mesmo hash. Quem mantém a conversa (a tela) conta todas as mensagens.
+- O hash do chat é `request_hash("<id>|<turn>|<texto anonimizado>")`. `message_hash` é público porque o hash do feedback (`SubmitOutcome.request_hash`) tem de ser o que o pipeline gravou.
+- `Conversation` e `message_hash` são importados de `triage.pipeline.processor`, como o serviço já faz com os `STATUS_*`: **não editei `src/triage/pipeline/__init__.py`**, que não está no §3.1.
+- A tela corta as últimas `history_turns` perguntas pelo `AppService.history_turns` (propriedade nova); o serviço sanitiza e anonimiza cada uma, e descarta as vazias ou acima de `MAX_TEXT_LENGTH`. Perguntas com desfecho inválido ou erro também contam como anteriores; o serviço as filtra por tamanho/vazio, não por desfecho.
+- Texto de recuperação = atual, depois as anteriores em ordem cronológica, separados por quebra de linha. Os delimitadores são `<<<CONVERSA ANTERIOR` e `CONVERSA ANTERIOR>>>`, e cada mensagem entra como `- <texto>`.
+- Sem o LLM, a recuperação determinística (`find`) também usa o histórico, como o §2.1 manda para `top_candidates` e `find`.
+- O botão "Nova conversa" fica sempre visível no topo da aba, mesmo com a conversa vazia.
+- Terminações de linha CRLF da árvore de trabalho preservadas nos arquivos editados e criados.
+
+**Achados fora do escopo (não corrigidos)**
+- `tests/test_config.py:91` — `test_shipped_config_equals_the_code_defaults` falha em HEAD: o commit `9cc58c7` pôs `"enabled": true` em `config/settings.json:4` e o teste ainda afirma `llm_enabled is False`. Ou o teste ou o padrão entregue precisa mudar; é decisão do revisor.
+- `data/agents/triage-assistant/workflow.md:5-7` — descreve só `<<<PEDIDO`…`PEDIDO>>>` e manda ignorar instrução "dentro dele"; não menciona o bloco `CONVERSA ANTERIOR`. Fora do §3.1. Hoje a proteção é a neutralização dos delimitadores e a guarda de saída (`validate_rag_output`), que independem do prompt.
+- `src/triage/automation/allowlist.py:18` — `ruff UP033` (`lru_cache(maxsize=None)`), anterior e fora do escopo.
+
+**Pendências / riscos**
+- A anonimização reduz o risco, mas não o elimina: com o LLM ligado, as mensagens anteriores anonimizadas também saem rumo ao provedor a cada turno (declarado no README).
+- Um histórico longo dilui o cosseno do localizador (`find` com `finder.min_score` e `finder.margin`). Não há conjunto rotulado de conversas, então o efeito nos limiares não foi medido.
+- Os dois achados de baixa confiança do validador em `tests/pipeline/test_conversation.py:26-27` são URLs de dado de teste, do mesmo tipo dos que já existem em `tests/automation/test_rag.py:18-19`; mantive os literais porque a guarda de saída compara URL exata.
+- Não rodei a suíte inteira (`pytest -q`) nem `ruff` em `run.py src tests`: o §7 pede os caminhos que rodei.
+
 ---
 
 # 10. Veredito
 
 <!-- Preenchido pelo REVISOR. Append-only: um bloco por rodada, com o que foi verificado e como. -->
+
+## Veredito — 2026-11-11 — 🟢 Aprovado
+
+**Verificado pelo revisor (sem confiar no resumo):**
+- `git status`/`diff`: só arquivos do §3.1 (config, processor, rag, service, views, README e testes). `src/triage/pipeline/__init__.py` aparece em `status` mas não tem diferença de conteúdo (só aviso de fim de linha). `config/settings.json` ganhou só a seção `chat`.
+- Diff lido por inteiro: `Conversation(id, turn, messages)` e `message_hash` (lote inalterado; chat com identificador e número); classificação e decisão só pela mensagem atual (`_triage`); recuperação e `find` com atual + anteriores; bloco `CONVERSA ANTERIOR` antes das fontes com os quatro delimitadores neutralizados (também no `content`); `submit` anonimiza cada mensagem anterior antes do pipeline; tela com identificador, últimas `history_turns` e botão "Nova conversa"; `chat.history_turns` validado como inteiro positivo.
+- `pytest tests/automation tests/pipeline tests/interface tests/classification tests/test_config.py tests/evaluation -q` → 738 passed, 1 failed (`test_shipped_config_equals_the_code_defaults`, `llm.enabled: true` do commit anterior `9cc58c7`; existe em `HEAD`, fora do escopo).
+- `ruff` nos caminhos do §7 → 1 erro, `UP033` em `allowlist.py:18`, pré-existente. `validate.py`: 0 achados nos 5 `.py` de produção; 2 `hardcoded` de baixa confiança em URL de dado de teste (`test_conversation.py`).
+- Sondagem própria (serviço real, catálogo + base importada, cliente falso): mensagem de seguimento com anterior "Maria Souza, CPF …, IPTU em atraso" → a mensagem ao LLM traz `CONVERSA ANTERIOR` com `[NOME]` e `[CPF]` e nenhum dado bruto; banco e log sem "Maria", "Souza" ou o CPF; o mesmo número de mensagem na mesma conversa repetido → `duplicate`; mesma pergunta em outra conversa → processada.
+- `nbconvert --execute notebooks/evidence.ipynb` → sem erro. Ambiente limpo.
+
+**Fora do escopo, para o backlog:** `workflow.md` do agente não cita o bloco `CONVERSA ANTERIOR` (somado ao item 30); o efeito de uma conversa longa nos limiares do `find` não foi medido (risco declarado no README).

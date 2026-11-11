@@ -17,6 +17,9 @@ ANSWER_TASK = "answer"
 NO_SOURCE_MARKER = "NENHUMA_FONTE"
 REQUEST_OPEN = "<<<PEDIDO"
 REQUEST_CLOSE = "PEDIDO>>>"
+HISTORY_OPEN = "<<<CONVERSA ANTERIOR"
+HISTORY_CLOSE = "CONVERSA ANTERIOR>>>"
+DELIMITERS = (REQUEST_OPEN, REQUEST_CLOSE, HISTORY_OPEN, HISTORY_CLOSE)
 SOURCE_HEADER = "FONTE {number}"
 SOURCE_FIELDS = (
     "Nome: {display_name}",
@@ -54,27 +57,40 @@ def _source_block(number: int, source: ServiceEntry) -> list[str]:
 
 
 def _neutralize_delimiters(text: str) -> str:
-    """Tira do pedido os delimitadores da mensagem, para que ele não feche o bloco de dado e simule instrução."""
-    return text.replace(REQUEST_OPEN, " ").replace(REQUEST_CLOSE, " ")
+    """Tira do texto os delimitadores da mensagem, para que ele não feche um bloco de dado e simule instrução."""
+    for delimiter in DELIMITERS:
+        text = text.replace(delimiter, " ")
+    return text
 
 
-def build_rag_message(text: str, sources: Sequence[ServiceEntry]) -> str:
-    """Mensagem do usuário: o pedido anonimizado entre delimitadores (dado, não ordem) e as fontes numeradas."""
+def _history_block(history: Sequence[str]) -> list[str]:
+    """As mensagens anteriores do cidadão (já anonimizadas), em ordem, entre delimitadores: dado, não ordem."""
+    messages = (f"- {_neutralize_delimiters(message)}" for message in history)
+    return ["", HISTORY_OPEN, *messages, HISTORY_CLOSE]
+
+
+def build_rag_message(text: str, sources: Sequence[ServiceEntry], history: Sequence[str] = ()) -> str:
+    """Mensagem do usuário: o pedido anonimizado entre delimitadores (dado, não ordem), a conversa anterior e as fontes numeradas."""
     lines = [REQUEST_OPEN, _neutralize_delimiters(text), REQUEST_CLOSE]
+    if history:
+        lines.extend(_history_block(history))
     for number, source in enumerate(sources, start=1):
         lines.extend(["", *_source_block(number, source)])
     return "\n".join(lines)
 
 
-def answer_with_sources(client: LlmClient, text: str, sources: Sequence[ServiceEntry]) -> RagResult:
+def answer_with_sources(
+    client: LlmClient, text: str, sources: Sequence[ServiceEntry], history: Sequence[str] = ()
+) -> RagResult:
     """Pede ao LLM a resposta sobre as fontes; só devolve texto que a guarda aprova.
 
-    Sem fonte o LLM não é chamado. O log traz só o tipo do erro ou o motivo da rejeição, nunca o pedido nem a saída.
+    `history` são as mensagens anteriores anonimizadas da conversa. Sem fonte o LLM não é chamado. O log traz só o tipo
+    do erro ou o motivo da rejeição, nunca o pedido, a conversa nem a saída.
     """
     if not sources:
         return RagResult(no_source=True)
     try:
-        answer = client.complete(ANSWER_TASK, build_rag_message(text, sources))
+        answer = client.complete(ANSWER_TASK, build_rag_message(text, sources, history))
     except LlmUnavailable as error:
         logger.warning("LLM indisponível (%s); sem resposta redigida", type(error).__name__)
         return RagResult(fallback_reason=FALLBACK_LLM_UNAVAILABLE)

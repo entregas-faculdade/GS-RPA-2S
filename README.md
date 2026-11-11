@@ -42,6 +42,21 @@ flowchart LR
 3. **Resposta:** só links do catálogo curado e da allowlist (`.gov.br`), com o link verificado na rede. Pedido de
    urgência, fora do catálogo, ambíguo, de baixa confiança, inválido ou com link fora do ar vai à revisão humana.
 
+## Conversa com memória
+
+No chat da aba **Cidadão**, a conversa tem memória: para achar a fonte e redigir a resposta, o robô considera também as
+últimas mensagens do cidadão naquela conversa (`chat.history_turns` em `config/settings.json`, padrão 6). Assim,
+"me passe o link correto para parcelamento" entende que o assunto é o IPTU da mensagem anterior. A classificação, a
+urgência e a revisão humana continuam decididas só pela mensagem atual. Repetir uma pergunta no chat gera uma nova
+resposta, e não o aviso de pedido já registrado.
+
+O botão **Nova conversa** limpa o histórico, a memória e as avaliações da tela e começa outra conversa. O histórico vive
+só na sessão do Streamlit e some ao recarregar a página; o banco guarda apenas a mensagem atual, anonimizada.
+
+**O que a mais vai ao provedor:** com o LLM ligado, as mensagens anteriores da conversa, já anonimizadas, saem rumo ao
+provedor a cada turno, além da mensagem atual. A anonimização reduz o risco, mas não o elimina (limites em *Proteção de
+dados, ética e ODS*), e o risco residual cresce com o tamanho da conversa. Sem o LLM, nada da conversa sai do computador.
+
 ## Como instalar e rodar
 
 Requisitos: Python (verificado com 3.14) e acesso à internet para instalar os pacotes e para o robô verificar os

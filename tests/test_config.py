@@ -14,6 +14,7 @@ import pytest
 import triage.config
 from triage.config import (
     AMBIGUITY_MARGIN,
+    CHAT_HISTORY_TURNS,
     CONFIDENCE_MIN,
     DEFAULT_CONFIG_PATH,
     DEFAULT_LINK_CHECK_USER_AGENT,
@@ -26,6 +27,7 @@ from triage.config import (
 )
 
 ROOT = Path(__file__).resolve().parent.parent
+CUSTOM_HISTORY_TURNS = 3
 OLD_ENV_KEYS = (
     "LLM_ENABLED",
     "LLM_BASE_URL",
@@ -96,6 +98,15 @@ def test_shipped_config_equals_the_code_defaults(missing_env: Path) -> None:
     assert settings.output_dir == "output"
 
 
+def test_shipped_chat_history_turns_equals_the_code_default(missing_env: Path, caplog: pytest.LogCaptureFixture) -> None:
+    with caplog.at_level("WARNING", logger="triage.config"):
+        settings = load_settings(missing_env)
+
+    assert settings.chat_history_turns == CHAT_HISTORY_TURNS == 6
+    assert _shipped()["chat"] == {"history_turns": 6}
+    assert caplog.records == []
+
+
 def test_shipped_config_is_found_from_another_directory(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path, missing_env: Path
 ) -> None:
@@ -114,6 +125,7 @@ def test_reads_every_section(tmp_path: Path) -> None:
         data["triage"].update(confidence_min=0.8, ambiguity_margin=0.3)
         data["finder"].update(min_score=0.4, margin=0.2)
         data["link_check"]["user_agent"] = " Robo-Teste/1.0 "
+        data["chat"]["history_turns"] = CUSTOM_HISTORY_TURNS
 
     settings = _load(tmp_path, change)
 
@@ -123,6 +135,7 @@ def test_reads_every_section(tmp_path: Path) -> None:
     assert (settings.confidence_min, settings.ambiguity_margin) == (0.8, 0.3)
     assert (settings.finder_min_score, settings.finder_margin) == (0.4, 0.2)
     assert settings.link_check_user_agent == "Robo-Teste/1.0"
+    assert settings.chat_history_turns == CUSTOM_HISTORY_TURNS
 
 
 def test_settings_are_immutable(missing_env: Path) -> None:
@@ -173,6 +186,7 @@ FIELD_DEFAULTS = {
     "finder.min_score": ("finder_min_score", FINDER_MIN_SCORE),
     "finder.margin": ("finder_margin", FINDER_MARGIN),
     "link_check.user_agent": ("link_check_user_agent", DEFAULT_LINK_CHECK_USER_AGENT),
+    "chat.history_turns": ("chat_history_turns", CHAT_HISTORY_TURNS),
 }
 
 
@@ -221,6 +235,12 @@ WRONG_TYPES = [
     ("finder.min_score", None),
     ("finder.margin", [0.1]),
     ("link_check.user_agent", ""),
+    ("chat.history_turns", "6"),
+    ("chat.history_turns", True),
+    ("chat.history_turns", 2.5),
+    ("chat.history_turns", 0),
+    ("chat.history_turns", -3),
+    ("chat.history_turns", None),
 ]
 
 
@@ -261,7 +281,7 @@ def test_thresholds_accept_the_range_limits(tmp_path: Path, caplog: pytest.LogCa
     assert caplog.records == []
 
 
-@pytest.mark.parametrize("section", ["llm", "triage", "finder", "link_check"])
+@pytest.mark.parametrize("section", ["llm", "triage", "finder", "link_check", "chat"])
 def test_missing_or_malformed_section_falls_back_to_the_defaults(
     tmp_path: Path, caplog: pytest.LogCaptureFixture, section: str
 ) -> None:
