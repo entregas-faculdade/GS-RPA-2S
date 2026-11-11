@@ -54,7 +54,6 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-03.13-conversa-com-memoria-e-nova-conversa](plan/plan-03.13-conversa-com-memoria-e-nova-conversa.md) | Dar memória à conversa do chat (mensagens anteriores anonimizadas) e um botão de nova conversa | — | 🟢 Aprovada | `specs/04.02-interface.md` |
 
 ---
 
