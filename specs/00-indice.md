@@ -5,7 +5,7 @@ dominio: "Governança de Specs (SDD)"
 status: "🟢 Vigente"
 tags: ["processo", "indice", "sdd"]
 relacionados: ["[[00-contexto]]", "[[00-backlog]]", "[[00-prompt-revisor]]", "[[00-prompt-executor]]"]
-proximo_numero_plan: {"01": 5, "02": 5, "03": 12, "04": 6, "05": 2} # Com famílias: mapa família → NN; simples: escalar NN único. Só sobe, nunca reaproveitado — ver §4.
+proximo_numero_plan: {"01": 5, "02": 5, "03": 14, "04": 6, "05": 2} # Com famílias: mapa família → NN; simples: escalar NN único. Só sobe, nunca reaproveitado — ver §4.
 ---
 
 # 0. O que é este arquivo
@@ -54,7 +54,8 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-04.04-revisao-com-categoria-e-exportacao](plan/plan-04.04-revisao-com-categoria-e-exportacao.md) | Registrar a categoria correta na revisão e exportar pedidos anonimizados | — | 🟢 Aprovada | `specs/arquitetura/04.01-persistencia.md` |
+| 1 | [plan-03.12-base-enriquecida-do-catalogo](plan/plan-03.12-base-enriquecida-do-catalogo.md) | Aceitar uma base enriquecida do catálogo (conteúdo por página, vários arquivos) e usá-la na recuperação e na resposta | — | 🟡 Em execução | `specs/03.01-catalogo-e-allowlist.md` |
+| 2 | [plan-03.13-conversa-com-memoria-e-nova-conversa](plan/plan-03.13-conversa-com-memoria-e-nova-conversa.md) | Dar memória à conversa do chat (mensagens anteriores anonimizadas) e um botão de nova conversa | 03.12 | 🔴 A executar | `specs/04.02-interface.md` |
 
 ---
 

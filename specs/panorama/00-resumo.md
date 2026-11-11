@@ -11,23 +11,22 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 # Panorama
 
 ## Progresso
-█████████░ 96% · 24/25 itens ✅
+█████████░ 92% · 25/27 itens ✅
 
 ## Agora
-—
+- 🟡 · plan-03.12 · R03.12 · Aceitar uma base enriquecida do catálogo (conteúdo por página, vários arquivos) e usá-la na recuperação e na resposta
 
 ## Próximas
-—
+- 🔴 · plan-03.13 · R03.13 · Dar memória à conversa do chat (mensagens anteriores anonimizadas) e um botão de nova conversa
 
 ## Por família
 | FF | Família | Itens ✅/total | Progresso | Plans abertas |
 |---|---|---|---|---|
 | 01 | Núcleo do robô | 4/4 | █████ | 0 |
 | 02 | Classificação | 4/4 | █████ | 0 |
-| 03 | Automação | 11/11 | █████ | 0 |
-| 04 | Operação e interface | 4/5 | ████░ | 1 |
+| 03 | Automação | 11/13 | ████░ | 2 |
+| 04 | Operação e interface | 5/5 | █████ | 0 |
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
-- 🟢 plan-04.04 · Registrar a categoria correta na revisão e exportar pedidos anonimizados rotulados — aguardando síntese
 - 📋 26 achado(s) no `00-backlog`
