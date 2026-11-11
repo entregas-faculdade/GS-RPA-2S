@@ -100,6 +100,7 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 | `triage.privacy` | etapa 1 | anonimizar PII (CPF, telefone, e-mail, nome, endereço, CEP, RG, data, documentos) |
 | `triage.classification` | etapa 2 | regex + TF-IDF, score de confiança, decisão de revisão |
 | `triage.automation` | etapa 3 | catálogo, allowlist, verificação de links, localizador de fontes, resposta (+ LLM opcional) |
+| `triage.agent` | etapa 3 | agente LLM: persona, regras, fluxo e parâmetros lidos de `data/agents/`, com linter |
 | `triage.storage` | transversal | SQLite: idempotência, fila de revisão, feedback |
 | `triage.interface` | borda | Streamlit sobre o núcleo |
 | `triage.pipeline` | orquestração | encadeia as etapas, retry, idempotência e relatório de execução |
@@ -141,7 +142,7 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 | Mexer no robô ponta a ponta, relatório ou agendamento | [[04.03-orquestracao-rpa]] | [[00-knowledge]] |
 | Mexer em PII, sanitização, allowlist ou revisão humana | [[003-seguranca-sem-autenticacao]] | [[00-knowledge]] |
 | Execução, ambiente ou publicação | [[004-infra-execucao-local]] | [[00-knowledge]] |
-| Usar ou alterar o LLM | [[005-llm-apenas-reformula-resposta]] + [[003-seguranca-sem-autenticacao]] | [[00-knowledge]] |
+| Usar ou alterar o LLM | [[005-llm-apenas-reformula-resposta]] + [[003-seguranca-sem-autenticacao]] + [[03.04-agente-llm]] | [[00-knowledge]] |
 | Mudar decisão estrutural | todos os `adr/` + [[00-fundacao-tecnologica]] | [[00-knowledge]] |
 | Criar ou executar uma plan | [[00-indice]] + [[00-prompt-revisor]] / [[00-prompt-executor]] | [[00-knowledge]] |
 | Achado fora do escopo | [[00-backlog]] | [[00-knowledge]] |

@@ -8,7 +8,7 @@ status: "🔴 A executar"
 prioridade: "Média"
 tags: ["plan"]
 relacionados: ["[[04.01-persistencia]]", "[[04.02-interface]]", "[[003-seguranca-sem-autenticacao]]"]
-depende_de: "plan-03.06-resposta-em-degraus — precisa estar 🟢 (mesmo arquivo da interface)"
+depende_de: "—"
 destino_sintese: "specs/arquitetura/04.01-persistencia.md"
 ---
 

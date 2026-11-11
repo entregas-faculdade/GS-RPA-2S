@@ -11,7 +11,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 # Panorama
 
 ## Progresso
-████████░░ 86% · 19/22 itens ✅
+█████████░ 90% · 20/22 itens ✅
 
 ## Agora
 —
@@ -25,10 +25,9 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 |---|---|---|---|---|
 | 01 | Núcleo do robô | 4/4 | █████ | 0 |
 | 02 | Classificação | 4/4 | █████ | 0 |
-| 03 | Automação | 7/9 | ███░░ | 2 |
+| 03 | Automação | 8/9 | ████░ | 1 |
 | 04 | Operação e interface | 3/4 | ███░░ | 1 |
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
-- 🟢 plan-03.08 · Definir o agente LLM em arquivos versionados (persona, regras, fluxo e parâmetros) com validador — aguardando síntese
 - 📋 26 achado(s) no `00-backlog`
