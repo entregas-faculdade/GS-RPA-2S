@@ -4,7 +4,7 @@ familia: "03"
 item: "R03.13"
 titulo: "Dar memória à conversa do chat (mensagens anteriores anonimizadas) e um botão de nova conversa"
 dominio: "Automação"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[04.02-interface]]", "[[03.02-resposta-final-e-llm]]", "[[04.03-orquestracao-rpa]]", "[[007-llm-redige-a-resposta-com-rag-do-catalogo]]"]
