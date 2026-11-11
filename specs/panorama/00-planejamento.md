@@ -95,7 +95,7 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 - ✅ **R03.7** LLM assistente de localização — escolha entre fontes aprovadas, opcional (✅ 2026-11-10)
 - ✅ **R03.10** Configuração em JSON — só a chave do LLM fica no `.env` (✅ 2026-11-11)
 - ✅ **R03.11** Resposta redigida pelo LLM com RAG do catálogo — fluxo único, guarda na saída (✅ 2026-11-11)
-- 🔷 **R03.12** Base enriquecida do catálogo — conteúdo por página e vários arquivos
+- ✅ **R03.12** Base enriquecida do catálogo — conteúdo por página e vários arquivos (✅ 2026-11-11)
 - 🔷 **R03.14** Importação da planilha da base enriquecida — 72 serviços de SP e federais
 - 🔷 **R03.13** Conversa com memória e botão de nova conversa
 

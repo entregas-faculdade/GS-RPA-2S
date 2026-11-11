@@ -8,7 +8,7 @@ status: "🔴 A executar"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[04.02-interface]]", "[[03.02-resposta-final-e-llm]]", "[[04.03-orquestracao-rpa]]", "[[007-llm-redige-a-resposta-com-rag-do-catalogo]]"]
-depende_de: "plan-03.12-base-enriquecida-do-catalogo — sintetizada antes do despacho"
+depende_de: "—"
 destino_sintese: "specs/04.02-interface.md"
 ---
 

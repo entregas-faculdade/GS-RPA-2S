@@ -4,11 +4,11 @@ familia: "03"
 item: "R03.14"
 titulo: "Importar a planilha da base enriquecida do usuário para o catálogo, com script reprodutível e allowlist ampliada"
 dominio: "Automação"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[03.01-catalogo-e-allowlist]]", "[[03.03-localizador-de-servicos]]", "[[007-llm-redige-a-resposta-com-rag-do-catalogo]]"]
-depende_de: "plan-03.12-base-enriquecida-do-catalogo — sintetizada antes do despacho"
+depende_de: "—"
 destino_sintese: "specs/03.01-catalogo-e-allowlist.md"
 ---
 
