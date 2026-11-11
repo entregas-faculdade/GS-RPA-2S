@@ -9,7 +9,7 @@ from threading import Event
 
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from triage.config import DEFAULT_OUTPUT_DIR, Settings, load_settings
+from triage.config import DEFAULT_OUTPUT_DIR, ConfigError, Settings, load_settings
 from triage.logging_setup import configure_logging, shutdown_logging
 from triage.pipeline import build_deps, run_batch, watch
 from triage.storage import StorageError
@@ -42,7 +42,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--watch", action="store_true", help="reexecuta periodicamente até Ctrl+C")
     parser.add_argument("--interval", type=_positive_seconds, default=DEFAULT_INTERVAL_SECONDS, help="segundos entre as rodadas do --watch")
     parser.add_argument(
-        "--llm", action=argparse.BooleanOptionalAction, default=None, help="liga ou desliga o LLM (padrão: LLM_ENABLED do .env)"
+        "--llm", action=argparse.BooleanOptionalAction, default=None, help="liga ou desliga o LLM (padrão: llm.enabled de config/settings.json)"
     )
     return parser
 
@@ -72,7 +72,11 @@ def _execute(args: argparse.Namespace, settings: Settings) -> int:
 def main(argv: list[str] | None = None) -> int:
     """Valida os argumentos, executa o robô e devolve o código de saída (0 ok, 1 infraestrutura, 2 argumento)."""
     args = _build_parser().parse_args(argv)
-    settings = _settings_from(args)
+    try:
+        settings = _settings_from(args)
+    except ConfigError as error:
+        logger.error("Configuração inválida; a execução não foi iniciada (%s)", error)
+        return EXIT_INFRASTRUCTURE_FAILURE
     configure_logging(settings)
     try:
         if not Path(args.input).is_dir():

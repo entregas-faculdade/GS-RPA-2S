@@ -1,0 +1,14 @@
+{
+  "log_level": "INFO",
+  "llm": {
+    "enabled": false,
+    "base_url": "https://openrouter.ai/api/v1",
+    "model": "deepseek/deepseek-v4-flash",
+    "fallback_models": ["deepseek/deepseek-v4-flash-0731", "deepseek/deepseek-v3.2", "minimax/minimax-m3:free", "openrouter/free"],
+    "agent_id": "triage-assistant",
+    "assist_locate": false
+  },
+  "triage": { "confidence_min": 0.60, "ambiguity_margin": 0.15 },
+  "finder": { "min_score": 0.25, "margin": 0.15 },
+  "link_check": { "user_agent": "GS-RPA-Triagem/1.0 (projeto academico FIAP)" }
+}

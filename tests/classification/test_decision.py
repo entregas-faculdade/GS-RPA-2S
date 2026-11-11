@@ -121,13 +121,11 @@ def test_review_reason_values_are_the_closed_set() -> None:
     }
 
 
-def test_thresholds_default_and_environment_override(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    monkeypatch.delenv("CONFIDENCE_MIN", raising=False)
-    monkeypatch.delenv("AMBIGUITY_MARGIN", raising=False)
+def test_thresholds_default_and_config_override(tmp_path: Path) -> None:
     defaults = load_settings(tmp_path / "missing.env")
     assert (defaults.confidence_min, defaults.ambiguity_margin) == (0.60, 0.15)
 
-    monkeypatch.setenv("CONFIDENCE_MIN", "0.8")
-    monkeypatch.setenv("AMBIGUITY_MARGIN", "abc")
-    overridden = load_settings(tmp_path / "missing.env")
+    config = tmp_path / "settings.json"
+    config.write_text('{"triage": {"confidence_min": 0.8, "ambiguity_margin": "abc"}}', encoding="utf-8")
+    overridden = load_settings(tmp_path / "missing.env", config)
     assert (overridden.confidence_min, overridden.ambiguity_margin) == (0.8, 0.15)

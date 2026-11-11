@@ -93,12 +93,15 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 - ✅ **R03.8** Agente LLM — persona, regras, fluxo e parâmetros em arquivos versionados, com validador (✅ 2026-11-10)
 - ✅ **R03.9** Verificação de links — identificação do robô e links bloqueados validados à mão (✅ 2026-11-10)
 - ✅ **R03.7** LLM assistente de localização — escolha entre fontes aprovadas, opcional (✅ 2026-11-10)
+- 🔷 **R03.10** Configuração em JSON — só a chave do LLM fica no `.env`
+- 🔷 **R03.11** Resposta redigida pelo LLM com RAG do catálogo — fluxo único, guarda na saída
 
 ## 04 · Operação e interface
 - ✅ **R04.1** Persistência SQLite — idempotência, fila, feedback e execuções (✅ 2026-11-09)
 - ✅ **R04.2** Interface Streamlit — atendimento, revisão e feedback (✅ 2026-11-10)
 - ✅ **R04.3** Orquestração RPA — lote, retry, agendamento e relatório de execução (✅ 2026-11-10)
 - 🔷 **R04.4** Revisão com categoria e exportação — catalogar pedidos anonimizados
+- 🔷 **R04.5** Interface em formato de chat — conversa na tela e avaliação por resposta
 
 ## 05 · Validação e entrega
 - ✅ **R05.1** Validação e entrega — métricas, notebook de evidências e README (✅ 2026-11-10)

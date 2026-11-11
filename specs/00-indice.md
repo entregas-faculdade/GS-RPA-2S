@@ -5,7 +5,7 @@ dominio: "Governança de Specs (SDD)"
 status: "🟢 Vigente"
 tags: ["processo", "indice", "sdd"]
 relacionados: ["[[00-contexto]]", "[[00-backlog]]", "[[00-prompt-revisor]]", "[[00-prompt-executor]]"]
-proximo_numero_plan: {"01": 5, "02": 5, "03": 10, "04": 5, "05": 2} # Com famílias: mapa família → NN; simples: escalar NN único. Só sobe, nunca reaproveitado — ver §4.
+proximo_numero_plan: {"01": 5, "02": 5, "03": 12, "04": 6, "05": 2} # Com famílias: mapa família → NN; simples: escalar NN único. Só sobe, nunca reaproveitado — ver §4.
 ---
 
 # 0. O que é este arquivo
@@ -54,7 +54,10 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-04.04-revisao-com-categoria-e-exportacao](plan/plan-04.04-revisao-com-categoria-e-exportacao.md) | Registrar a categoria correta na revisão e exportar pedidos anonimizados | — | 🔴 A executar | `specs/arquitetura/04.01-persistencia.md` |
+| 1 | [plan-03.10-configuracao-em-json-e-so-a-chave-no-env](plan/plan-03.10-configuracao-em-json-e-so-a-chave-no-env.md) | Mover a configuração para um JSON versionado e deixar só a chave do LLM no .env | — | 🟢 Aprovada | `arquitetura/01.01-estrutura-do-projeto.md` |
+| 2 | [plan-03.11-resposta-redigida-pelo-llm-com-rag-do-catalogo](plan/plan-03.11-resposta-redigida-pelo-llm-com-rag-do-catalogo.md) | Fazer o LLM redigir a resposta a partir das fontes recuperadas do catálogo (RAG), com guarda na saída | 03.10 | 🔴 A executar | `adr/007-llm-redige-a-resposta-com-rag-do-catalogo.md` |
+| 3 | [plan-04.05-interface-em-formato-de-chat](plan/plan-04.05-interface-em-formato-de-chat.md) | Mostrar a aba Cidadão como um chat, com a conversa na tela e avaliação por resposta | 03.11 | 🔴 A executar | `specs/04.02-interface.md` |
+| 4 | [plan-04.04-revisao-com-categoria-e-exportacao](plan/plan-04.04-revisao-com-categoria-e-exportacao.md) | Registrar a categoria correta na revisão e exportar pedidos anonimizados | — | 🔴 A executar | `specs/arquitetura/04.01-persistencia.md` |
 
 ---
 

@@ -8,22 +8,26 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from triage.config import load_settings
+from triage.config import ConfigError, load_settings
 from triage.interface.service import AppService, build_service
 from triage.interface.views import render_banner, render_citizen_tab, render_review_tab
 from triage.logging_setup import configure_logging
 from triage.storage import StorageError
 
 DB_FILENAME = "triage.db"
-STARTUP_ERROR_MESSAGE = "Não foi possível iniciar o atendimento (banco de dados inacessível). Tente novamente mais tarde."
+STARTUP_ERROR_MESSAGE = "Não foi possível iniciar o atendimento (configuração ou banco de dados inacessível). Tente novamente mais tarde."
 
 logger = logging.getLogger("triage.app")
 
 
 @st.cache_resource
 def _load_service() -> AppService | None:
-    """Monta as dependências uma única vez; falha de infraestrutura vira `None` (mensagem na tela, sem traceback)."""
-    settings = load_settings()
+    """Monta as dependências uma única vez; falha de configuração ou de infraestrutura vira `None` (mensagem na tela, sem traceback)."""
+    try:
+        settings = load_settings()
+    except ConfigError as error:
+        logger.error("Configuração inválida; a interface não foi iniciada (%s)", error)
+        return None
     configure_logging(settings)
     try:
         return build_service(settings, Path(settings.output_dir) / DB_FILENAME)

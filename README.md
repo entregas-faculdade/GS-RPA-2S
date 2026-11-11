@@ -85,28 +85,36 @@ python -m ruff check run.py src tests
 
 ## Como configurar as chaves
 
-O robô funciona **sem nenhuma chave**: o LLM é opcional e vem **desligado**. Para ligá-lo:
+O robô funciona **sem nenhuma chave e sem LLM**: o LLM é opcional e vem **desligado**. A configuração tem duas fontes:
 
-1. Copie `.env.example` para `.env` (o `.env` está no `.gitignore` e nunca vai ao repositório).
-2. Preencha `LLM_ENABLED=true`, `LLM_BASE_URL`, `LLM_MODEL` e `LLM_API_KEY` com um provedor de API compatível com
-   `/chat/completions` e de camada gratuita.
+- **`.env`** (fora do Git): guarda **só a chave** do LLM, `LLM_API_KEY`. Nenhuma outra variável de ambiente altera o robô.
+- **`config/settings.json`** (versionado): todo o resto. Arquivo ausente ou JSON inválido impede o robô de subir (código de
+  saída `1` no `run.py`; mensagem na tela no `app.py`). Campo ausente ou inválido volta ao padrão e é avisado no log.
 
-| Variável | Para que serve |
+Para ligar o LLM:
+
+1. Copie `.env.example` para `.env` (o `.env` está no `.gitignore` e nunca vai ao repositório) e preencha `LLM_API_KEY`
+   com a chave de um provedor de API compatível com `/chat/completions` (os modelos de `config/settings.json` são do OpenRouter).
+2. Em `config/settings.json`, troque `llm.enabled` para `true`. Também dá para ligar só numa execução: `python run.py --llm`.
+
+| Chave de `config/settings.json` | Para que serve |
 |---|---|
-| `LLM_ENABLED` | liga (`true`) ou desliga o LLM; padrão desligado |
-| `LLM_BASE_URL`, `LLM_MODEL`, `LLM_API_KEY` | provedor, modelo e chave do LLM (só no `.env`) |
-| `LLM_ASSIST_LOCATE` | liga o assistente de localização (modo b, abaixo); exige `LLM_ENABLED`; padrão desligado |
-| `LLM_FALLBACK_MODELS` | modelos alternativos, separados por vírgula, tentados na ordem se o principal falhar; opcional |
-| `LLM_AGENT_ID` | agente em `data/agents/<id>/` (padrão `triage-assistant`); opcional |
-| `LOG_LEVEL` | nível do log (padrão `INFO`) |
-| `CONFIDENCE_MIN`, `AMBIGUITY_MARGIN` | limiares da revisão humana (padrão `0.60` e `0.15`), opcionais |
+| `log_level` | nível do log (padrão `INFO`) |
+| `llm.enabled` | liga (`true`) ou desliga o LLM; padrão desligado |
+| `llm.base_url`, `llm.model` | provedor (formato `/chat/completions`) e modelo principal |
+| `llm.fallback_models` | lista de modelos alternativos, tentados na ordem se o principal falhar; pode ser vazia |
+| `llm.agent_id` | agente em `data/agents/<id>/` (padrão `triage-assistant`) |
+| `llm.assist_locate` | liga o assistente de localização (modo b, abaixo); exige `llm.enabled`; padrão desligado |
+| `triage.confidence_min`, `triage.ambiguity_margin` | limiares da revisão humana (padrão `0.60` e `0.15`), em [0, 1] |
+| `finder.min_score`, `finder.margin` | limiares do localizador de fontes (padrão `0.25` e `0.15`), em [0, 1] |
+| `link_check.user_agent` | identificação do verificador de links (nome do projeto; não imita navegador) |
 
-O LLM tem **dois modos**, independentes e sempre sob o `LLM_ENABLED`:
+O LLM tem **dois modos**, independentes e sempre sob o `llm.enabled`:
 
 | Modo | Interruptor | O que envia ao provedor |
 |---|---|---|
-| **(a) Reformulação** | `LLM_ENABLED=true` | só o texto-modelo da resposta já decidida (links e telefones do catálogo); **nunca** o pedido do cidadão |
-| **(b) Assistente de localização** | `LLM_ENABLED=true` **e** `LLM_ASSIST_LOCATE=true` (padrão `false`) | o texto do pedido **anonimizado** e uma lista de até 5 fontes aprovadas (`id`, nome, órgão) |
+| **(a) Reformulação** | `llm.enabled: true` | só o texto-modelo da resposta já decidida (links e telefones do catálogo); **nunca** o pedido do cidadão |
+| **(b) Assistente de localização** | `llm.enabled: true` **e** `llm.assist_locate: true` (padrão `false`) | o texto do pedido **anonimizado** e uma lista de até 5 fontes aprovadas (`id`, nome, órgão) |
 
 **(a) Reformulação.** O LLM só reescreve a resposta que o robô já decidiu. Se ele falhar, vier vazio ou trouxer link ou
 telefone fora do esperado, vale o texto-modelo e o motivo vai para o log.
@@ -133,17 +141,28 @@ O comportamento do LLM não está no código: o **agente** é definido por arqui
 | `data/agents/<id>/workflow.md` | uma seção `## Tarefa: <nome>` por tarefa (hoje, `rewrite` e `locate`) |
 | `data/agents/<id>/config.json` | temperatura, `max_tokens`, timeout e política de tentativas |
 
-**`.env` × versionado:** o que muda por ambiente ou é segredo fica no `.env` (`LLM_ENABLED`, `LLM_BASE_URL`,
-`LLM_MODEL`, `LLM_API_KEY`, `LLM_FALLBACK_MODELS`, `LLM_AGENT_ID`); o que é comportamento do agente fica nos arquivos
-acima. Provedor e modelo se trocam só pelo `.env`: Groq e OpenRouter, por exemplo, falam o mesmo formato de chat.
+**`.env` × versionado:** o `.env` guarda só a chave (`LLM_API_KEY`); provedor, modelos, `llm.agent_id` e os interruptores
+ficam em `config/settings.json`; o comportamento do agente fica nos arquivos acima. Provedor e modelo se trocam só em
+`config/settings.json`: Groq e OpenRouter, por exemplo, falam o mesmo formato de chat.
 
-Exemplo **gratuito** no OpenRouter (o nome de modelo gratuito muda com o tempo; confira a lista do provedor):
+Exemplo no OpenRouter (modelos do `config/settings.json` entregue; o nome de modelo gratuito muda com o tempo, confira a
+lista do provedor). No `.env`:
 
 ```
-LLM_ENABLED=true
-LLM_BASE_URL=https://openrouter.ai/api/v1
-LLM_MODEL=openrouter/free
 LLM_API_KEY=<sua chave>
+```
+
+Em `config/settings.json`:
+
+```json
+"llm": {
+  "enabled": true,
+  "base_url": "https://openrouter.ai/api/v1",
+  "model": "deepseek/deepseek-v4-flash",
+  "fallback_models": ["deepseek/deepseek-v4-flash-0731", "deepseek/deepseek-v3.2", "minimax/minimax-m3:free", "openrouter/free"],
+  "agent_id": "triage-assistant",
+  "assist_locate": false
+}
 ```
 
 O LLM é opcional e vem **desligado**; o robô roda e é avaliado sem ele. Agente ausente ou inválido também desliga o LLM
