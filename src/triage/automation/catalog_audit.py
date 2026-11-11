@@ -1,9 +1,9 @@
-"""Auditoria do catálogo: esquema, allowlist, links, telefones e idade da verificação. Nunca altera o catálogo."""
+"""Auditoria do catálogo (catálogo + base enriquecida): esquema, `content`, allowlist, links, telefones e idade. Nunca altera nada."""
 
 import logging
 import re
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date
 
 import requests
@@ -34,12 +34,13 @@ logger = logging.getLogger("triage.automation")
 
 @dataclass(frozen=True)
 class Check:
-    """Resultado de uma verificação sobre uma entrada (`level`: ok, warning ou error)."""
+    """Resultado de uma verificação sobre uma entrada (`level`: ok, warning ou error); `source` é o arquivo de origem."""
 
     entry_id: str
     name: str
     level: str
     detail: str
+    source: str = ""
 
 
 @dataclass(frozen=True)
@@ -72,32 +73,32 @@ def _record_id(record: object, index: int) -> str:
 
 
 class CatalogAuditor:
-    """Audita registros crus do catálogo; guarda links e páginas já consultados (uma vez por execução)."""
+    """Audita registros crus do catálogo; guarda links, páginas e `id`s já vistos (uma vez por execução, entre arquivos)."""
 
     def __init__(self, allowed_suffixes: frozenset[str], options: AuditOptions) -> None:
         self._allowed_suffixes = allowed_suffixes
         self._options = options
         self._statuses: dict[str, LinkStatus] = {}
         self._pages: dict[str, str | None] = {}
+        self._seen_ids: set[str] = set()
 
-    def audit(self, records: Sequence[object]) -> list[Check]:
-        """Um resultado por verificação, na ordem dos registros."""
+    def audit(self, records: Sequence[object], source: str = "") -> list[Check]:
+        """Um resultado por verificação, na ordem dos registros, cada um com o arquivo de origem (`source`)."""
         checks: list[Check] = []
-        seen_ids: set[str] = set()
         for index, record in enumerate(records):
-            entry_id = _record_id(record, index)
-            try:
-                entry = parse_entry(record)
-            except CatalogRecordError as error:
-                checks.append(Check(entry_id, "schema", LEVEL_ERROR, str(error)))
-                continue
-            if entry.id in seen_ids:
-                checks.append(Check(entry.id, "id", LEVEL_ERROR, "id repetido; o segundo registro é ignorado"))
-                continue
-            seen_ids.add(entry.id)
-            checks.append(Check(entry.id, "schema", LEVEL_OK, "registro válido e id único"))
-            checks.extend(self._audit_entry(entry))
+            checks.extend(replace(check, source=source) for check in self._audit_record(record, index))
         return checks
+
+    def _audit_record(self, record: object, index: int) -> list[Check]:
+        entry_id = _record_id(record, index)
+        try:
+            entry = parse_entry(record)
+        except CatalogRecordError as error:
+            return [Check(entry_id, "schema", LEVEL_ERROR, str(error))]
+        if entry.id in self._seen_ids:
+            return [Check(entry.id, "id", LEVEL_ERROR, "id repetido; o segundo registro é ignorado")]
+        self._seen_ids.add(entry.id)
+        return [Check(entry.id, "schema", LEVEL_OK, "registro válido e id único"), *self._audit_entry(entry)]
 
     def _audit_entry(self, entry: ServiceEntry) -> list[Check]:
         checks = self._check_allowlist(entry)
@@ -193,6 +194,14 @@ class CatalogAuditor:
 def audit_catalog(records: Sequence[object], allowed_suffixes: frozenset[str], options: AuditOptions) -> list[Check]:
     """Audita os registros crus do catálogo e devolve um resultado por verificação."""
     return CatalogAuditor(allowed_suffixes, options).audit(records)
+
+
+def audit_catalog_files(
+    files: Sequence[tuple[str, Sequence[object]]], allowed_suffixes: frozenset[str], options: AuditOptions
+) -> list[Check]:
+    """Audita vários arquivos (`(nome, registros)`, em ordem) como um conjunto: `id` repetido entre arquivos é erro."""
+    auditor = CatalogAuditor(allowed_suffixes, options)
+    return [check for name, records in files for check in auditor.audit(records, name)]
 
 
 def has_errors(checks: Sequence[Check]) -> bool:

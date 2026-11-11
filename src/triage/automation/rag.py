@@ -24,6 +24,7 @@ SOURCE_FIELDS = (
     "Abrangência: {coverage}",
     "Instruções: {instructions}",
 )
+CONTENT_FIELD = "Conteúdo: {content}"
 LINKS_HEADER = "Links:"
 PHONES_HEADER = "Telefones:"
 
@@ -40,9 +41,11 @@ class RagResult:
 
 
 def _source_block(number: int, source: ServiceEntry) -> list[str]:
-    """Uma fonte exatamente como no catálogo: campos, `rótulo: url` por link e `rótulo: número` por telefone."""
+    """Uma fonte exatamente como no catálogo: campos, `Conteúdo:` (se houver), `rótulo: url` por link e `rótulo: número` por telefone."""
     lines = [SOURCE_HEADER.format(number=number)]
     lines.extend(field.format(**vars(source)) for field in SOURCE_FIELDS)
+    if source.content:
+        lines.append(CONTENT_FIELD.format(content=_neutralize_delimiters(source.content)))
     if source.links:
         lines.extend([LINKS_HEADER, *(f"- {link.label}: {link.url}" for link in source.links)])
     if source.phones:

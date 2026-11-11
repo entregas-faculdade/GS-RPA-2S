@@ -61,11 +61,18 @@ def _source_phones(sources: Sequence[ServiceEntry]) -> set[str]:
     return {re.sub(r"\D", "", phone.number) for source in sources for phone in source.phones}
 
 
+def _source_text_numbers(sources: Sequence[ServiceEntry]) -> set[str]:
+    """Sequências de dígitos do texto oficial das fontes (`instructions` e `content`): números que o LLM pode repetir."""
+    texts = [text for source in sources for text in (source.instructions, source.content)]
+    return {digits for text in texts for digits in phone_digit_sequences(text)}
+
+
 def validate_rag_output(text: str, sources: Sequence[ServiceEntry]) -> str | None:
     """Devolve o motivo da rejeição, ou `None` se a saída serve.
 
     Rejeita texto vazio, acima de `MAX_RESPONSE_LENGTH`, com URL que não seja de um link das fontes
-    (igualdade exata), com telefone que não seja de uma das fontes ou sem nenhum link nem telefone delas.
+    (igualdade exata), com número de 3+ dígitos que não seja telefone das fontes nem apareça no texto oficial delas
+    (`instructions`, `content`) ou sem nenhum link nem telefone delas.
     """
     if not text or not text.strip():
         return REJECT_EMPTY
@@ -77,7 +84,8 @@ def validate_rag_output(text: str, sources: Sequence[ServiceEntry]) -> str | Non
         return REJECT_FOREIGN_URL
     phones = _source_phones(sources)
     mentioned = phone_digit_sequences(text)
-    if any(digits not in phones for digits in mentioned):
+    allowed_numbers = phones | _source_text_numbers(sources)
+    if any(digits not in allowed_numbers for digits in mentioned):
         return REJECT_FOREIGN_PHONE
     if source_urls.isdisjoint(urls) and phones.isdisjoint(mentioned):
         return REJECT_MISSING_ANCHOR

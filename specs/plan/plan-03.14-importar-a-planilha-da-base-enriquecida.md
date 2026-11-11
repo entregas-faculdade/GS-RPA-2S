@@ -75,6 +75,7 @@ Fatos medidos pelo revisor na planilha (o executor reconfirma):
 - `docs/guia-da-base-enriquecida.md` — acrescentar a seção "Importar da planilha" (comando, colunas, o que o script faz e não faz)
 - `README.md` — uma linha sobre a base importada
 - `tests/automation/` — testes do importador e da allowlist
+- `tests/evaluation/test_finder_metrics.py`, `tests/pipeline/conftest.py`, `tests/interface/conftest.py`, `tests/interface/test_service_tiers.py`, `tests/automation/test_resolver.py` — onde chamam `load_catalog()` sem `extra_dir=None` e fixam contagens ou áreas do catálogo piloto, passar a ler só o catálogo versionado (a base importada não pode alterar o que eles afirmam sobre o piloto)
 
 ## 3.2 Fora
 - Editar a planilha, o `data/catalog.json`, as palavras-chave ou o conteúdo (são do usuário); `content` de qualquer registro.
@@ -114,7 +115,8 @@ Fatos medidos pelo revisor na planilha (o executor reconfirma):
    registro de cada esfera; `area` pela tabela e o padrão `city`; `kind` portal; palavras-chave aparadas e sem repetição; linha sem `ID` ou sem URL
    ignorada; host fora da allowlist vira `candidate`; saída determinística; o `sp_expanded.json` do repositório carrega por `load_catalog()` sem
    registro rejeitado e com os 72 ids; os 4 sufixos novos na allowlist.
-9. Rodar a verificação do §7.
+9. [dirigido] **Testes que fixam o piloto.** Nos cinco arquivos de teste do §3.1 que chamam `load_catalog()` sem `extra_dir=None`, passar `extra_dir=None` quando a asserção depender de contagem ou área do catálogo piloto; os demais ficam como estão.
+10. Rodar a verificação do §7.
 
 # 6. Critérios de aceite
 - [ ] `data/catalog.d/sp_expanded.json` existe, é gerado pelo script e tem 72 registros (menos os ignorados, se houver, listados no relatório), todos válidos em `load_catalog()`.

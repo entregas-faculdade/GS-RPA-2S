@@ -37,12 +37,12 @@ def _alive(url: str) -> LinkStatus:
 
 
 def _approved() -> list[ServiceEntry]:
-    return [entry for entry in load_catalog() if entry.status == APPROVED]
+    return [entry for entry in load_catalog(extra_dir=None) if entry.status == APPROVED]
 
 
 def test_every_record_loads_in_the_v2_format() -> None:
     records = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
-    assert len(load_catalog()) == len(records)
+    assert len(load_catalog(extra_dir=None)) == len(records)
 
 
 def test_ids_are_unique() -> None:
@@ -62,7 +62,7 @@ def test_every_approved_record_has_enough_keywords() -> None:
 
 @pytest.mark.parametrize("category", sorted(ORIGINAL_CATEGORY_URLS))
 def test_original_categories_still_resolve_to_the_same_url(category: str) -> None:
-    lookup = CatalogLookup(load_catalog(), GOV_BR, _alive)
+    lookup = CatalogLookup(load_catalog(extra_dir=None), GOV_BR, _alive)
     resolution = resolve_service(category, lookup)
     assert resolution.service is not None
     assert resolution.service.links[0].url == ORIGINAL_CATEGORY_URLS[category]
@@ -79,7 +79,7 @@ def test_safety_has_an_approved_record_with_phone() -> None:
 
 def test_keywords_are_not_shared_across_areas_except_documented() -> None:
     areas_by_keyword: dict[str, set[str]] = defaultdict(set)
-    for entry in load_catalog():
+    for entry in load_catalog(extra_dir=None):
         for keyword in entry.keywords:
             areas_by_keyword[keyword.strip().lower()].add(entry.area)
     shared = {keyword for keyword, areas in areas_by_keyword.items() if len(areas) > 1}
@@ -88,7 +88,7 @@ def test_keywords_are_not_shared_across_areas_except_documented() -> None:
 
 def test_manual_checks_only_sit_on_allowed_links_with_a_valid_past_date() -> None:
     today = date.today()
-    for entry in load_catalog():
+    for entry in load_catalog(extra_dir=None):
         for link in (link for link in entry.links if link.manual_check_on):
             assert is_allowed(link.url), (entry.id, link.url)
             assert date.fromisoformat(link.manual_check_on) <= today, (entry.id, link.url)

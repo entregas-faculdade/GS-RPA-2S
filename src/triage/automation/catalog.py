@@ -7,6 +7,9 @@ from datetime import date
 from pathlib import Path
 
 CATALOG_PATH = Path("data") / "catalog.json"
+CATALOG_DIR_PATH = Path("data") / "catalog.d"
+CATALOG_DIR_PATTERN = "*.json"
+MAX_CONTENT_LENGTH = 3000
 
 KIND_SERVICE = "service"
 KINDS = frozenset({KIND_SERVICE, "portal", "channel"})
@@ -63,6 +66,7 @@ class ServiceEntry:
     source_note: str
     verified_on: str
     status: str
+    content: str = ""
 
 
 def _text(record: dict, name: str) -> str:
@@ -85,6 +89,16 @@ def _category(record: dict) -> str | None:
     value = record["category"]
     if value is not None and (not isinstance(value, str) or not value.strip()):
         raise CatalogRecordError("campo category deve ser texto ou null")
+    return value
+
+
+def _content(record: dict) -> str:
+    """Trecho oficial da página, opcional: ausente vale vazio; presente, precisa ser texto não vazio de até `MAX_CONTENT_LENGTH`."""
+    if "content" not in record:
+        return ""
+    value = _text(record, "content")
+    if len(value) > MAX_CONTENT_LENGTH:
+        raise CatalogRecordError(f"campo content com {len(value)} caracteres (limite {MAX_CONTENT_LENGTH})")
     return value
 
 
@@ -172,6 +186,7 @@ def parse_entry(record: object) -> ServiceEntry:
         source_note=_text(record, "source_note"),
         verified_on=_text(record, "verified_on"),
         status=_choice(record, "status", STATUSES),
+        content=_content(record),
     )
     _validate_shape(entry)
     return entry
@@ -188,18 +203,20 @@ def read_catalog_records(path: Path = CATALOG_PATH) -> list:
     return records
 
 
-def load_catalog(path: Path = CATALOG_PATH) -> list[ServiceEntry]:
-    """Lê as entradas v2 na ordem do arquivo; falha segura: arquivo ausente ou inválido devolve `[]`.
-
-    Registro inválido ou com `id` repetido é ignorado com log.
-    """
-    try:
-        records = read_catalog_records(path)
-    except CatalogFileError as error:
-        logger.error("%s", error)
+def catalog_extra_files(directory: Path | None = CATALOG_DIR_PATH) -> list[Path]:
+    """Os `*.json` da pasta da base enriquecida, em ordem de nome; pasta ausente, vazia ou ilegível devolve `[]`."""
+    if directory is None or not directory.is_dir():
         return []
+    try:
+        return sorted(directory.glob(CATALOG_DIR_PATTERN), key=lambda file: file.name)
+    except OSError as error:
+        logger.error("Pasta do catálogo ilegível (%s): %s", directory, error)
+        return []
+
+
+def _parse_records(records: list, seen_ids: set[str]) -> list[ServiceEntry]:
+    """Converte os registros de um arquivo; inválido ou com `id` já visto (neste ou em arquivo anterior) é ignorado com log."""
     entries: list[ServiceEntry] = []
-    seen_ids: set[str] = set()
     for record in records:
         try:
             entry = parse_entry(record)
@@ -211,6 +228,24 @@ def load_catalog(path: Path = CATALOG_PATH) -> list[ServiceEntry]:
             continue
         seen_ids.add(entry.id)
         entries.append(entry)
+    return entries
+
+
+def load_catalog(path: Path = CATALOG_PATH, extra_dir: Path | None = CATALOG_DIR_PATH) -> list[ServiceEntry]:
+    """Lê as entradas v2 de `path` e depois de cada `*.json` de `extra_dir` (ordem de nome); `extra_dir=None` lê só `path`.
+
+    Falha segura: arquivo ausente, ilegível ou fora de lista é registrado e ignorado, sem derrubar os demais.
+    Registro inválido ou com `id` repetido (vale o primeiro, mesmo entre arquivos) é ignorado com log.
+    """
+    entries: list[ServiceEntry] = []
+    seen_ids: set[str] = set()
+    for file in [path, *catalog_extra_files(extra_dir)]:
+        try:
+            records = read_catalog_records(file)
+        except CatalogFileError as error:
+            logger.error("%s", error)
+            continue
+        entries.extend(_parse_records(records, seen_ids))
     return entries
 
 

@@ -1,13 +1,19 @@
 """Localizador de fontes: só entradas aprovadas, pontuação e folga, limiares e determinismo (catálogo fake, sem rede)."""
 
+import csv
 import dataclasses
 from collections.abc import Callable
+from pathlib import Path
 
 import pytest
+from sklearn.feature_extraction.text import TfidfVectorizer
 
-from triage.automation.catalog import ServiceEntry
+from triage.automation.catalog import ServiceEntry, approved_only, load_catalog
 from triage.automation.finder import FinderMatch, ServiceFinder
+from triage.classification.preprocessing import normalize
 from triage.config import Settings
+
+FINDER_CSV = Path("data") / "labeled" / "finder_requests.csv"
 
 SETTINGS = Settings(
     llm_enabled=False,
@@ -205,3 +211,54 @@ def test_top_candidates_never_include_candidate_entries(entries: list[ServiceEnt
     finder = ServiceFinder([*entries, candidate], SETTINGS)
 
     assert finder.top_candidates("quero o passaporte", 5) == ()
+
+
+def test_the_content_of_an_entry_is_searchable(make_entry: MakeEntry) -> None:
+    plain = make_entry("plain", keywords=("tema",), display_name="Tema geral", agency="Órgão A")
+    with_content = make_entry(
+        "detailed",
+        keywords=("outro tema",),
+        display_name="Outro tema",
+        agency="Órgão B",
+        content="Para trocar o hodometro adulterado procure a vistoria veicular obrigatoria.",
+    )
+    finder = ServiceFinder([plain, with_content], SETTINGS)
+
+    match = finder.find("meu hodometro esta adulterado")
+
+    assert match is not None
+    assert match.entry.id == "detailed"
+    assert ServiceFinder([plain, dataclasses.replace(with_content, content="")], SETTINGS).best("hodometro adulterado") is None
+
+
+def _legacy_best(entries: list[ServiceEntry], text: str) -> tuple[str, float, float] | None:
+    """Referência: o localizador de antes do `content` (documento = keywords + nome + órgão), montado à parte."""
+    approved = sorted(approved_only(entries), key=lambda entry: entry.id)
+    documents = [" ".join((*entry.keywords, entry.display_name, entry.agency)) for entry in approved]
+    vectorizer = TfidfVectorizer(preprocessor=normalize, ngram_range=(1, 2), sublinear_tf=True)
+    matrix = vectorizer.fit_transform(documents)
+    query = vectorizer.transform([text])
+    if query.nnz == 0:
+        return None
+    scores = matrix.dot(query.T).toarray().ravel().tolist()
+    best = scores.index(max(scores))
+    margin = scores[best] - max(scores[:best] + scores[best + 1 :], default=0.0)
+    return approved[best].id, scores[best], margin
+
+
+def test_without_content_scores_are_identical_to_the_previous_finder_on_the_labeled_requests() -> None:
+    entries = load_catalog(extra_dir=None)
+    assert all(entry.content == "" for entry in entries)
+    finder = ServiceFinder(entries, SETTINGS)
+    with FINDER_CSV.open(encoding="utf-8", newline="") as handle:
+        texts = [row["text"] for row in csv.DictReader(handle)]
+    assert len(texts) == 96
+
+    for text in texts:
+        expected = _legacy_best(entries, text)
+        actual = finder.best(text)
+        if expected is None:
+            assert actual is None, text
+            continue
+        assert actual is not None, text
+        assert (actual.entry.id, actual.score, actual.margin) == (expected[0], pytest.approx(expected[1]), pytest.approx(expected[2])), text

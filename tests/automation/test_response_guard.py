@@ -151,3 +151,56 @@ def test_a_link_or_phone_of_a_source_that_was_not_sent_is_foreign() -> None:
 def test_a_bare_host_of_any_source_is_accepted() -> None:
     assert validate_rag_output(f"No saude.gov.br ou em {URL}", (SERVICE, OTHER_SOURCE)) is None
     assert validate_rag_output(f"No saude.gov.br ou em {URL}", (SERVICE,)) == REJECT_FOREIGN_URL
+
+
+TEXT_SOURCE = dataclasses.replace(
+    SERVICE,
+    instructions="Leve o RG. A taxa é de 85 reais e o prazo de 30 dias.",
+    content="Atendimento pelo 156, protocolo de 6 dígitos. Lei 14129 de 2021; vale 3 meses.",
+)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        f"Ligue 156 e acesse {URL}",
+        f"Em 30 dias, acesse {URL}",
+        f"Veja a Lei 14129 em {URL}",
+        f"A taxa é de 85 reais; acesse {URL}",
+        f"Ligue 135 e cite a Lei 14129. {URL}",
+    ],
+)
+def test_accepts_numbers_that_appear_in_the_source_text(text: str) -> None:
+    assert validate_rag_output(text, (TEXT_SOURCE,)) is None
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        f"Ligue 157 e acesse {URL}",
+        f"Em 45 dias úteis ou 120 dias, acesse {URL}",
+        f"Veja a Lei 14130 em {URL}",
+        f"Pague 1000 reais em {URL}",
+        f"Ligue 0800 999 9999 ou acesse {URL}",
+    ],
+)
+def test_rejects_numbers_that_are_in_no_source_text_nor_phone(text: str) -> None:
+    assert validate_rag_output(text, (TEXT_SOURCE,)) == REJECT_FOREIGN_PHONE
+
+
+def test_numbers_of_a_source_that_was_not_sent_are_foreign() -> None:
+    sent = dataclasses.replace(SERVICE, instructions="Sem números.", content="")
+
+    assert validate_rag_output(f"Ligue 156. {URL}", (sent,)) == REJECT_FOREIGN_PHONE
+    assert validate_rag_output(f"Ligue 156. {URL}", (sent, TEXT_SOURCE)) is None
+
+
+def test_numbers_inside_urls_of_the_source_text_do_not_open_the_guard() -> None:
+    source = dataclasses.replace(SERVICE, content="Veja https://www.gov.br/lei/987654 para detalhes.")
+
+    assert validate_rag_output(f"Veja 987654 em {URL}", (source,)) == REJECT_FOREIGN_PHONE
+
+
+def test_url_and_anchor_rules_are_unchanged_by_the_source_text() -> None:
+    assert validate_rag_output("Prazo de 30 dias.", (TEXT_SOURCE,)) == REJECT_MISSING_ANCHOR
+    assert validate_rag_output(f"{URL} e https://www.gov.br/lei/14129", (TEXT_SOURCE,)) == REJECT_FOREIGN_URL

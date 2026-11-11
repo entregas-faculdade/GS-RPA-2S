@@ -9,10 +9,12 @@ from pathlib import Path
 import pytest
 
 from triage.automation import catalog_audit
+from triage.automation.catalog import MAX_CONTENT_LENGTH
 from triage.automation.catalog_audit import (
     AuditOptions,
     Check,
     audit_catalog,
+    audit_catalog_files,
     has_errors,
 )
 from triage.automation.link_check import LinkStatus
@@ -233,3 +235,90 @@ def test_script_exits_one_on_error_and_does_not_touch_the_file(
 
 def test_script_exits_one_when_catalog_is_missing(tmp_path: Path) -> None:
     assert _load_script().main(["--offline", "--catalog", str(tmp_path / "nada.json")]) == 1
+
+
+def test_content_over_the_limit_or_blank_is_a_schema_error_pointing_at_the_file(make_record: Callable[..., dict]) -> None:
+    files = [
+        ("a.json", [make_record(id="long", content="a" * (MAX_CONTENT_LENGTH + 1))]),
+        ("b.json", [make_record(id="blank", content="  "), make_record(id="fine", content="Trecho oficial.")]),
+    ]
+    checks = audit_catalog_files(files, SUFFIXES, _options())
+    errors = [check for check in checks if check.level == "error"]
+    assert [(check.entry_id, check.source) for check in errors] == [("long", "a.json"), ("blank", "b.json")]
+    assert "content" in errors[0].detail and str(MAX_CONTENT_LENGTH) in errors[0].detail
+    assert "content" in errors[1].detail
+    assert {check.source for check in checks if check.entry_id == "fine"} == {"b.json"}
+
+
+def test_duplicate_id_across_files_is_an_error_in_the_second_file(make_record: Callable[..., dict]) -> None:
+    files = [("catalog.json", [make_record()]), ("catalog.d/a.json", [make_record(), make_record(id="novo")])]
+    checks = audit_catalog_files(files, SUFFIXES, _options())
+    duplicated = _find(checks, "id")
+    assert [(check.level, check.source) for check in duplicated] == [("error", "catalog.d/a.json")]
+    assert [check.source for check in _find(checks, "schema") if check.entry_id == "novo"] == ["catalog.d/a.json"]
+
+
+def test_a_dead_approved_link_in_an_extra_file_is_an_error_with_its_file(make_record: Callable[..., dict]) -> None:
+    record = make_record(id="detailed", content="Trecho.")
+    options = _options(link_checker=_checker(frozenset({GOOD_URL})))
+    checks = audit_catalog_files([("catalog.d/a.json", [record])], SUFFIXES, options)
+    errors = [check for check in checks if check.level == "error"]
+    assert [(check.name, check.source) for check in errors] == [("links", "catalog.d/a.json")]
+
+
+def test_audit_catalog_without_a_file_name_keeps_the_source_empty(make_record: Callable[..., dict]) -> None:
+    assert {check.source for check in audit_catalog([make_record()], SUFFIXES, _options())} == {""}
+
+
+def _write_catalog(path: Path, records: list) -> Path:
+    path.write_text(json.dumps(records), encoding="utf-8")
+    return path
+
+
+def test_script_reads_the_extra_dir_and_points_at_the_file_of_each_error(
+    tmp_path: Path, make_record: Callable[..., dict], capsys: pytest.CaptureFixture[str]
+) -> None:
+    main = _write_catalog(tmp_path / "catalog.json", [make_record()])
+    extra = tmp_path / "catalog.d"
+    extra.mkdir()
+    _write_catalog(extra / "a.json", [make_record(id="ok_extra", content="Trecho oficial.")])
+    _write_catalog(extra / "b.json", [make_record(id="longo", content="a" * (MAX_CONTENT_LENGTH + 1))])
+    code = _load_script().main(["--offline", "--catalog", str(main), "--catalog-dir", str(extra)])
+    out = capsys.readouterr().out
+    assert code == 1
+    assert "ERRO  longo [schema]" in out and str(extra / "b.json") in out
+    assert "3 registro(s) verificado(s); com erro." in out
+
+
+def test_script_is_green_when_the_extra_dir_has_only_valid_records(
+    tmp_path: Path, make_record: Callable[..., dict], capsys: pytest.CaptureFixture[str]
+) -> None:
+    main = _write_catalog(tmp_path / "catalog.json", [make_record()])
+    extra = tmp_path / "catalog.d"
+    extra.mkdir()
+    _write_catalog(extra / "a.json", [make_record(id="ok_extra", content="Trecho oficial.")])
+    (extra / "README.md").write_text("ignorado", encoding="utf-8")
+    assert _load_script().main(["--offline", "--catalog", str(main), "--catalog-dir", str(extra)]) == 0
+    assert "2 registro(s) verificado(s); sem erro." in capsys.readouterr().out
+
+
+def test_script_reports_an_unreadable_extra_file_and_still_audits_the_others(
+    tmp_path: Path, make_record: Callable[..., dict], capsys: pytest.CaptureFixture[str]
+) -> None:
+    main = _write_catalog(tmp_path / "catalog.json", [make_record()])
+    extra = tmp_path / "catalog.d"
+    extra.mkdir()
+    (extra / "a.json").write_text("{nao é json", encoding="utf-8")
+    _write_catalog(extra / "b.json", [make_record(id="ok_extra")])
+    assert _load_script().main(["--offline", "--catalog", str(main), "--catalog-dir", str(extra)]) == 1
+    out = capsys.readouterr().out
+    assert "[file]" in out and str(extra / "a.json") in out
+    assert "ok_extra [schema]" in out
+
+
+def test_script_with_a_missing_extra_dir_audits_only_the_catalog(
+    tmp_path: Path, make_record: Callable[..., dict], capsys: pytest.CaptureFixture[str]
+) -> None:
+    main = _write_catalog(tmp_path / "catalog.json", [make_record()])
+    assert _load_script().main(["--offline", "--catalog", str(main), "--catalog-dir", str(tmp_path / "nada")]) == 0
+    assert "1 registro(s) verificado(s); sem erro." in capsys.readouterr().out

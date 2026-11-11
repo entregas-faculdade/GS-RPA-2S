@@ -4,7 +4,7 @@ familia: "03"
 item: "R03.12"
 titulo: "Aceitar uma base enriquecida do catálogo (conteúdo por página, vários arquivos) e usá-la na recuperação e na resposta"
 dominio: "Automação"
-status: "🟡 Em execução"
+status: "🟢 Aprovada"
 prioridade: "Alta"
 tags: ["plan"]
 relacionados: ["[[03.01-catalogo-e-allowlist]]", "[[03.02-resposta-final-e-llm]]", "[[03.03-localizador-de-servicos]]", "[[007-llm-redige-a-resposta-com-rag-do-catalogo]]"]
@@ -135,8 +135,102 @@ responde com `status` aprovado, domínio na allowlist e link vivo.
 
 <!-- Preenchido pelo EXECUTOR. Append-only: cada rodada acrescenta um bloco novo; nada é removido. -->
 
+## Resumo da execução — 2026-11-11
+
+**Resultado:** Concluído com pendências (as pendências são riscos e achados fora do escopo; todos os critérios de aceite foram atendidos)
+
+**O que foi feito**
+- `catalog.py:95` `_content` e campo `ServiceEntry.content = ""`: opcional; ausente vale vazio; presente exige texto não vazio de até `MAX_CONTENT_LENGTH = 3000`, senão `CatalogRecordError` (o registro é ignorado com log) — §2.1.
+- `catalog.py:234` `load_catalog(path, extra_dir=CATALOG_DIR_PATH)`: lê `path` e depois os `*.json` de `extra_dir` em ordem de nome (`catalog_extra_files`); `id` repetido vale o primeiro, também entre arquivos (`_parse_records`); arquivo ilegível ou fora de lista é registrado e ignorado sem derrubar os demais; `extra_dir=None` lê só `path`.
+- `finder.py:31` `_search_document`: acrescenta `content` ao documento só quando existe (sem `content` o texto indexado é o de antes).
+- `rag.py:27,48`: linha `Conteúdo:` depois das instruções, só quando a fonte tem `content`; `<<<PEDIDO` e `PEDIDO>>>` são removidos do trecho, como já eram do pedido.
+- `response_guard.py:64,87` `_source_text_numbers`: a guarda aceita, além dos telefones, as sequências de 3+ dígitos de `instructions` e `content` das fontes enviadas; URL, endereço e demais números seguem rejeitados.
+- `catalog_audit.py`: `Check.source` (arquivo de origem, padrão vazio); `CatalogAuditor` guarda os `id`s entre arquivos; `audit_catalog_files` audita o conjunto. O `content` é conferido pelo esquema (`parse_entry`): tamanho e vazio saem como erro `schema` com o arquivo.
+- `scripts/verify_catalog.py`: opção `--catalog-dir` (padrão `data/catalog.d`); audita catálogo + pasta; linhas `AVISO`/`ERRO` terminam com `(arquivo: ...)`; arquivo ilegível da pasta vira erro `[file]` sem derrubar os demais; catálogo principal ilegível segue como antes (log e saída 1).
+- `docs/guia-da-base-enriquecida.md` (novo), `data/catalog.d/README.md` (novo, uma linha, nenhum `.json`) e parágrafo "Base enriquecida" em `README.md`.
+- Testes em `tests/automation/`: `content` e vários arquivos (`test_catalog.py`), busca por `content` e pontuação idêntica sem ele (`test_finder.py`), `Conteúdo:` (`test_rag.py`), dígitos da fonte (`test_response_guard.py`), conjunto e verificador (`test_catalog_audit.py`). `test_catalog.py` e `test_catalog_content.py` passaram a ler o catálogo versionado com `extra_dir=None`, para a base do usuário não alterar o que eles afirmam sobre o piloto.
+
+**Arquivos alterados**
+| Arquivo | Natureza | O que mudou |
+|---|---|---|
+| `src/triage/automation/catalog.py` | alterado | `content`, `MAX_CONTENT_LENGTH`, `CATALOG_DIR_PATH`, leitura de vários arquivos |
+| `src/triage/automation/finder.py` | alterado | `content` no documento de busca |
+| `src/triage/automation/rag.py` | alterado | `Conteúdo:` no bloco da fonte |
+| `src/triage/automation/response_guard.py` | alterado | dígitos do texto das fontes aceitos |
+| `src/triage/automation/catalog_audit.py` | alterado | `Check.source`, `id`s entre arquivos, `audit_catalog_files` |
+| `scripts/verify_catalog.py` | alterado | `--catalog-dir`, arquivo de origem, arquivo ilegível |
+| `docs/guia-da-base-enriquecida.md` | criado | guia para montar a base |
+| `data/catalog.d/README.md` | criado | aponta o guia |
+| `README.md` | alterado | parágrafo da base enriquecida |
+| `tests/automation/test_catalog.py` | alterado | testes de `content` e de vários arquivos; leitura isolada do catálogo versionado |
+| `tests/automation/test_catalog_content.py` | alterado | `load_catalog(extra_dir=None)` |
+| `tests/automation/test_finder.py` | alterado | busca por `content`; pontuações idênticas sem `content` nos 96 pedidos |
+| `tests/automation/test_rag.py` | alterado | `Conteúdo:`, delimitadores, número do `content` na guarda |
+| `tests/automation/test_response_guard.py` | alterado | dígitos aceitos e rejeitados |
+| `tests/automation/test_catalog_audit.py` | alterado | auditoria do conjunto, `content`, arquivo de origem e script |
+
+**Verificações executadas**
+- `python -m pytest tests/automation tests/evaluation -q`, antes de editar → 338 passed.
+- `python -m pytest tests/automation tests/pipeline tests/interface tests/test_config.py -q` → 511 passed, 1 failed: `tests/test_config.py::test_shipped_config_equals_the_code_defaults`, porque `config/settings.json` já estava modificado no worktree (`llm.enabled: true`) antes de eu começar; não toquei nesse arquivo (ver Achados fora do escopo).
+- `python -m pytest tests/automation -q`, depois do último ajuste → 326 passed.
+- `python -m pytest tests/evaluation -q`, depois das edições (métricas do localizador) → 53 passed.
+- `python -m ruff check scripts tests/automation` e os 5 `.py` de `src/triage/automation` que alterei → All checks passed. `python -m ruff check src/triage/automation` (diretório inteiro) → 1 erro, `UP033` em `allowlist.py:18`, arquivo que não toquei.
+- `validate.py` do `padrao-python` em cada um dos 12 `.py` tocados → sem achado em 9. `test_rag.py` (2), `test_response_guard.py` (2) e `test_catalog_audit.py` (3) acusam só "URLs/hosts embutidos" em linhas que já existiam: rodei o validador sobre `git show HEAD:<arquivo>` e deu os mesmos achados e a mesma contagem. Um rascunho meu de `test_catalog_audit.py` somava uma URL nova e foi trocado.
+- `python scripts/verify_catalog.py --offline --max-age-days 100000` → `55 registro(s) verificado(s); sem erro.`, saída 0.
+- Sondagem do verificador (pasta temporária no scratchpad: `a.json` com `content` válido, `b.json` com `content` de 3001 caracteres) → `ERRO  probe_big [schema] campo content com 3001 caracteres (limite 3000) (arquivo: ...\probe\b.json)`, `57 registro(s) verificado(s); com erro.`, saída 1.
+- `python -m jupyter nbconvert --to notebook --execute notebooks/evidence.ipynb --output-dir <scratchpad>` → gravou o notebook executado, sem erro.
+- Sondagem da guarda ("30 dias" e "156"): `test_rag.py::test_a_number_from_the_content_passes_the_guard_and_another_one_does_not` e `test_response_guard.py::test_accepts_numbers_that_appear_in_the_source_text` / `test_rejects_numbers_that_are_in_no_source_text_nor_phone`. Com `content` contendo "30 dias" e "156", a saída com esses números passa; "45", "120", "999" e "157" são rejeitados com `foreign_phone`.
+- Não rodei a suíte inteira nem `ruff` em `run.py src tests` (verificação ampla é do revisor, §3.7 do prompt).
+
+**Estado inicial do worktree:** ` M config/settings.json` (modificação do usuário, anterior à execução); branch `develop`.
+
+**Ambiente após a verificação:** pytest e nbconvert subiram processos temporários (subprocessos do pytest, kernel do Jupyter), todos encerrados sozinhos. `environment.py snapshot` (antes do notebook, `--tmp-prefix gs-rpa`) e `diff` (depois): 0 diretórios temporários, 0 contêineres, imagens, volumes, redes, branches ou worktrees novos; o diff de processos lista só shells e utilitários desta sessão e processos do sistema, nenhum servidor ou kernel meu. Sondagem e notebook executado ficaram no scratchpad da sessão, fora do repositório.
+
+**Critérios de aceite**
+- [x] `content` válido carrega; acima de `MAX_CONTENT_LENGTH` é rejeitado com log; sem `content` nada muda — `test_catalog.py::test_content_defaults_to_empty_and_is_loaded_when_present`, `test_content_at_the_limit_is_valid_and_above_it_is_rejected_with_log`, `test_present_content_must_be_non_blank_text`.
+- [x] `data/catalog.d/*.json` lido além de `data/catalog.json`, `id` repetido resolvido pelo primeiro, falha de um arquivo isolada — `test_extra_files_are_read_after_the_catalog_in_name_order`, `test_duplicate_id_across_files_keeps_the_first`, `test_a_broken_extra_file_is_logged_and_does_not_drop_the_others`, `test_missing_or_empty_extra_dir_is_not_an_error`.
+- [x] A recuperação usa `content`; sem `content` as pontuações são idênticas — `test_finder.py::test_the_content_of_an_entry_is_searchable` e `test_without_content_scores_are_identical_to_the_previous_finder_on_the_labeled_requests` (96 pedidos contra uma montagem independente do índice antigo: entrada, pontuação e folga).
+- [x] `Conteúdo:` no bloco; a guarda aceita só dígitos do texto das fontes ou telefones delas e rejeita URL e telefone alheios — `test_rag.py`, `test_response_guard.py` (os testes antigos de URL seguem verdes sem alteração).
+- [x] `verify_catalog.py` audita o conjunto, indica o arquivo e segue verde no catálogo atual — sondagem acima e `test_catalog_audit.py::test_script_*`; catálogo atual: 55 registros, sem erro, saída 0.
+- [x] Guia existe, em português, sem URL inventada — `docs/guia-da-base-enriquecida.md` (única URL: a da entrada real `popular_pharmacy`; o `content` do exemplo é um marcador).
+- [x] Nenhum teste faz chamada real; ambiente e worktree limpos; `ruff` e validador sem violação nova — verificações acima.
+- [x] Notebook de evidências executa sem erro — nbconvert acima.
+
+**Decisões e suposições**
+- `content` presente mas vazio, só espaços, `null` ou não texto é **registro inválido** (não vira "sem `content`"): leio assim a linha do §2.1 do verificador, "se não é vazio quando presente". Ausente continua válido.
+- `content` é medido em caracteres brutos (sem `strip`) e guardado como veio.
+- `load_catalog(path, extra_dir=None)` lê só `path`: criei esse modo para os testes do catálogo versionado não dependerem da pasta real, que vai passar a ter a base do usuário. O padrão de `extra_dir` é `data/catalog.d`; catálogo principal ausente não impede a leitura da pasta.
+- No verificador as linhas `OK` não mudaram; só `AVISO` e `ERRO` ganharam `(arquivo: ...)`. A linha-resumo mantém o formato anterior, com o total de registros de todos os arquivos.
+- O `content` do exemplo do guia é um marcador explícito: copiar texto oficial de uma página exigiria consultar a rede (fora do escopo). O exemplo vem com `status: "candidate"`.
+- A guarda extrai os números do texto das fontes com o mesmo padrão dos telefones (`phone_digit_sequences`): número dentro de URL ou e-mail do `content` não vale.
+- Um aviso da ferramenta de edição disse que o `ruff` não estava instalado; é falso: `python -m ruff` (0.17.4, o de `requirements-dev.txt`) roda e foi o usado.
+
+**Achados fora do escopo (não corrigidos)**
+- `config/settings.json` está modificado no worktree (`llm.enabled: true`, anterior a esta execução) e faz `tests/test_config.py::test_shipped_config_equals_the_code_defaults` falhar.
+- `src/triage/automation/allowlist.py:18` — `ruff` UP033 (`@lru_cache(maxsize=None)` → `@functools.cache`), já existente.
+- `ruff format --check` acusa 26 arquivos de `src/triage/automation`, `scripts` e `tests/automation`: o projeto não usa `ruff format` como gate.
+- `tests/evaluation/test_finder_metrics.py`, `tests/pipeline/conftest.py`, `tests/interface/conftest.py`, `tests/interface/test_service_tiers.py` e `tests/automation/test_resolver.py` chamam `load_catalog()` sem `extra_dir=None`. Quando o usuário puser arquivos em `data/catalog.d/`, os que fixam contagens ou áreas do catálogo piloto (sobretudo o de métricas do localizador) podem passar a falhar por dado, não por defeito. Ficam fora do §3.1 (só `tests/automation/`), então não mexi.
+- `data/agents/` (persona e regras do LLM) não nomeia o campo `Conteúdo:`; o LLM o recebe na mensagem, mas a regra "use só as fontes" não o cita. O agente está fora do escopo (§3.2).
+
+**Pendências / riscos**
+- Nenhuma entrada real foi criada: o conteúdo da base é do usuário (§3.2).
+- Verificação ampla (suíte inteira, `ruff` em `run.py src tests`) não rodada por conta própria; a única falha conhecida é a de `test_config.py`, explicada acima.
+
 ---
 
 # 10. Veredito
 
 <!-- Preenchido pelo REVISOR. Append-only: um bloco por rodada, com o que foi verificado e como. -->
+
+## Veredito — 2026-11-11 — 🟢 Aprovado
+
+**Verificado pelo revisor (sem confiar no resumo):**
+- `git status`/`diff --stat`: só arquivos do §3.1 (catalog, catalog_audit, finder, rag, response_guard, verify_catalog, README, guia, `data/catalog.d/README.md` sem `.json`, testes de `tests/automation/`). `config/settings.json` modificado é do usuário (anterior à execução).
+- Diff lido por inteiro: `content` opcional validado (vazio, não texto e acima de 3000 são inválidos); `load_catalog(path, extra_dir)` lê catálogo + `*.json` em ordem de nome, `id` repetido vale o primeiro entre arquivos, arquivo ilegível isolado; `finder` só acrescenta `content` quando existe; `rag` ganha `Conteúdo:` com delimitadores neutralizados; guarda aceita dígitos de `instructions`/`content` das fontes; auditoria do conjunto com arquivo de origem.
+- `pytest tests/automation tests/pipeline tests/interface tests/test_config.py tests/evaluation -q` → 564 passed, 1 failed: `test_shipped_config_equals_the_code_defaults`, causado só pelo `llm.enabled: true` local do usuário (`assert True is False`), não pela execução.
+- `ruff check src/triage/automation scripts tests/automation` → 1 erro (UP033 em `allowlist.py:18`, arquivo não tocado, já no backlog 14). `validate.py`: 0 achados nos 6 `.py` de produção; nos testes, os achados `hardcoded` (3/2/2) são os mesmos de `HEAD`.
+- `verify_catalog.py --offline` → 55 registros, sem erro, saída 0.
+- Sondagem real (pasta temporária): registro com `content` achado por palavra só do `content` (`probe_iptu` primeiro); `id` repetido entre arquivos manteve o primeiro; JSON quebrado e `content` de 3001 isolados com log; guarda: "30 dias" e "156" passam, "120" é rejeitado (`foreign_phone`).
+- `nbconvert --execute notebooks/evidence.ipynb` → sem erro. Ambiente limpo (nada criado fora do escopo; arquivos de sondagem no scratchpad).
+
+**Fora do escopo, para o backlog:** log de registro inválido imprime o registro inteiro (com `content` de até 3000+ caracteres); persona/regras do agente não nomeiam `Conteúdo:`; testes que chamam `load_catalog()` sem `extra_dir=None` podem falhar por dado quando `data/catalog.d/` receber a base (tratado na 03.14).

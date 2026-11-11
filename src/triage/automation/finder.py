@@ -29,8 +29,9 @@ class FinderMatch:
 
 
 def _search_document(entry: ServiceEntry) -> str:
-    """Texto de busca da entrada: o que o cidadão diria (palavras-chave e nome) mais o órgão."""
-    return " ".join((*entry.keywords, entry.display_name, entry.agency))
+    """Texto de busca da entrada: o que o cidadão diria (palavras-chave e nome), o órgão e o trecho oficial, se houver."""
+    parts = (*entry.keywords, entry.display_name, entry.agency)
+    return " ".join((*parts, entry.content) if entry.content else parts)
 
 
 def _build_index(entries: tuple[ServiceEntry, ...]) -> tuple[TfidfVectorizer, Any] | None:
