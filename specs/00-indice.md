@@ -54,9 +54,8 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-03.11-resposta-redigida-pelo-llm-com-rag-do-catalogo](plan/plan-03.11-resposta-redigida-pelo-llm-com-rag-do-catalogo.md) | Fazer o LLM redigir a resposta a partir das fontes recuperadas do catálogo (RAG), com guarda na saída | — | 🟢 Aprovada | `adr/007-llm-redige-a-resposta-com-rag-do-catalogo.md` |
-| 2 | [plan-04.05-interface-em-formato-de-chat](plan/plan-04.05-interface-em-formato-de-chat.md) | Mostrar a aba Cidadão como um chat, com a conversa na tela e avaliação por resposta | 03.11 | 🔴 A executar | `specs/04.02-interface.md` |
-| 3 | [plan-04.04-revisao-com-categoria-e-exportacao](plan/plan-04.04-revisao-com-categoria-e-exportacao.md) | Registrar a categoria correta na revisão e exportar pedidos anonimizados | — | 🔴 A executar | `specs/arquitetura/04.01-persistencia.md` |
+| 1 | [plan-04.05-interface-em-formato-de-chat](plan/plan-04.05-interface-em-formato-de-chat.md) | Mostrar a aba Cidadão como um chat, com a conversa na tela e avaliação por resposta | — | 🟡 Em execução | `specs/04.02-interface.md` |
+| 2 | [plan-04.04-revisao-com-categoria-e-exportacao](plan/plan-04.04-revisao-com-categoria-e-exportacao.md) | Registrar a categoria correta na revisão e exportar pedidos anonimizados | — | 🔴 A executar | `specs/arquitetura/04.01-persistencia.md` |
 
 ---
 

@@ -1,11 +1,11 @@
 ---
 tipo: "adr"
 titulo: "LLM: além de reformular, escolhe a fonte apenas entre candidatas aprovadas, em modo opt-in"
-status: "🟢 Aceito"
+status: "🔴 Substituído"
 tags: ["adr", "llm", "governanca", "privacidade"]
 relacionados: ["[[005-llm-apenas-reformula-resposta]]", "[[003-seguranca-sem-autenticacao]]", "[[03.02-resposta-final-e-llm]]", "[[03.03-localizador-de-servicos]]", "[[03.04-agente-llm]]"]
 substitui: "[[005-llm-apenas-reformula-resposta]] (só na parte que vedava ao LLM qualquer escolha; o resto da 005 segue valendo)"
-substituido_por: ""
+substituido_por: "[[007-llm-redige-a-resposta-com-rag-do-catalogo]]"
 alternativas_consideradas:
   - "LLM só reformula, sem ajudar a localizar (a decisão da 005) — descartada como único modo porque, quando o localizador determinístico não acha a fonte, o cidadão recebe só \"não tenho a informação\" mesmo havendo uma fonte aprovada adequada."
   - "LLM escolhe livremente a fonte ou escreve link, telefone e instrução — descartada porque abre alucinação e injeção de prompt: um link ou telefone inventado chegaria ao cidadão."
