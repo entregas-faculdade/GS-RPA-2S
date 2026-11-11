@@ -54,7 +54,7 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-04.04-revisao-com-categoria-e-exportacao](plan/plan-04.04-revisao-com-categoria-e-exportacao.md) | Registrar a categoria correta na revisão e exportar pedidos anonimizados | — | 🔴 A executar | `specs/arquitetura/04.01-persistencia.md` |
+| 1 | [plan-04.04-revisao-com-categoria-e-exportacao](plan/plan-04.04-revisao-com-categoria-e-exportacao.md) | Registrar a categoria correta na revisão e exportar pedidos anonimizados | — | 🟢 Aprovada | `specs/arquitetura/04.01-persistencia.md` |
 
 ---
 

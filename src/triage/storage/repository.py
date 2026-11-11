@@ -34,6 +34,15 @@ class ReviewItem:
     created_at: str
 
 
+@dataclass(frozen=True)
+class LabeledRequest:
+    """Pedido com a categoria correta informada pelo revisor; o texto é sempre o anonimizado."""
+
+    request_hash: str
+    anonymized_text: str
+    category: str
+
+
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
@@ -106,6 +115,25 @@ class Repository:
                 (note, review_id),
             )
             return cursor.rowcount > 0
+
+    def set_label(self, request_hash: str, category: str) -> None:
+        """Grava a categoria correta do pedido; regravar o mesmo hash substitui o rótulo."""
+        if not category.strip():
+            raise ValueError("A categoria do rótulo não pode ser vazia.")
+        with session(self._path) as connection:
+            connection.execute(
+                "INSERT OR REPLACE INTO labels (request_hash, category, created_at) VALUES (?, ?, ?)",
+                (request_hash, category, _now()),
+            )
+
+    def labeled_requests(self) -> list[LabeledRequest]:
+        """Pedidos rotulados, do rótulo mais antigo ao mais recente, com o texto anonimizado."""
+        with session(self._path) as connection:
+            rows = connection.execute(
+                "SELECT l.request_hash, r.anonymized_text, l.category FROM labels l "
+                "JOIN requests r ON r.hash = l.request_hash ORDER BY l.created_at, l.rowid"
+            ).fetchall()
+        return [LabeledRequest(*row) for row in rows]
 
     def add_feedback(self, request_hash: str, rating: str) -> None:
         if rating not in VALID_RATINGS:

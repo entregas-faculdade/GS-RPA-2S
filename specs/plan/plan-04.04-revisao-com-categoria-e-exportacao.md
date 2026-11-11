@@ -4,7 +4,7 @@ familia: "04"
 item: "R04.4"
 titulo: "Registrar a categoria correta na revisão e exportar pedidos anonimizados rotulados"
 dominio: "Operação e interface"
-status: "🔴 A executar"
+status: "🟢 Aprovada"
 prioridade: "Média"
 tags: ["plan"]
 relacionados: ["[[04.01-persistencia]]", "[[04.02-interface]]", "[[003-seguranca-sem-autenticacao]]"]
@@ -113,8 +113,69 @@ dado de treino).
 
 <!-- Preenchido pelo EXECUTOR. Append-only: cada rodada acrescenta um bloco novo; nada é removido. -->
 
+## Resumo da execução — 2026-11-11
+
+**Resultado:** Concluído
+
+**O que foi feito**
+- `schema.py`: tabela `labels(request_hash PK -> requests, category, created_at)` por `CREATE TABLE IF NOT EXISTS`; tabelas antigas intactas.
+- `repository.py`: `LabeledRequest`, `Repository.set_label` (vazia -> `ValueError`; hash inexistente -> `StorageError`; `INSERT OR REPLACE`) e `labeled_requests` (JOIN com `requests`, por data e rowid); exportado em `storage/__init__.py`.
+- `service.py`: `label_options()` (as 8 de `CATEGORY_RULES` + `other`), `resolve(review_id, note, category=None)` (rotula antes de resolver; inválida/inexistente/falha de banco -> `False`), `export_labeled(directory)` (CSV `id,text,label,split,urgent`, `split=train`, `urgent` por `is_urgent`, `labeled_<UTC>.csv`, `None` sem rótulos; `id` = `R` + 12 primeiros caracteres do hash).
+- `views.py`: seletor "Categoria correta" (sugestão pré-selecionada ou "(não informar)"), botão "Exportar pedidos rotulados" para `output/exports` com aviso de dado residual e caminho exportado.
+- Testes novos em `tests/storage/test_repository.py` e `tests/interface/test_service.py`.
+
+**Arquivos alterados**
+| Arquivo | Natureza | O que mudou |
+|---|---|---|
+| `src/triage/storage/schema.py` | alterado | tabela `labels` no DDL |
+| `src/triage/storage/repository.py` | alterado | `LabeledRequest`, `set_label`, `labeled_requests` |
+| `src/triage/storage/__init__.py` | alterado | exporta `LabeledRequest` |
+| `src/triage/interface/service.py` | alterado | `label_options`, `resolve` com categoria, `export_labeled` |
+| `src/triage/interface/views.py` | alterado | seletor, botão de exportar e aviso |
+| `tests/storage/test_repository.py` | alterado | 6 testes novos (inclui banco antigo sem `labels`); `TABLES` inclui `labels` |
+| `tests/interface/test_service.py` | alterado | 8 testes novos (rótulo, inválida, sem categoria, exportação com e sem rótulos, formato) |
+
+**Verificações executadas**
+- `python -m pytest tests/storage tests/interface tests/pipeline -q` -> 139 passed (antes do ajuste final de imports); `python -m pytest tests/storage tests/interface -q` após o ajuste -> 64 passed.
+- `python -m ruff check src/triage/storage src/triage/interface tests/storage tests/interface` -> 3 erros, **todos preexistentes** (conferido com `git stash`: UP017 em `repository.py` `_now`, I001 e SIM117 em `tests/storage/test_repository.py`); nenhum em linha minha.
+- `validate.py` do `padrao-python` em `src/triage/storage`, `src/triage/interface`, `tests/storage`, `tests/interface` -> 0 achados em cada.
+- `git diff --stat` -> só arquivos de §3.1 (mais as 3 specs que já estavam modificadas pelo revisor antes da execução).
+
+**Estado inicial do worktree:** ` M specs/00-indice.md`, ` M specs/panorama/00-resumo.md`, ` M specs/plan/plan-04.04-revisao-com-categoria-e-exportacao.md`.
+
+**Ambiente após a verificação:** nada criado (só `pytest` e `ruff`, encerrados; `output/` já é ignorado pelo Git; `snapshot` de ambiente não rodado por não haver processo, servidor ou contêiner iniciado).
+
+**Critérios de aceite**
+- [x] Rotular e resolver grava a categoria; inválida não resolve; sem categoria fluxo igual — `test_resolve_with_valid_category_records_label`, `..._invalid_category_does_not_resolve`, `..._without_category_keeps_old_flow`.
+- [x] Banco antigo abre e ganha a tabela sem perda — `test_database_without_labels_table_is_upgraded_without_data_loss`.
+- [x] CSV com `id,text,label,split,urgent`, texto anonimizado, `split=train` — `test_export_writes_only_anonymized_text_in_labeled_format` (CPF bruto e hash completo ausentes) e `test_export_header_matches_labeled_dataset`.
+- [x] Tela com aviso e caminho; `output/exports/` fora do Git — `views.py` (`EXPORT_WARNING`, `st.success`); `git check-ignore` confirma `.gitignore:6:output/`. A renderização Streamlit **não foi conferida visualmente** (sem teste de tela no escopo).
+- [x] SQL parametrizado; `storage` não importa `classification` — `repository.py`/`schema.py`; só `interface/service.py` importa.
+- [x] Testes verdes; validador sem achado; `ruff` sem violação nova (3 preexistentes, ver acima); sem chave nem dado pessoal no diff (só CPF sintético de teste já usado na suíte).
+
+**Decisões e suposições**
+- `.gitignore` não foi tocado: `output/` já cobre `output/exports/`.
+- `export_labeled` captura `StorageError`/`OSError`, loga só o tipo e devolve `None`; por isso a mensagem da tela para `None` cobre "sem rótulos" e "falha".
+- `resolve` passou a devolver `False` também em `StorageError` ao resolver (a plan só pedia isso para o caminho com categoria; vale para os dois por simplicidade).
+- O item da fila é localizado por `pending_reviews()` para obter o hash (item já resolvido ou inexistente -> `False`, sem rótulo).
+- `label_options()` é `staticmethod`; importa `CATEGORY_RULES` e `OTHER_LABEL` de `triage.classification` no serviço, como a plan manda.
+- `is_urgent` lê `data/urgency_terms.json` relativo ao diretório de execução (comportamento existente); fora da raiz do repositório falha segura e marca `urgent=1`.
+
+**Achados fora do escopo (não corrigidos)**
+- `src/triage/storage/repository.py:47` — `datetime.timezone.utc` (UP017 do ruff), preexistente.
+- `tests/storage/test_repository.py:1,158` — I001 e SIM117 do ruff, preexistentes.
+
+**Pendências / riscos**
+- Tela Streamlit não foi aberta no navegador; só testada a camada de serviço.
+- A spec `04.02-interface` §2.3 e `04.01-persistencia` seguem sem a mudança até a síntese (do revisor).
+
+
 ---
 
 # 10. Veredito
 
 <!-- Preenchido pelo REVISOR. Append-only. -->
+
+## Veredito — 2026-11-11 — 🟢 Aprovado
+
+Verifiquei, sem confiar no resumo: o diff bate com o resumo e fica dentro do §3.1 (`schema.py`, `repository.py`, `storage/__init__.py`, `service.py`, `views.py` e os dois arquivos de teste); `.gitignore` não precisou de mudança (`output/` já está ignorado). `python -m pytest tests/storage tests/interface tests/pipeline tests/classification -q` → 250 passed; `ruff` em `src/triage/storage`, `src/triage/interface`, `tests/storage` e `tests/interface` → 3 erros, todos anteriores e fora das linhas novas (`UP017` em `repository.py:47`, `I001` e `SIM117` em `test_repository.py`; backlog 14); `validate.py` nos quatro alvos → 0 achados. Código lido inteiro: SQL parametrizado, `labels` criada por `CREATE TABLE IF NOT EXISTS` com chave estrangeira (a conexão liga `PRAGMA foreign_keys=ON`), `storage` não importa `classification`, `export_labeled` só captura `StorageError` e `OSError` e loga o tipo. Sondagem no app real (`AppTest.from_file("app.py")` em pasta temporária, banco com um pedido anonimizado na fila): a aba Revisão mostra o seletor "Categoria correta" com a sugestão pré-selecionada; escolher `driver_license` e clicar em "Marcar como resolvido" tira o item da fila; "Exportar pedidos rotulados" grava `output/exports/labeled_<UTC>.csv` com cabeçalho `id,text,label,split,urgent`, `split=train`, `id` derivado do hash e só o texto anonimizado; o aviso de dado residual aparece. Banco antigo sem `labels` ganha a tabela sem perda (teste do executor, conferido). `output/` só com `logs`, `models` e `reports` na raiz; nenhum processo restante. Fora do escopo, ao backlog 28: `is_urgent` lê `data/urgency_terms.json` relativo ao diretório corrente e, fora da raiz, marca `urgent=1` em silêncio (na pasta temporária da sondagem o CSV saiu com `urgent=1`; na raiz, `is_urgent` dá `False` para "renovar a CNH" e `True` para pedido de emergência), e a pasta de exportação é fixa em `output/exports` em vez de seguir a pasta de saída da configuração.

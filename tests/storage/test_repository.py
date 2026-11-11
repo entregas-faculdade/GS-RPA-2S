@@ -7,7 +7,7 @@ import pytest
 
 from triage.storage import Repository, RequestRecord, StorageError, init_db, request_hash
 
-TABLES = {"requests", "review_queue", "feedback", "runs"}
+TABLES = {"requests", "review_queue", "feedback", "labels", "runs"}
 
 
 def _record(text: str = "meu pedido anonimizado", status: str = "answered") -> RequestRecord:
@@ -160,3 +160,58 @@ def test_storage_error_is_logged_without_request_text(repository: Repository, ca
             repository.add_feedback(raw_marker, "up")
     assert caplog.records
     assert raw_marker not in caplog.text
+
+
+def test_set_label_creates_and_replaces(repository: Repository, db_path: Path) -> None:
+    record = _record()
+    repository.save_request(record, anonymized=True)
+    repository.set_label(record.request_hash, "id_card")
+    repository.set_label(record.request_hash, "other")
+    assert _query(db_path, "SELECT request_hash, category FROM labels") == [(record.request_hash, "other")]
+
+
+@pytest.mark.parametrize("category", ["", "   "])
+def test_set_label_empty_category_is_refused(repository: Repository, category: str) -> None:
+    record = _record()
+    repository.save_request(record, anonymized=True)
+    with pytest.raises(ValueError):
+        repository.set_label(record.request_hash, category)
+
+
+def test_set_label_unknown_hash_raises_storage_error(repository: Repository) -> None:
+    with pytest.raises(StorageError):
+        repository.set_label("hash-inexistente", "other")
+
+
+def test_labeled_requests_returns_anonymized_text_in_order(repository: Repository) -> None:
+    first, second = _record("primeiro pedido"), _record("segundo pedido")
+    repository.save_request(first, anonymized=True)
+    repository.save_request(second, anonymized=True)
+    repository.set_label(second.request_hash, "voter_id")
+    repository.set_label(first.request_hash, "id_card")
+    assert [(item.anonymized_text, item.category) for item in repository.labeled_requests()] == [
+        ("segundo pedido", "voter_id"),
+        ("primeiro pedido", "id_card"),
+    ]
+
+
+def test_labeled_requests_empty(repository: Repository) -> None:
+    assert repository.labeled_requests() == []
+
+
+def test_database_without_labels_table_is_upgraded_without_data_loss(db_path: Path) -> None:
+    db_path.parent.mkdir(parents=True)
+    connection = sqlite3.connect(db_path)
+    connection.executescript(
+        "CREATE TABLE requests (hash TEXT PRIMARY KEY, anonymized_text TEXT NOT NULL, category TEXT, "
+        "confidence REAL, status TEXT NOT NULL, review_reason TEXT, created_at TEXT NOT NULL);"
+        "INSERT INTO requests VALUES ('h1', 'pedido antigo', NULL, NULL, 'answered', NULL, '2026-01-01');"
+    )
+    connection.commit()
+    connection.close()
+
+    repository = Repository(db_path)
+    repository.set_label("h1", "other")
+
+    assert _query(db_path, "SELECT hash, anonymized_text FROM requests") == [("h1", "pedido antigo")]
+    assert [item.request_hash for item in repository.labeled_requests()] == ["h1"]

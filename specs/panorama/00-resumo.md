@@ -17,7 +17,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 —
 
 ## Próximas
-- 🔴 · plan-04.04 · R04.4 · Registrar a categoria correta na revisão e exportar pedidos anonimizados rotulados
+—
 
 ## Por família
 | FF | Família | Itens ✅/total | Progresso | Plans abertas |
@@ -29,4 +29,5 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
+- 🟢 plan-04.04 · Registrar a categoria correta na revisão e exportar pedidos anonimizados rotulados — aguardando síntese
 - 📋 26 achado(s) no `00-backlog`

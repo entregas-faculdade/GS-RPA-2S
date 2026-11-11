@@ -1,6 +1,8 @@
 """`AppService`: envio, fila de revisão, resolução e feedback, sem a camada de tela."""
 
+import csv
 import sqlite3
+from pathlib import Path
 
 import pytest
 
@@ -111,3 +113,73 @@ def test_pipeline_failure_becomes_error_outcome(service: AppService, monkeypatch
 
     assert outcome.kind == "error"
     assert "Tente novamente" in outcome.message
+
+
+def _queue_pii_request(service: AppService) -> int:
+    service.submit(PII_URGENT_TEXT)
+    return service.pending_reviews()[0].id
+
+
+def test_label_options_are_the_nine_categories(service: AppService) -> None:
+    options = service.label_options()
+
+    assert len(options) == 9
+    assert "other" in options
+    assert "id_card" in options
+
+
+def test_resolve_with_valid_category_records_label(service: AppService, repository: Repository) -> None:
+    review_id = _queue_pii_request(service)
+
+    assert service.resolve(review_id, "ok", "social_benefits") is True
+    assert service.pending_reviews() == []
+    assert [item.category for item in repository.labeled_requests()] == ["social_benefits"]
+
+
+def test_resolve_with_invalid_category_does_not_resolve(service: AppService, repository: Repository) -> None:
+    review_id = _queue_pii_request(service)
+
+    assert service.resolve(review_id, "ok", "categoria_inventada") is False
+    assert len(service.pending_reviews()) == 1
+    assert repository.labeled_requests() == []
+
+
+def test_resolve_without_category_keeps_old_flow(service: AppService, repository: Repository) -> None:
+    review_id = _queue_pii_request(service)
+
+    assert service.resolve(review_id, "ok") is True
+    assert repository.labeled_requests() == []
+
+
+def test_resolve_unknown_review_with_category_returns_false(service: AppService) -> None:
+    assert service.resolve(9999, "ok", "other") is False
+
+
+def test_export_without_labels_returns_none(service: AppService, tmp_path: Path) -> None:
+    assert service.export_labeled(tmp_path / "exports") is None
+
+
+def test_export_writes_only_anonymized_text_in_labeled_format(service: AppService, tmp_path: Path) -> None:
+    review_id = _queue_pii_request(service)
+    service.resolve(review_id, "ok", "social_benefits")
+    [labeled] = service._deps.repository.labeled_requests()
+
+    path = service.export_labeled(tmp_path / "novo" / "exports")
+
+    assert path is not None and path.name.startswith("labeled_") and path.suffix == ".csv"
+    content = path.read_text(encoding="utf-8")
+    assert "123.456.789-09" not in content
+    assert labeled.request_hash not in content
+    with path.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.reader(handle))
+    assert rows[0] == ["id", "text", "label", "split", "urgent"]
+    [row] = rows[1:]
+    assert row[1:] == [labeled.anonymized_text, "social_benefits", "train", "1"]
+    assert row[0].startswith("R") and labeled.request_hash.startswith(row[0][1:])
+
+
+def test_export_header_matches_labeled_dataset() -> None:
+    labeled_csv = Path(__file__).resolve().parents[2] / "data" / "labeled" / "requests_labeled.csv"
+    header = labeled_csv.read_text(encoding="utf-8").splitlines()[0]
+
+    assert header.split(",") == ["id", "text", "label", "split", "urgent"]

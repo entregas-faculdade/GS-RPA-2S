@@ -1,6 +1,7 @@
 """Renderização das telas Streamlit; toda decisão fica no `AppService` e nos pacotes do núcleo."""
 
 from dataclasses import dataclass
+from pathlib import Path
 
 import streamlit as st
 
@@ -16,6 +17,13 @@ from triage.storage.schema import RATING_DOWN, RATING_UP
 BANNER = "Protótipo acadêmico com dados sintéticos. Não envie dados pessoais reais."
 REVIEW_WARNING = "Dados de demonstração; não envie dados pessoais reais. A fila de revisão não exige login."
 EMPTY_QUEUE = "Nenhum pedido aguardando revisão."
+EXPORT_DIR = Path("output") / "exports"
+EXPORT_WARNING = (
+    "O texto exportado é o anonimizado, mas pode conter dado pessoal residual: revise-o antes de "
+    "levá-lo a data/labeled/."
+)
+EXPORT_EMPTY = "Nada exportado: não há pedidos rotulados (ou o banco ou a pasta estão inacessíveis)."
+NO_LABEL = "(não informar)"
 FEEDBACK_THANKS = "Obrigado pela avaliação!"
 FEEDBACK_ALREADY = "Sua avaliação já foi registrada."
 CHAT_PLACEHOLDER = "Descreva o serviço público de que você precisa"
@@ -87,9 +95,22 @@ def _render_review_item(service: AppService, entry) -> None:
         st.markdown(f"Categoria sugerida: `{entry.category or '—'}` · confiança: {confidence}")
         st.text(entry.anonymized_text)
         note = st.text_input("Nota de resolução", key=f"note_{entry.id}")
+        options = [NO_LABEL, *service.label_options()]
+        suggested = options.index(entry.category) if entry.category in options else 0
+        choice = st.selectbox("Categoria correta", options, index=suggested, key=f"label_{entry.id}")
         if st.button("Marcar como resolvido", key=f"resolve_{entry.id}"):
-            service.resolve(entry.id, note)
+            service.resolve(entry.id, note, None if choice == NO_LABEL else choice)
             st.rerun()
+
+
+def _render_export(service: AppService) -> None:
+    st.caption(EXPORT_WARNING)
+    if st.button("Exportar pedidos rotulados", key="export_labeled"):
+        path = service.export_labeled(EXPORT_DIR)
+        if path is None:
+            st.warning(EXPORT_EMPTY)
+        else:
+            st.success(f"Exportado em {path}")
 
 
 def render_review_tab(service: AppService) -> None:
@@ -100,3 +121,4 @@ def render_review_tab(service: AppService) -> None:
         st.caption(EMPTY_QUEUE)
     for entry in entries:
         _render_review_item(service, entry)
+    _render_export(service)

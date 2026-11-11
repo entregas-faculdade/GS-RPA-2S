@@ -45,6 +45,11 @@ CREATE TABLE IF NOT EXISTS feedback (
     rating TEXT NOT NULL CHECK (rating IN ('up', 'down')),
     created_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS labels (
+    request_hash TEXT PRIMARY KEY REFERENCES requests(hash),
+    category TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS runs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     started_at TEXT NOT NULL,
