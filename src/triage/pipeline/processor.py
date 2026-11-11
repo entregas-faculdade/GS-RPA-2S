@@ -3,12 +3,18 @@
 import logging
 import time
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 from sklearn.pipeline import Pipeline
 
+from triage.automation.catalog import ServiceEntry
+from triage.automation.finder import ServiceFinder
 from triage.automation.llm_client import LlmClient, build_llm_client
+from triage.automation.messages import (
+    build_emergency_message,
+    build_no_information_message,
+)
 from triage.automation.resolver import (
     REASON_LINK_UNAVAILABLE,
     CatalogLookup,
@@ -40,7 +46,10 @@ STATUS_SKIPPED_DUPLICATE = "skipped_duplicate"
 STATUS_ERROR = "error"
 LINK_OK = "ok"
 LINK_UNAVAILABLE = "unavailable"
+TIER_CATALOG = "catalog"
+TIER_FINDER = "finder"
 SAFE_REVIEW_REASON = ReviewReason.LOW_CONFIDENCE.value
+FINDER_REASONS = frozenset({ReviewReason.OUT_OF_CATALOG, ReviewReason.LOW_CONFIDENCE})
 REJECTED_TEXT_TEMPLATE = "[pedido rejeitado na ingestão: {reason}]"
 STORAGE_RETRY_POLICY = RetryPolicy(attempts=3, base_delay=0.5, max_delay=2.0, transient=(StorageError,))
 
@@ -59,6 +68,7 @@ class ProcessingResult:
     link_status: str | None = None
     used_llm: bool = False
     fallback_reason: str | None = None
+    tier: str | None = None
 
 
 @dataclass(frozen=True)
@@ -72,6 +82,7 @@ class Deps:
     llm_client: LlmClient | None = None
     retry_policy: RetryPolicy = STORAGE_RETRY_POLICY
     sleep: Callable[[float], None] = time.sleep
+    finder: ServiceFinder | None = None
 
 
 def _load_model_or_none() -> Pipeline | None:
@@ -87,12 +98,14 @@ def build_deps(settings: Settings, db_path: str | Path) -> Deps:
 
     Banco inacessível levanta `StorageError`; o chamador decide (no `run.py`, código de saída 1).
     """
+    lookup = build_default_lookup()
     return Deps(
         repository=Repository(db_path),
-        lookup=build_default_lookup(),
+        lookup=lookup,
         settings=settings,
         model=_load_model_or_none(),
         llm_client=build_llm_client(settings),
+        finder=ServiceFinder(lookup.approved_entries(), settings),
     )
 
 
@@ -102,13 +115,8 @@ def _review(
     return ProcessingResult(STATUS_QUEUED_FOR_REVIEW, category, confidence, reason, link_status=link_status)
 
 
-def _answer_or_review(decision: Decision, deps: Deps) -> ProcessingResult:
-    """Resolve o serviço da categoria e monta a resposta; sem serviço utilizável, vai à revisão com a causa."""
-    resolution = resolve_service(decision.category, deps.lookup)
-    if resolution.service is None:
-        link_status = LINK_UNAVAILABLE if resolution.reason == REASON_LINK_UNAVAILABLE else None
-        return _review(decision.category, decision.confidence, resolution.reason, link_status)
-    response = build_response(resolution.service, deps.llm_client)
+def _answered(decision: Decision, service: ServiceEntry, tier: str, deps: Deps) -> ProcessingResult:
+    response = build_response(service, deps.llm_client)
     return ProcessingResult(
         STATUS_ANSWERED,
         decision.category,
@@ -118,16 +126,52 @@ def _answer_or_review(decision: Decision, deps: Deps) -> ProcessingResult:
         LINK_OK,
         response.used_llm,
         response.fallback_reason,
+        tier,
     )
+
+
+def _failed_resolution(decision: Decision, reason: str | None) -> ProcessingResult:
+    link_status = LINK_UNAVAILABLE if reason == REASON_LINK_UNAVAILABLE else None
+    return _review(decision.category, decision.confidence, reason, link_status)
+
+
+def _answer_or_review(decision: Decision, deps: Deps) -> ProcessingResult:
+    """Degrau 1: resolve o serviço da categoria e responde; sem serviço utilizável, revisão com a causa."""
+    resolution = resolve_service(decision.category, deps.lookup)
+    if resolution.service is None:
+        return _failed_resolution(decision, resolution.reason)
+    return _answered(decision, resolution.service, TIER_CATALOG, deps)
+
+
+def _find_or_review(text: str, decision: Decision, deps: Deps) -> ProcessingResult:
+    """Degraus 2 e 3: procura a fonte aprovada no texto anonimizado; sem fonte, mensagem de que o sistema não tem a informação."""
+    match = deps.finder.find(text) if deps.finder is not None else None
+    if match is None:
+        review = _review(decision.category, decision.confidence, decision.reason.value)
+        return replace(review, response_text=build_no_information_message())
+    resolution = deps.lookup.resolve_entry(match.entry)
+    if resolution.service is None:
+        return _failed_resolution(decision, resolution.reason)
+    return _answered(decision, resolution.service, TIER_FINDER, deps)
+
+
+def _urgent_review(decision: Decision, deps: Deps) -> ProcessingResult:
+    """Urgência: revisão com os telefones de emergência aprovados; sem localizador nem resolução."""
+    review = _review(decision.category, decision.confidence, decision.reason.value)
+    return replace(review, response_text=build_emergency_message(deps.lookup.approved_entries()))
 
 
 def _triage(text: str, deps: Deps) -> ProcessingResult:
     if deps.model is None:
         return _review(None, 0.0, SAFE_REVIEW_REASON)
     decision = triage_decision(text, classify(text, deps.model), deps.settings)
-    if decision.action != ACTION_AUTO_ANSWER:
-        return _review(decision.category, decision.confidence, decision.reason.value)
-    return _answer_or_review(decision, deps)
+    if decision.action == ACTION_AUTO_ANSWER:
+        return _answer_or_review(decision, deps)
+    if decision.reason is ReviewReason.URGENT:
+        return _urgent_review(decision, deps)
+    if decision.reason in FINDER_REASONS:
+        return _find_or_review(text, decision, deps)
+    return _review(decision.category, decision.confidence, decision.reason.value)
 
 
 def _store(record: RequestRecord, deps: Deps) -> None:

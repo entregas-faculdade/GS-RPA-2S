@@ -14,7 +14,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 ████████░░ 81% · 18/22 itens ✅
 
 ## Agora
-- 🟡 · plan-03.06 · R03.6 · "Responder em degraus no pipeline: serviço, canal geral, \"não tenho a informação\" e telefones de emergência"
+—
 
 ## Próximas
 - 🔴 · plan-03.08 · R03.8 · Definir o agente LLM em arquivos versionados (persona, regras, fluxo e parâmetros) com validador
@@ -31,4 +31,5 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
-- 📋 24 achado(s) no `00-backlog`
+- 🟢 plan-03.06 · "Responder em degraus no pipeline: serviço, canal geral, \"não tenho a informação\" e telefones de emergência" — aguardando síntese
+- 📋 25 achado(s) no `00-backlog`

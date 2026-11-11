@@ -13,6 +13,8 @@ from triage.pipeline.processor import (
     LINK_UNAVAILABLE,
     STATUS_ERROR,
     STATUS_SKIPPED_DUPLICATE,
+    TIER_CATALOG,
+    TIER_FINDER,
     ProcessingResult,
 )
 from triage.storage.schema import (
@@ -32,6 +34,7 @@ STATUS_LABELS = {
 }
 REVIEW_STATUSES = (STATUS_QUEUED_FOR_REVIEW, STATUS_REJECTED)
 LINK_LABELS = {LINK_OK: "no ar", LINK_UNAVAILABLE: "fora do ar"}
+TIER_LABELS = {TIER_CATALOG: "serviço específico do catálogo", TIER_FINDER: "fonte achada pelo localizador"}
 FILE_TIMESTAMP_FORMAT ="%Y%m%dT%H%M%S"
 
 logger = logging.getLogger("triage.pipeline")
@@ -50,6 +53,7 @@ class RunReport:
     by_review_reason: dict[str, int]
     links: dict[str, int]
     llm: dict[str, object]
+    tiers: dict[str, int]
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -62,6 +66,7 @@ class RunReport:
             "by_review_reason": self.by_review_reason,
             "links": self.links,
             "llm": self.llm,
+            "tiers": self.tiers,
         }
 
 
@@ -77,6 +82,7 @@ def build_report(
     )
     link_count = Counter(result.link_status for result in outcomes if result.link_status)
     fallbacks = Counter(result.fallback_reason for result in outcomes if result.fallback_reason)
+    tier_count = Counter(result.tier for result in outcomes if result.tier)
     return RunReport(
         run_id=run_id,
         started_at=started_at,
@@ -87,6 +93,7 @@ def build_report(
         by_review_reason=dict(sorted(reasons.items())),
         links={LINK_OK: link_count.get(LINK_OK, 0), LINK_UNAVAILABLE: link_count.get(LINK_UNAVAILABLE, 0)},
         llm={"used": sum(result.used_llm for result in outcomes), "fallbacks": dict(sorted(fallbacks.items()))},
+        tiers={TIER_CATALOG: tier_count.get(TIER_CATALOG, 0), TIER_FINDER: tier_count.get(TIER_FINDER, 0)},
     )
 
 
@@ -101,6 +108,7 @@ def render_markdown(report: RunReport) -> str:
     """Versão legível do relatório, em português."""
     totals = {STATUS_LABELS[status]: count for status, count in report.totals.items()}
     links = {LINK_LABELS[status]: count for status, count in report.links.items()}
+    tiers = {TIER_LABELS[tier]: count for tier, count in report.tiers.items()}
     lines = [
         f"# Relatório da execução {report.run_id}",
         "",
@@ -111,6 +119,7 @@ def render_markdown(report: RunReport) -> str:
         *_table("Totais por status", totals),
         *_table("Por categoria", report.by_category),
         *_table("Por motivo de revisão", report.by_review_reason),
+        *_table("Respondidos por degrau", tiers),
         *_table("Links do catálogo (por pedido)", links),
         "## LLM",
         "",

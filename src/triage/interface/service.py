@@ -126,7 +126,7 @@ class AppService:
         if status == STATUS_ANSWERED and response_text:
             return SubmitOutcome(KIND_ANSWERED, response_text, request_hash(anonymize(sanitized_text).text))
         if status == STATUS_QUEUED_FOR_REVIEW:
-            return SubmitOutcome(KIND_HUMAN_REVIEW, MESSAGE_HUMAN_REVIEW)
+            return SubmitOutcome(KIND_HUMAN_REVIEW, response_text or MESSAGE_HUMAN_REVIEW)
         if status == STATUS_SKIPPED_DUPLICATE:
             return SubmitOutcome(KIND_DUPLICATE, MESSAGE_DUPLICATE)
         return SubmitOutcome(KIND_ERROR, MESSAGE_ERROR)

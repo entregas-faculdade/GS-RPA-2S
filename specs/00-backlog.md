@@ -87,6 +87,7 @@ via normal.
 | 23 | `AMBIGUITY_MARGIN=0,15` é inerte com `CONFIDENCE_MIN` ≥ 0,60 (a folga mínima já é 0,20); a validação cruzada deu resultado idêntico de 0,05 a 0,25. Escrever isso em `02.02` ou rever o papel do parâmetro | revisão | 2026-11-10 | baixo |
 | 24 | `notebooks/evidence.ipynb`, seção 6 (limites) ainda diz "São 8 serviços curados à mão", mas o catálogo tem 51 entradas aprovadas; atualizar quando os números do piloto fecharem | revisão | 2026-11-10 | baixo |
 | 25 | `automation/finder.py` — o localizador cobre 47,9% do teste e erra 3 de 18 pedidos sem fonte; entradas sobrepostas (certidão, título de eleitor, INSS) derrubam a folga e dão `None`, e ele não distingue cidade ou estado (IPVA do Rio devolve a fonte de SP); ampliar a amostra e rever `keywords` das entradas duplicadas | revisão | 2026-11-10 | médio |
+| 26 | `automation/messages.py` — a mensagem de emergência lista os 6 canais de `safety` na ordem do catálogo (190, 193, 192, 199, 100, 180); para um pedido de saúde (o léxico de urgência é só de saúde) o SAMU 192 devia vir primeiro, e 100 e 180 são ruído; decidir se a lista se ordena ou se filtra por tipo de urgência | revisão | 2026-11-10 | médio |
 
 ---
 

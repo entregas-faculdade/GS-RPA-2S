@@ -1,9 +1,16 @@
 """Resposta-padrão em template: determinística, em português, e também o caminho seguro do LLM."""
 
-from triage.automation.catalog import ServiceEntry
+from triage.automation.catalog import KIND_SERVICE, ServiceEntry
 
 RESPONSE_TEMPLATE = (
     "Para resolver o seu pedido, o serviço indicado é: {display_name}.\n"
+    "Órgão responsável: {agency}.\n"
+    "Abrangência: {coverage}.\n"
+    "{instructions}"
+)
+GENERAL_CHANNEL_TEMPLATE = (
+    "Não encontrei um serviço específico para o seu pedido. O canal oficial indicado é o do órgão: {display_name}. "
+    "Ele pode atender ao seu pedido; se não for o que você procura, descreva o pedido de outra forma ou procure o atendimento do próprio órgão.\n"
     "Órgão responsável: {agency}.\n"
     "Abrangência: {coverage}.\n"
     "{instructions}"
@@ -18,9 +25,13 @@ def _section(header: str, lines: list[str]) -> str:
 
 
 def render_template(service: ServiceEntry) -> str:
-    """Monta a resposta com nome, órgão, abrangência, instruções, todos os links e os telefones, se houver."""
+    """Monta a resposta com nome, órgão, abrangência, instruções, todos os links e os telefones, se houver.
+
+    Portal ou canal geral abre dizendo que não há serviço específico e se apresenta como sugestão.
+    """
+    opening = RESPONSE_TEMPLATE if service.kind == KIND_SERVICE else GENERAL_CHANNEL_TEMPLATE
     parts = [
-        RESPONSE_TEMPLATE.format(
+        opening.format(
             display_name=service.display_name,
             agency=service.agency,
             coverage=service.coverage,
