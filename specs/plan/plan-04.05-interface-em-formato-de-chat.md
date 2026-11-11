@@ -4,7 +4,7 @@ familia: "04"
 item: "R04.5"
 titulo: "Mostrar a aba Cidadão como um chat, com a conversa na tela e avaliação por resposta"
 dominio: "Interface"
-status: "🟡 Em execução"
+status: "🟢 Aprovada"
 prioridade: "Média"
 tags: ["plan"]
 relacionados: ["[[04.02-interface]]", "[[04.03-orquestracao-rpa]]", "[[003-seguranca-sem-autenticacao]]"]
@@ -85,8 +85,57 @@ cada mensagem é um pedido independente (nenhum contexto entre mensagens); a ava
 
 <!-- Preenchido pelo EXECUTOR. Append-only: cada rodada acrescenta um bloco novo; nada é removido. -->
 
+## Resumo da execução — 2026-11-11
+
+**Resultado:** Concluído
+
+**O que foi feito**
+- `views.py`: `render_citizen_tab` virou chat — histórico (`ChatTurn`) em `st.session_state` desenhado com `st.chat_message`, entrada por `st.chat_input`; texto em branco retorna sem chamar `submit`; cada envio chama `service.submit(message)` uma vez, acrescenta o turno e faz `st.rerun()` para a ordem ficar correta. Botão "Enviar pedido" e `st.text_area` removidos.
+- `views.py`: `_render_feedback` agora recebe o índice do turno; chaves `feedback_<turno>_<up|down>` e estado `citizen_feedback` por turno (agradecimento ou aviso de avaliação já registrada), então avaliar uma resposta não afeta as outras. Só respostas com `request_hash` mostram os botões.
+- `tests/interface/test_chat.py` (novo): 7 testes com `AppTest` e um dublê do serviço.
+
+**Arquivos alterados**
+| Arquivo | Natureza | O que mudou |
+|---|---|---|
+| `src/triage/interface/views.py` | alterado | aba Cidadão em formato de chat; avaliação por resposta |
+| `tests/interface/test_chat.py` | criado | testes do chat |
+
+**Verificações executadas**
+- `python -m pytest tests/interface -q` → 25 passed (7 novos)
+- `python -m ruff check src/triage/interface app.py tests/interface` → All checks passed
+- `validate.py` (padrao-python) em `views.py` e `test_chat.py` → 0 achados
+- Leitura de `views.py`: sem `print`, log ou escrita em disco.
+
+**Estado inicial do worktree:** ` M specs/02.02-confianca-e-revisao-humana.md`, ` M specs/03.01-catalogo-e-allowlist.md` (preexistentes, não tocados).
+
+**Ambiente após a verificação:** nada criado (AppTest roda em processo, sem servidor).
+
+**Critérios de aceite**
+- [x] Conversa em chat, ordem preservada — `test_two_questions_keep_arrival_order`
+- [x] `submit` só com o texto digitado — `test_each_submit_receives_only_the_typed_text`
+- [x] Avaliação por resposta e independente — `test_rating_one_answer_does_not_mark_the_other`
+- [x] Nada em log/arquivo/banco; banner mantido (`app.py` intacto)
+- [x] `AppService` e núcleo intocados; testes, ruff e validador limpos
+- [x] Ambiente e worktree limpos
+
+**Decisões e suposições**
+- `st.chat_input` só ganha botão de envio por Enter e já devolve `None` para vazio; o `strip()` cobre mensagem só de espaços.
+- A pergunta é exibida com `st.text` (texto cru, sem interpretar markdown); some ao recarregar.
+- Não verifiquei visualmente no navegador (`streamlit run`); só `AppTest`.
+- `app.py` não precisou de ajuste. `st.chat_input` dentro de aba fica inline, não fixo no rodapé.
+
+**Achados fora do escopo (não corrigidos)**
+- Nenhum.
+
+**Pendências / riscos**
+- Conferência visual no navegador fica para o revisor.
+
 ---
 
 # 10. Veredito
 
 <!-- Preenchido pelo REVISOR. Append-only: um bloco por rodada, com o que foi verificado e como. -->
+
+## Veredito — 2026-11-11 — 🟢 Aprovado
+
+Verifiquei, sem confiar no resumo: o diff bate com o resumo e fica dentro do §3.1 (`src/triage/interface/views.py` e `tests/interface/test_chat.py`); `AppService`, `app.py`, núcleo e README intocados. `python -m pytest tests/interface -q` → 25 passed (7 novos); `ruff` em `src/triage/interface`, `app.py` e `tests/interface` → limpo; `validate.py` em `views.py` e `test_chat.py` → 0 achados. Leitura de `views.py`: sem `print`, log, escrita em disco nem uso do histórico além de exibir; cada envio chama `service.submit(message)` uma vez, só com o texto digitado; texto em branco retorna sem chamar. Sondagem no app real (`AppTest.from_file("app.py")` em pasta temporária): as duas abas sobem sem exceção, o `st.chat_input` aparece dentro da aba Cidadão e uma pergunta enviada produz a pergunta e o desfecho como duas mensagens do chat, sem exceção. Conferência visual no navegador continua sendo do usuário. Fora do escopo, ao backlog: os caminhos de `data/` (catálogo e allowlist) são relativos ao diretório corrente, ao contrário de `config/settings.json`.

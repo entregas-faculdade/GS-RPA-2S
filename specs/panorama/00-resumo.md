@@ -14,7 +14,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 █████████░ 92% · 23/25 itens ✅
 
 ## Agora
-- 🟡 · plan-04.05 · R04.5 · Mostrar a aba Cidadão como um chat, com a conversa na tela e avaliação por resposta
+—
 
 ## Próximas
 - 🔴 · plan-04.04 · R04.4 · Registrar a categoria correta na revisão e exportar pedidos anonimizados rotulados
@@ -29,4 +29,5 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
-- 📋 25 achado(s) no `00-backlog`
+- 🟢 plan-04.05 · Mostrar a aba Cidadão como um chat, com a conversa na tela e avaliação por resposta — aguardando síntese
+- 📋 26 achado(s) no `00-backlog`

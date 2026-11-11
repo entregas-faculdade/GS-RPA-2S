@@ -1,5 +1,7 @@
 """Renderização das telas Streamlit; toda decisão fica no `AppService` e nos pacotes do núcleo."""
 
+from dataclasses import dataclass
+
 import streamlit as st
 
 from triage.interface.service import (
@@ -16,8 +18,17 @@ REVIEW_WARNING = "Dados de demonstração; não envie dados pessoais reais. A fi
 EMPTY_QUEUE = "Nenhum pedido aguardando revisão."
 FEEDBACK_THANKS = "Obrigado pela avaliação!"
 FEEDBACK_ALREADY = "Sua avaliação já foi registrada."
-OUTCOME_KEY = "citizen_outcome"
-RATED_KEY = "citizen_rated"
+CHAT_PLACEHOLDER = "Descreva o serviço público de que você precisa"
+HISTORY_KEY = "citizen_history"
+FEEDBACK_KEY = "citizen_feedback"
+
+
+@dataclass(frozen=True)
+class ChatTurn:
+    """Uma pergunta e o desfecho dela; existe só na sessão, para exibição."""
+
+    question: str
+    outcome: SubmitOutcome
 
 
 def render_banner() -> None:
@@ -33,32 +44,40 @@ def _show_outcome(outcome: SubmitOutcome) -> None:
         st.info(outcome.message)
 
 
-def _render_feedback(service: AppService, outcome: SubmitOutcome) -> None:
+def _render_feedback(service: AppService, turn_index: int, outcome: SubmitOutcome) -> None:
+    """Botões 👍/👎 da resposta `turn_index`; cada resposta tem chaves e estado próprios."""
     if outcome.request_hash is None:
         return
-    if st.session_state.get(RATED_KEY) == outcome.request_hash:
-        st.caption(FEEDBACK_THANKS)
+    feedback_notes = st.session_state.setdefault(FEEDBACK_KEY, {})
+    if turn_index in feedback_notes:
+        st.caption(feedback_notes[turn_index])
         return
     up_column, down_column = st.columns(2)
     for column, rating, label in ((up_column, RATING_UP, "👍"), (down_column, RATING_DOWN, "👎")):
-        if column.button(label, key=f"feedback_{rating}"):
-            if not service.send_feedback(outcome.request_hash, rating):
-                st.caption(FEEDBACK_ALREADY)
-            st.session_state[RATED_KEY] = outcome.request_hash
+        if column.button(label, key=f"feedback_{turn_index}_{rating}"):
+            accepted = service.send_feedback(outcome.request_hash, rating)
+            feedback_notes[turn_index] = FEEDBACK_THANKS if accepted else FEEDBACK_ALREADY
             st.rerun()
 
 
+def _render_history(service: AppService) -> None:
+    for turn_index, turn in enumerate(st.session_state.get(HISTORY_KEY, [])):
+        with st.chat_message("user"):
+            st.text(turn.question)
+        with st.chat_message("assistant"):
+            _show_outcome(turn.outcome)
+            _render_feedback(service, turn_index, turn.outcome)
+
+
 def render_citizen_tab(service: AppService) -> None:
-    """Caixa de pedido, resposta (ou aviso de encaminhamento) e avaliação 👍/👎."""
-    text = st.text_area("Descreva o serviço público de que você precisa", key="citizen_text")
-    if st.button("Enviar pedido"):
-        st.session_state[OUTCOME_KEY] = service.submit(text)
-        st.session_state.pop(RATED_KEY, None)
-    outcome = st.session_state.get(OUTCOME_KEY)
-    if outcome is None:
+    """Chat: a conversa fica na sessão só para exibição; cada mensagem é um pedido independente ao serviço."""
+    _render_history(service)
+    message = st.chat_input(CHAT_PLACEHOLDER, key="citizen_message")
+    if message is None or not message.strip():
         return
-    _show_outcome(outcome)
-    _render_feedback(service, outcome)
+    outcome = service.submit(message)
+    st.session_state.setdefault(HISTORY_KEY, []).append(ChatTurn(message, outcome))
+    st.rerun()
 
 
 def _render_review_item(service: AppService, entry) -> None:
