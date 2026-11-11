@@ -17,7 +17,7 @@ WORKFLOW_FILE = "workflow.md"
 CONFIG_FILE = "config.json"
 AGENT_FILES = (IDENTITY_FILE, RULES_FILE, WORKFLOW_FILE, CONFIG_FILE)
 TASK_HEADING = re.compile(r"^## Tarefa: (\S+)\s*$", re.MULTILINE)
-REQUIRED_TASKS = ("rewrite",)
+REQUIRED_TASKS = ("rewrite", "locate")
 TEMPERATURE_MIN = 0.0
 TEMPERATURE_MAX = 2.0
 PROMPT_SEPARATOR = "\n\n"
@@ -37,6 +37,7 @@ class AgentParams:
     attempts: int
     base_delay_seconds: float
     max_delay_seconds: float
+    max_candidates: int
 
 
 @dataclass(frozen=True)
@@ -75,6 +76,7 @@ PARAM_RULES = (
     ("temperature", _is_temperature, f"número em [{TEMPERATURE_MIN:g}, {TEMPERATURE_MAX:g}]"),
     ("max_tokens", _is_positive_int, "inteiro positivo"),
     ("timeout_seconds", _is_positive_number, "número positivo"),
+    ("max_candidates", _is_positive_int, "inteiro positivo"),
     ("retries.attempts", _is_positive_int, "inteiro positivo"),
     ("retries.base_delay_seconds", _is_non_negative_number, "número não negativo"),
     ("retries.max_delay_seconds", _is_non_negative_number, "número não negativo"),
@@ -112,6 +114,7 @@ def _build_params(raw: dict) -> AgentParams:
         attempts=retries["attempts"],
         base_delay_seconds=float(retries["base_delay_seconds"]),
         max_delay_seconds=float(retries["max_delay_seconds"]),
+        max_candidates=raw["max_candidates"],
     )
 
 

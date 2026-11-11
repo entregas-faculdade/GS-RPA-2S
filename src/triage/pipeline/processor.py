@@ -8,9 +8,11 @@ from pathlib import Path
 
 from sklearn.pipeline import Pipeline
 
+from triage.agent import AgentError, load_agent
 from triage.automation.catalog import ServiceEntry
 from triage.automation.finder import ServiceFinder
 from triage.automation.llm_client import LlmClient, build_llm_client
+from triage.automation.llm_locator import choose_entry
 from triage.automation.messages import (
     build_emergency_message,
     build_no_information_message,
@@ -48,6 +50,8 @@ LINK_OK = "ok"
 LINK_UNAVAILABLE = "unavailable"
 TIER_CATALOG = "catalog"
 TIER_FINDER = "finder"
+TIER_FINDER_LLM = "finder_llm"
+DEFAULT_MAX_CANDIDATES = 5
 SAFE_REVIEW_REASON = ReviewReason.LOW_CONFIDENCE.value
 FINDER_REASONS = frozenset({ReviewReason.OUT_OF_CATALOG, ReviewReason.LOW_CONFIDENCE})
 REJECTED_TEXT_TEMPLATE = "[pedido rejeitado na ingestão: {reason}]"
@@ -83,6 +87,7 @@ class Deps:
     retry_policy: RetryPolicy = STORAGE_RETRY_POLICY
     sleep: Callable[[float], None] = time.sleep
     finder: ServiceFinder | None = None
+    max_candidates: int = DEFAULT_MAX_CANDIDATES
 
 
 def _load_model_or_none() -> Pipeline | None:
@@ -93,19 +98,32 @@ def _load_model_or_none() -> Pipeline | None:
         return None
 
 
+def _max_candidates(settings: Settings, client: LlmClient | None) -> int:
+    """Quantas candidatas o assistente de localização recebe: vem do `config.json` do agente (só lido com o modo ligado)."""
+    if client is None or not settings.llm_assist_locate:
+        return DEFAULT_MAX_CANDIDATES
+    try:
+        return load_agent(settings.llm_agent_id).params.max_candidates
+    except AgentError as error:
+        logger.warning("Agente sem max_candidates utilizável (%s); usando %d", type(error).__name__, DEFAULT_MAX_CANDIDATES)
+        return DEFAULT_MAX_CANDIDATES
+
+
 def build_deps(settings: Settings, db_path: str | Path) -> Deps:
     """Monta as dependências de uma execução: banco, catálogo, modelo (ausente vira `None`) e LLM opcional.
 
     Banco inacessível levanta `StorageError`; o chamador decide (no `run.py`, código de saída 1).
     """
     lookup = build_default_lookup()
+    llm_client = build_llm_client(settings)
     return Deps(
         repository=Repository(db_path),
         lookup=lookup,
         settings=settings,
         model=_load_model_or_none(),
-        llm_client=build_llm_client(settings),
+        llm_client=llm_client,
         finder=ServiceFinder(lookup.approved_entries(), settings),
+        max_candidates=_max_candidates(settings, llm_client),
     )
 
 
@@ -143,16 +161,27 @@ def _answer_or_review(decision: Decision, deps: Deps) -> ProcessingResult:
     return _answered(decision, resolution.service, TIER_CATALOG, deps)
 
 
+def _llm_choice(text: str, deps: Deps) -> ServiceEntry | None:
+    """Escolha do LLM entre as candidatas aprovadas; só com `LLM_ENABLED`, `LLM_ASSIST_LOCATE`, cliente e localizador."""
+    if not (deps.settings.llm_enabled and deps.settings.llm_assist_locate):
+        return None
+    if deps.llm_client is None or deps.finder is None:
+        return None
+    candidates = deps.finder.top_candidates(text, deps.max_candidates)
+    return choose_entry(deps.llm_client, text, candidates)
+
+
 def _find_or_review(text: str, decision: Decision, deps: Deps) -> ProcessingResult:
     """Degraus 2 e 3: procura a fonte aprovada no texto anonimizado; sem fonte, mensagem de que o sistema não tem a informação."""
     match = deps.finder.find(text) if deps.finder is not None else None
-    if match is None:
+    entry, tier = (match.entry, TIER_FINDER) if match is not None else (_llm_choice(text, deps), TIER_FINDER_LLM)
+    if entry is None:
         review = _review(decision.category, decision.confidence, decision.reason.value)
         return replace(review, response_text=build_no_information_message())
-    resolution = deps.lookup.resolve_entry(match.entry)
+    resolution = deps.lookup.resolve_entry(entry)
     if resolution.service is None:
         return _failed_resolution(decision, resolution.reason)
-    return _answered(decision, resolution.service, TIER_FINDER, deps)
+    return _answered(decision, resolution.service, tier, deps)
 
 
 def _urgent_review(decision: Decision, deps: Deps) -> ProcessingResult:

@@ -95,14 +95,31 @@ O robô funciona **sem nenhuma chave**: o LLM é opcional e vem **desligado**. P
 |---|---|
 | `LLM_ENABLED` | liga (`true`) ou desliga o LLM; padrão desligado |
 | `LLM_BASE_URL`, `LLM_MODEL`, `LLM_API_KEY` | provedor, modelo e chave do LLM (só no `.env`) |
+| `LLM_ASSIST_LOCATE` | liga o assistente de localização (modo b, abaixo); exige `LLM_ENABLED`; padrão desligado |
 | `LLM_FALLBACK_MODELS` | modelos alternativos, separados por vírgula, tentados na ordem se o principal falhar; opcional |
 | `LLM_AGENT_ID` | agente em `data/agents/<id>/` (padrão `triage-assistant`); opcional |
 | `LOG_LEVEL` | nível do log (padrão `INFO`) |
 | `CONFIDENCE_MIN`, `AMBIGUITY_MARGIN` | limiares da revisão humana (padrão `0.60` e `0.15`), opcionais |
 
-O LLM só **reformula** a resposta que o robô já decidiu e recebe apenas o texto-modelo da resposta, nunca o pedido do
-cidadão. Se ele falhar, vier vazio ou trouxer um link fora do esperado, vale o texto-modelo e o motivo vai para o log.
-Nenhum dado pessoal real deve ser enviado a nenhuma API.
+O LLM tem **dois modos**, independentes e sempre sob o `LLM_ENABLED`:
+
+| Modo | Interruptor | O que envia ao provedor |
+|---|---|---|
+| **(a) Reformulação** | `LLM_ENABLED=true` | só o texto-modelo da resposta já decidida (links e telefones do catálogo); **nunca** o pedido do cidadão |
+| **(b) Assistente de localização** | `LLM_ENABLED=true` **e** `LLM_ASSIST_LOCATE=true` (padrão `false`) | o texto do pedido **anonimizado** e uma lista de até 5 fontes aprovadas (`id`, nome, órgão) |
+
+**(a) Reformulação.** O LLM só reescreve a resposta que o robô já decidiu. Se ele falhar, vier vazio ou trouxer link ou
+telefone fora do esperado, vale o texto-modelo e o motivo vai para o log.
+
+**(b) Assistente de localização.** Quando o localizador determinístico não acha a fonte, o LLM escolhe **um `id` de uma
+lista fechada** de fontes aprovadas, em JSON (`{"id": "<id>"}` ou `{"id": "none"}`). Qualquer outra saída (texto livre, id fora
+da lista, JSON inválido, vazio, timeout) vira "não tenho a informação". O LLM nunca escreve link, telefone nem órgão: o texto
+mostrado vem do catálogo aprovado. Como esse modo **envia o texto anonimizado do cidadão para fora do computador**, ele é
+opt-in e vem desligado.
+
+**Risco residual.** A anonimização reduz o risco, mas não o elimina: nome fora da lista de prenomes, endereço sem número e
+cidade ou bairro podem passar (limites em `specs/01.03-anonimizacao-de-pii.md`). **Nenhum dado pessoal real deve ser digitado**
+no sistema, com ou sem LLM. A chave do provedor fica só no `.env`, fora do Git.
 
 ## Agente LLM
 
@@ -113,7 +130,7 @@ O comportamento do LLM não está no código: o **agente** é definido por arqui
 | `data/agents/global_rules.md` | regras que valem para todo agente |
 | `data/agents/<id>/identity.md` | persona e tom de voz |
 | `data/agents/<id>/rules.md` | limites rígidos |
-| `data/agents/<id>/workflow.md` | uma seção `## Tarefa: <nome>` por tarefa (hoje, `rewrite`) |
+| `data/agents/<id>/workflow.md` | uma seção `## Tarefa: <nome>` por tarefa (hoje, `rewrite` e `locate`) |
 | `data/agents/<id>/config.json` | temperatura, `max_tokens`, timeout e política de tentativas |
 
 **`.env` × versionado:** o que muda por ambiente ou é segredo fica no `.env` (`LLM_ENABLED`, `LLM_BASE_URL`,

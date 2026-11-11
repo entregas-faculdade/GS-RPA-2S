@@ -188,7 +188,7 @@ def test_a_working_first_model_does_not_touch_the_alternatives(monkeypatch: pyte
 def test_unknown_task_is_not_sent_to_the_provider(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = _patch_post(monkeypatch)
     with pytest.raises(AgentError):
-        _client().complete("locate", "p")
+        _client().complete("inexistente", "p")
     assert fake.calls == []
 
 

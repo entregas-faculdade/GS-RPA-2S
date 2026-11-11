@@ -113,11 +113,31 @@ def test_workflow_with_an_empty_rewrite_section_is_an_error(agents_dir: Path, ag
         load_agent(DEFAULT_AGENT_ID, agents_dir)
 
 
+def test_workflow_without_the_locate_section_is_an_error(agents_dir: Path, agent_dir: Path) -> None:
+    (agent_dir / "workflow.md").write_text("## Tarefa: rewrite\n\ntexto\n", encoding="utf-8")
+    with pytest.raises(AgentError, match="Tarefa: locate"):
+        load_agent(DEFAULT_AGENT_ID, agents_dir)
+
+
+def test_the_real_agent_has_the_locate_task_and_five_candidates() -> None:
+    agent = load_agent(DEFAULT_AGENT_ID)
+
+    assert agent.tasks["locate"]
+    assert agent.params.max_candidates == 5
+
+
+@pytest.mark.parametrize("value", [0, -1, 2.5, "5", True])
+def test_invalid_max_candidates_is_an_error(value: object, agents_dir: Path, agent_dir: Path) -> None:
+    _write_config(agent_dir, max_candidates=value)
+    with pytest.raises(AgentError, match="max_candidates"):
+        load_agent(DEFAULT_AGENT_ID, agents_dir)
+
+
 def test_system_prompt_is_ordered_global_identity_rules_task(agents_dir: Path, agent_dir: Path) -> None:
     (agents_dir / "global_rules.md").write_text("GLOBAL", encoding="utf-8")
     (agent_dir / "identity.md").write_text("IDENTIDADE", encoding="utf-8")
     (agent_dir / "rules.md").write_text("REGRAS", encoding="utf-8")
-    (agent_dir / "workflow.md").write_text("## Tarefa: outra\nNAO\n\n## Tarefa: rewrite\nTAREFA\n", encoding="utf-8")
+    (agent_dir / "workflow.md").write_text("## Tarefa: outra\nNAO\n\n## Tarefa: rewrite\nTAREFA\n\n## Tarefa: locate\nESCOLHA\n", encoding="utf-8")
 
     prompt = compose_system_prompt(load_agent(DEFAULT_AGENT_ID, agents_dir), "rewrite")
 
@@ -125,8 +145,8 @@ def test_system_prompt_is_ordered_global_identity_rules_task(agents_dir: Path, a
 
 
 def test_unknown_task_has_no_prompt() -> None:
-    with pytest.raises(AgentError, match="não tem a tarefa 'locate'"):
-        compose_system_prompt(load_agent(DEFAULT_AGENT_ID), "locate")
+    with pytest.raises(AgentError, match="não tem a tarefa 'inexistente'"):
+        compose_system_prompt(load_agent(DEFAULT_AGENT_ID), "inexistente")
 
 
 def test_loaded_agent_is_immutable() -> None:

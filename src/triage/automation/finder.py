@@ -73,6 +73,21 @@ class ServiceFinder:
         position, margin = _best_and_margin(scores)
         return FinderMatch(self._entries[position], scores[position], margin)
 
+    def top_candidates(self, text: str, limit: int) -> tuple[ServiceEntry, ...]:
+        """As até `limit` entradas aprovadas de maior pontuação (empate: ordem de `id`), sem limiar mínimo.
+
+        Entrada sem nenhum termo em comum com o texto (pontuação zero) não é candidata.
+        """
+        if self._index is None or not text.strip() or limit <= 0:
+            return ()
+        vectorizer, matrix = self._index
+        query = vectorizer.transform([text])
+        if query.nnz == 0:
+            return ()
+        scores = matrix.dot(query.T).toarray().ravel().tolist()
+        ranked = sorted(range(len(scores)), key=lambda position: (-scores[position], position))
+        return tuple(self._entries[position] for position in ranked[:limit] if scores[position] > 0)
+
     def find(self, text: str) -> FinderMatch | None:
         """A fonte aprovada do pedido, ou `None` se a pontuação ou a folga ficam abaixo do limiar."""
         match = self.best(text)

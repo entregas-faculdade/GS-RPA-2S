@@ -176,3 +176,32 @@ def test_accepts_any_iterable_of_entries(entries: list[ServiceEntry]) -> None:
 
     assert match is not None
     assert match.entry.id == "ipva"
+
+
+def test_top_candidates_are_ranked_by_score_and_limited(entries: list[ServiceEntry]) -> None:
+    finder = ServiceFinder(entries, SETTINGS)
+    text = "quero pagar o ipva do carro e a vacina"
+
+    ranked = finder.top_candidates(text, 2)
+
+    assert len(ranked) == 2
+    assert ranked[0].id == finder.best(text).entry.id
+    assert len(finder.top_candidates("ipva cnh vacina", 1)) == 1
+
+
+def test_top_candidates_ignore_the_thresholds_but_skip_zero_scores(entries: list[ServiceEntry]) -> None:
+    finder = ServiceFinder(entries, _with(SETTINGS, finder_min_score=1.0, finder_margin=1.0))
+
+    assert [entry.id for entry in finder.top_candidates("ipva", 5)] == ["ipva"]
+
+
+@pytest.mark.parametrize(("text", "limit"), [("", 5), ("   ", 5), ("zzz qqq", 5), ("ipva", 0)])
+def test_top_candidates_empty_cases(entries: list[ServiceEntry], text: str, limit: int) -> None:
+    assert ServiceFinder(entries, SETTINGS).top_candidates(text, limit) == ()
+
+
+def test_top_candidates_never_include_candidate_entries(entries: list[ServiceEntry], make_entry: MakeEntry) -> None:
+    candidate = make_entry("passport", status="candidate", keywords=("passaporte",), display_name="Passaporte")
+    finder = ServiceFinder([*entries, candidate], SETTINGS)
+
+    assert finder.top_candidates("quero o passaporte", 5) == ()

@@ -18,6 +18,7 @@ ENV_KEYS = (
     "LLM_API_KEY",
     "LLM_AGENT_ID",
     "LLM_FALLBACK_MODELS",
+    "LLM_ASSIST_LOCATE",
     "LOG_LEVEL",
     "LINK_CHECK_USER_AGENT",
     "FINDER_MIN_SCORE",
@@ -162,3 +163,15 @@ def test_fallback_models_are_a_trimmed_comma_separated_list(
 ) -> None:
     monkeypatch.setenv("LLM_FALLBACK_MODELS", raw_value)
     assert load_settings(tmp_path / "missing.env").llm_fallback_models == expected
+
+
+def test_assist_locate_is_off_by_default(tmp_path: Path) -> None:
+    assert load_settings(tmp_path / "missing.env").llm_assist_locate is False
+
+
+@pytest.mark.parametrize(("raw_value", "expected"), [("true", True), (" 1 ", True), ("false", False), ("talvez", False)])
+def test_assist_locate_reads_the_same_boolean_as_llm_enabled(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, raw_value: str, expected: bool
+) -> None:
+    monkeypatch.setenv("LLM_ASSIST_LOCATE", raw_value)
+    assert load_settings(tmp_path / "missing.env").llm_assist_locate is expected

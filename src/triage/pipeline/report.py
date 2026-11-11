@@ -15,6 +15,7 @@ from triage.pipeline.processor import (
     STATUS_SKIPPED_DUPLICATE,
     TIER_CATALOG,
     TIER_FINDER,
+    TIER_FINDER_LLM,
     ProcessingResult,
 )
 from triage.storage.schema import (
@@ -34,7 +35,11 @@ STATUS_LABELS = {
 }
 REVIEW_STATUSES = (STATUS_QUEUED_FOR_REVIEW, STATUS_REJECTED)
 LINK_LABELS = {LINK_OK: "no ar", LINK_UNAVAILABLE: "fora do ar"}
-TIER_LABELS = {TIER_CATALOG: "serviço específico do catálogo", TIER_FINDER: "fonte achada pelo localizador"}
+TIER_LABELS = {
+    TIER_CATALOG: "serviço específico do catálogo",
+    TIER_FINDER: "fonte achada pelo localizador",
+    TIER_FINDER_LLM: "fonte escolhida pelo assistente de localização",
+}
 FILE_TIMESTAMP_FORMAT ="%Y%m%dT%H%M%S"
 
 logger = logging.getLogger("triage.pipeline")
@@ -93,7 +98,7 @@ def build_report(
         by_review_reason=dict(sorted(reasons.items())),
         links={LINK_OK: link_count.get(LINK_OK, 0), LINK_UNAVAILABLE: link_count.get(LINK_UNAVAILABLE, 0)},
         llm={"used": sum(result.used_llm for result in outcomes), "fallbacks": dict(sorted(fallbacks.items()))},
-        tiers={TIER_CATALOG: tier_count.get(TIER_CATALOG, 0), TIER_FINDER: tier_count.get(TIER_FINDER, 0)},
+        tiers={tier: tier_count.get(tier, 0) for tier in TIER_LABELS},
     )
 
 

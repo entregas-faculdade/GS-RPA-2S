@@ -17,7 +17,6 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 —
 
 ## Próximas
-- 🔴 · plan-03.07 · R03.7 · Usar o LLM, de forma opcional, para localizar a fonte entre candidatas aprovadas e melhorar o texto
 - 🔴 · plan-04.04 · R04.4 · Registrar a categoria correta na revisão e exportar pedidos anonimizados rotulados
 
 ## Por família
@@ -30,4 +29,5 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
+- 🟢 plan-03.07 · Usar o LLM, de forma opcional, para localizar a fonte entre candidatas aprovadas e melhorar o texto — aguardando síntese
 - 📋 26 achado(s) no `00-backlog`

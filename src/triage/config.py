@@ -39,6 +39,7 @@ class Settings:
     link_check_user_agent: str = DEFAULT_LINK_CHECK_USER_AGENT
     llm_agent_id: str = DEFAULT_AGENT_ID
     llm_fallback_models: tuple[str, ...] = ()
+    llm_assist_locate: bool = False
 
 
 def _parse_bool(raw_value: str) -> bool:
@@ -82,4 +83,5 @@ def load_settings(dotenv_path: Path = DEFAULT_DOTENV_PATH) -> Settings:
         link_check_user_agent=os.getenv("LINK_CHECK_USER_AGENT", "").strip() or DEFAULT_LINK_CHECK_USER_AGENT,
         llm_agent_id=os.getenv("LLM_AGENT_ID", "").strip() or DEFAULT_AGENT_ID,
         llm_fallback_models=_parse_list(os.getenv("LLM_FALLBACK_MODELS", "")),
+        llm_assist_locate=_parse_bool(os.getenv("LLM_ASSIST_LOCATE", "")),
     )
