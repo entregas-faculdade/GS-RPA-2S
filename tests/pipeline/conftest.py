@@ -47,7 +47,7 @@ def make_deps(tmp_path: Path, settings: Settings, trained_model: Pipeline) -> Ca
 
     def build(**overrides: object) -> Deps:
         checker = overrides.pop("link_ok", True)
-        lookup = CatalogLookup(load_catalog(), load_allowed_suffixes(), link_checker(checker))
+        lookup = CatalogLookup(load_catalog(extra_dir=None), load_allowed_suffixes(), link_checker(checker))
         values = {
             "repository": Repository(tmp_path / "triage.db"),
             "lookup": lookup,

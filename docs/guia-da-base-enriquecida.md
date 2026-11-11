@@ -68,7 +68,7 @@ O registro que você coloca em `data/catalog.d/` **conta como aprovado por você
 `docs/fontes-publicas-sp-para-aprovacao.md`. Mas ele só **responde** se as três condições valem ao mesmo tempo:
 
 1. `status` é `approved`;
-2. o domínio de cada link está na allowlist (`gov.br` e subdomínios, em `data/allowed_domains.json`);
+2. o domínio de cada link está na allowlist (`gov.br` e subdomínios, mais `cetsp.com.br`, `sptrans.com.br`, `sabesp.com.br` e `desenvolvesp.com.br`, em `data/allowed_domains.json`);
 3. o verificador confirma que o link está no ar.
 
 Fora disso a entrada fica `candidate` (ou o link é descartado) e nunca chega ao cidadão. Use `candidate` enquanto estiver
@@ -133,3 +133,40 @@ Baseado na entrada real `popular_pharmacy` de `data/catalog.json` (mesma URL ofi
 
 Troque `AAAA-MM-DD` pela data real, o `id` por um novo, o `content` pelo trecho oficial, rode o verificador e só então mude
 `status` para `approved`.
+
+## 8. Importar da planilha
+
+A base também pode vir de uma planilha. O script `scripts/import_catalog_xlsx.py` lê a **primeira aba** do `.xlsx` e gera
+`data/catalog.d/sp_expanded.json`: a planilha é a fonte e o JSON é gerado, então **não edite o JSON à mão**; corrija a planilha e
+rode de novo. Na raiz do repositório:
+
+```powershell
+python scripts/import_catalog_xlsx.py                          # usa docs/catalogo_servicos_publicos_expandido_rpa.xlsx
+python scripts/import_catalog_xlsx.py --xlsx outra.xlsx --out data/catalog.d/outra.json --date 2026-11-11
+```
+
+`--date` é o `verified_on` dos registros (padrão: hoje, em UTC). Rodar duas vezes com a mesma planilha e a mesma data gera arquivos idênticos.
+
+**Colunas esperadas** (acento e maiúscula do cabeçalho não importam): `ID`, `Esfera / Órgão`, `Macro-Categoria`,
+`Finalidade / Descrição do Serviço`, `URL Oficial`, `Palavras-Chave / Intents (NLP)` e `Tipo de Interação / Notas RPA`.
+
+**O que o script faz por linha** (as tabelas ficam em `data/catalog_import.json`):
+
+| Registro | Vem de |
+|---|---|
+| `id` | `xl_` + `ID` em minúsculas (`M02` vira `xl_m02`) |
+| `scope` e `coverage` | prefixo do `ID`: `M` municipal ("Município de São Paulo"), `S` estadual ("Estado de São Paulo"), `F` federal ("Brasil") |
+| `area` | tabela da `Macro-Categoria`; categoria fora da tabela cai em `city` e vem avisada no relatório |
+| `kind` | `portal` se a finalidade começa com "Portal"; senão `service` |
+| `display_name`, `agency`, `keywords`, `links` | finalidade, órgão, palavras-chave (aparadas, sem vazio e sem repetição) e a URL (um link por linha) |
+| `instructions` | frase-modelo com o órgão e a finalidade, mandando usar a página oficial |
+| `source_note` | arquivo, linha e `ID` de origem, mais a coluna de notas |
+| `status` | `approved`; `candidate` se o domínio do link não está na allowlist |
+
+**O que o script não faz:** não escreve `content` nem telefone (a planilha não os traz), não copia a coluna de notas para a resposta
+(ela é jargão de RPA e fica só no `source_note`), não navega na internet, não conserta texto e não remove nem funde registros. Linha
+sem `ID`, sem URL ou com `ID` repetido é ignorada com aviso. Os registros importados **convivem** com os de `data/catalog.json` (ids
+diferentes); o relatório lista os pares que apontam para o mesmo link, e quem decide o que fazer com eles é você.
+
+O relatório impresso traz as linhas lidas e geradas, as ignoradas (com o motivo), os `candidate`, as áreas que caíram no padrão e os
+pares. Depois de importar, rode `python scripts/verify_catalog.py`: link que não responde nunca chega ao cidadão, mesmo `approved`.

@@ -225,5 +225,5 @@ def test_extra_files_load_even_when_the_main_catalog_is_missing(tmp_path: Path, 
     assert [entry.id for entry in load_catalog(tmp_path / "missing.json", extra)] == ["from_a"]
 
 
-def test_versioned_extra_dir_has_no_json_so_it_never_becomes_a_real_source() -> None:
-    assert list(Path("data", "catalog.d").glob("*.json")) == []
+def test_versioned_extra_dir_has_only_the_imported_spreadsheet_base() -> None:
+    assert [file.name for file in Path("data", "catalog.d").glob("*.json")] == ["sp_expanded.json"]

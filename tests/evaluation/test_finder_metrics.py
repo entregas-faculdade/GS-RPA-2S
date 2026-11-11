@@ -151,7 +151,7 @@ def _rows() -> list[dict[str, str]]:
 
 
 def _approved() -> dict[str, ServiceEntry]:
-    return {entry.id: entry for entry in approved_only(load_catalog())}
+    return {entry.id: entry for entry in approved_only(load_catalog(extra_dir=None))}
 
 
 def test_labeled_set_has_the_columns_and_unique_ids() -> None:

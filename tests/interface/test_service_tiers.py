@@ -52,7 +52,7 @@ class FakeFinder:
 def _service(
     repository: Repository, settings: Settings, model: Pipeline, finder: FakeFinder | None = None
 ) -> AppService:
-    lookup = CatalogLookup([*load_catalog(), PORTAL], load_allowed_suffixes(), lambda _url: LinkStatus(True, 200, None))
+    lookup = CatalogLookup([*load_catalog(extra_dir=None), PORTAL], load_allowed_suffixes(), lambda _url: LinkStatus(True, 200, None))
     return AppService(Deps(repository=repository, lookup=lookup, settings=settings, model=model, finder=finder))
 
 

@@ -14,7 +14,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 █████████░ 92% · 26/28 itens ✅
 
 ## Agora
-- 🟡 · plan-03.14 · R03.14 · Importar a planilha da base enriquecida do usuário para o catálogo, com script reprodutível e allowlist ampliada
+—
 
 ## Próximas
 - 🔴 · plan-03.13 · R03.13 · Dar memória à conversa do chat (mensagens anteriores anonimizadas) e um botão de nova conversa
@@ -29,4 +29,5 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 05 | Validação e entrega | 1/1 | █████ | 0 |
 
 ## Atenção
-- 📋 28 achado(s) no `00-backlog`
+- 🟢 plan-03.14 · Importar a planilha da base enriquecida do usuário para o catálogo, com script reprodutível e allowlist ampliada — aguardando síntese
+- 📋 29 achado(s) no `00-backlog`

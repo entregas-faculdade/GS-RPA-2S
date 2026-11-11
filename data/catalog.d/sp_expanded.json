@@ -1,0 +1,1960 @@
+[
+  {
+    "id": "xl_m01",
+    "category": null,
+    "kind": "portal",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "city",
+    "display_name": "Portal Oficial da Prefeitura de São Paulo",
+    "agency": "PMSP - Geral",
+    "instructions": "PMSP - Geral: Portal Oficial da Prefeitura de São Paulo. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "prefeitura",
+      "sp",
+      "portal sp",
+      "serviços municipais"
+    ],
+    "links": [
+      {
+        "label": "Portal Oficial da Prefeitura de São Paulo",
+        "url": "https://www.prefeitura.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 2 (ID M01). Notas da planilha: Proteção Cloudflare (HTTP 403) - Playwright com User-Agent rotativo.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m02",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "tax",
+    "display_name": "Consulta e Emissão de Segunda Via de IPTU",
+    "agency": "Secretaria da Fazenda",
+    "instructions": "Secretaria da Fazenda: Consulta e Emissão de Segunda Via de IPTU. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "iptu",
+      "imposto predial",
+      "pagar iptu",
+      "taxa municipal"
+    ],
+    "links": [
+      {
+        "label": "Consulta e Emissão de Segunda Via de IPTU",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/fazenda/servicos/iptu"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 3 (ID M02). Notas da planilha: Requer inserção de SQL / Número do Contribuinte.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m03",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "tax",
+    "display_name": "Emissão de Nota Fiscal Eletrônica (NFS-e)",
+    "agency": "Secretaria da Fazenda",
+    "instructions": "Secretaria da Fazenda: Emissão de Nota Fiscal Eletrônica (NFS-e). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "nota fiscal",
+      "nf-e",
+      "emitir nota",
+      "tomador",
+      "prestador"
+    ],
+    "links": [
+      {
+        "label": "Emissão de Nota Fiscal Eletrônica (NFS-e)",
+        "url": "https://nfe.prefeitura.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 4 (ID M03). Notas da planilha: Sistema legado com login por certificado digital ou senha web.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m04",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "tax",
+    "display_name": "Consulta de CADIN Municipal (Inadimplência)",
+    "agency": "Secretaria da Fazenda",
+    "instructions": "Secretaria da Fazenda: Consulta de CADIN Municipal (Inadimplência). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "cadin",
+      "divida ativa",
+      "nome sujo prefeitura"
+    ],
+    "links": [
+      {
+        "label": "Consulta de CADIN Municipal (Inadimplência)",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/fazenda/cadin"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 5 (ID M04). Notas da planilha: Consulta mediante CPF/CNPJ.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m05",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "tax",
+    "display_name": "Parcelamento de Débitos Tributários e Não Tributários",
+    "agency": "Secretaria da Fazenda",
+    "instructions": "Secretaria da Fazenda: Parcelamento de Débitos Tributários e Não Tributários. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "parcelar divida",
+      "refinanciamento",
+      "refis sp",
+      "debitos atrasados"
+    ],
+    "links": [
+      {
+        "label": "Parcelamento de Débitos Tributários e Não Tributários",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/fazenda/parcelamento"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 6 (ID M05). Notas da planilha: Fluxo autenticado com senha web.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m06",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "city",
+    "display_name": "Consulta de Alvará de Funcionamento e Licenças",
+    "agency": "Secretaria de Licenciamento (SMUL)",
+    "instructions": "Secretaria de Licenciamento (SMUL): Consulta de Alvará de Funcionamento e Licenças. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "alvará",
+      "licença de funcionamento",
+      "comércio",
+      "empresa"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Alvará de Funcionamento e Licenças",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/licenciamento"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 7 (ID M06). Notas da planilha: Integração com o sistema SEL/Licenciamento.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m07",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "city",
+    "display_name": "Consulta de Viabilidade de Localização (Consulta Prévia)",
+    "agency": "Secretaria de Licenciamento (SMUL)",
+    "instructions": "Secretaria de Licenciamento (SMUL): Consulta de Viabilidade de Localização (Consulta Prévia). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "viabilidade comercial",
+      "posso abrir empresa aqui",
+      "zoneamento comercial"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Viabilidade de Localização (Consulta Prévia)",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/licenciamento/viabilidade"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 8 (ID M07). Notas da planilha: Validação de endereço e atividade econômica.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m08",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "health",
+    "display_name": "Localização de Unidades Básicas de Saúde (UBS)",
+    "agency": "Secretaria de Saúde (SMS)",
+    "instructions": "Secretaria de Saúde (SMS): Localização de Unidades Básicas de Saúde (UBS). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "ubs",
+      "posto de saúde",
+      "médico perto de mim",
+      "vacina"
+    ],
+    "links": [
+      {
+        "label": "Localização de Unidades Básicas de Saúde (UBS)",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/saude/profissionais/ubs"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 9 (ID M08). Notas da planilha: Páginas estáticas com listagem de endereços e telefones.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m09",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "health",
+    "display_name": "Agendamento e Informações de Campanhas de Vacinação",
+    "agency": "Secretaria de Saúde (SMS)",
+    "instructions": "Secretaria de Saúde (SMS): Agendamento e Informações de Campanhas de Vacinação. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "vacinação",
+      "vacina febre amarela",
+      "gripe",
+      "covid"
+    ],
+    "links": [
+      {
+        "label": "Agendamento e Informações de Campanhas de Vacinação",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/saude/vigilancia_em_saude/vacinacao"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 10 (ID M09). Notas da planilha: Conteúdo informativo com links para plataformas de agendamento.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m10",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "health",
+    "display_name": "Consulta de Rede de Atendimento AMAs e Hospitais Municipais",
+    "agency": "Secretaria de Saúde (SMS)",
+    "instructions": "Secretaria de Saúde (SMS): Consulta de Rede de Atendimento AMAs e Hospitais Municipais. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "ama",
+      "hospital municipal",
+      "atendimento de urgencia",
+      "pronto socorro"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Rede de Atendimento AMAs e Hospitais Municipais",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/saude/atendimento"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 11 (ID M10). Notas da planilha: Diretório de unidades de saúde.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m11",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "education",
+    "display_name": "Consulta de Vagas em Centros de Educação Infantil (CEI/Creches)",
+    "agency": "Secretaria de Educação (SME)",
+    "instructions": "Secretaria de Educação (SME): Consulta de Vagas em Centros de Educação Infantil (CEI/Creches). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "creche",
+      "matricula creche",
+      "escola municipal infantil",
+      "vaga creche"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Vagas em Centros de Educação Infantil (CEI/Creches)",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/educacao/educacao_infantil/cei"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 12 (ID M11). Notas da planilha: Consulta por distrito e faixa etária.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m12",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "education",
+    "display_name": "Inscrição e Transferência no Ensino Fundamental e Médio Municipal",
+    "agency": "Secretaria de Educação (SME)",
+    "instructions": "Secretaria de Educação (SME): Inscrição e Transferência no Ensino Fundamental e Médio Municipal. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "escola municipal",
+      "matricula ensino fundamental",
+      "transferencia escolar"
+    ],
+    "links": [
+      {
+        "label": "Inscrição e Transferência no Ensino Fundamental e Médio Municipal",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/educacao"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 13 (ID M12). Notas da planilha: Portal SP 156 integrado.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m13",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "city",
+    "display_name": "Consulta de Zoneamento Urbano e Uso do Solo (Geosampa)",
+    "agency": "SP Urbanismo / SMUL",
+    "instructions": "SP Urbanismo / SMUL: Consulta de Zoneamento Urbano e Uso do Solo (Geosampa). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "geosampa",
+      "zoneamento",
+      "mapa de sao paulo",
+      "lote",
+      "uso do solo"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Zoneamento Urbano e Uso do Solo (Geosampa)",
+        "url": "https://geosampa.prefeitura.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 14 (ID M13). Notas da planilha: Mapa interativo em GIS; automação exige extração de coordenadas ou API.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m14",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "vehicles",
+    "display_name": "Consulta e Indicação de Defesa de Autuação de Multas de Trânsito",
+    "agency": "Secretaria de Mobilidade (CET)",
+    "instructions": "Secretaria de Mobilidade (CET): Consulta e Indicação de Defesa de Autuação de Multas de Trânsito. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "multa cet",
+      "recorrer multa sp",
+      "transito municipal",
+      "infração"
+    ],
+    "links": [
+      {
+        "label": "Consulta e Indicação de Defesa de Autuação de Multas de Trânsito",
+        "url": "https://www.cetsp.com.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 15 (ID M14). Notas da planilha: Redirecionamento para sistema de infrações municipais.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m15",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "vehicles",
+    "display_name": "Solicitação, 2ª Via e Recarga do Cartão Bilhete Único",
+    "agency": "Secretaria de Transportes (SPTrans)",
+    "instructions": "Secretaria de Transportes (SPTrans): Solicitação, 2ª Via e Recarga do Cartão Bilhete Único. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "bilhete unico",
+      "cartao transporte",
+      "recarga",
+      "estudante",
+      "2 via bilhete"
+    ],
+    "links": [
+      {
+        "label": "Solicitação, 2ª Via e Recarga do Cartão Bilhete Único",
+        "url": "https://www.sptrans.com.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 16 (ID M15). Notas da planilha: Requer login de usuário e integração com sistemas de pagamento.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m16",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "vehicles",
+    "display_name": "Cadastro e Renovação do Bilhete Único Estudantil",
+    "agency": "Secretaria de Transportes (SPTrans)",
+    "instructions": "Secretaria de Transportes (SPTrans): Cadastro e Renovação do Bilhete Único Estudantil. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "passe livre estudante",
+      "bilhete unico estudante",
+      "desconto onibus sp"
+    ],
+    "links": [
+      {
+        "label": "Cadastro e Renovação do Bilhete Único Estudantil",
+        "url": "https://www.sptrans.com.br/estudante"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 17 (ID M16). Notas da planilha: Envio de comprovante de matrícula e foto.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m17",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "social",
+    "display_name": "Consulta de Centros de Referência de Assistência Social (CRAS)",
+    "agency": "Secretaria de Assistência e Des. Social",
+    "instructions": "Secretaria de Assistência e Des. Social: Consulta de Centros de Referência de Assistência Social (CRAS). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "cras",
+      "assistencia social",
+      "auxilio municipal",
+      "bolsa familia"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Centros de Referência de Assistência Social (CRAS)",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/assistencia_social/cras"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 18 (ID M17). Notas da planilha: Listagem de unidades por região e diretrizes de atendimento.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m18",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "social",
+    "display_name": "Consulta de Centros de Referência Especializados (CREAS)",
+    "agency": "Secretaria de Assistência e Des. Social",
+    "instructions": "Secretaria de Assistência e Des. Social: Consulta de Centros de Referência Especializados (CREAS). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "creas",
+      "apoio familiar",
+      "violencia domestica",
+      "assistencia especial"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Centros de Referência Especializados (CREAS)",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/assistencia_social/creas"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 19 (ID M18). Notas da planilha: Atendimento especializado a famílias em situação de risco.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m19",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "city",
+    "display_name": "Solicitação de Tapa-Buraco e Zeladoria Urbana (SP 156)",
+    "agency": "Secretaria de Subprefeituras",
+    "instructions": "Secretaria de Subprefeituras: Solicitação de Tapa-Buraco e Zeladoria Urbana (SP 156). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "tapa buraco",
+      "buraco na rua",
+      "zeladoria urbana",
+      "poda de arvore",
+      "calcada"
+    ],
+    "links": [
+      {
+        "label": "Solicitação de Tapa-Buraco e Zeladoria Urbana (SP 156)",
+        "url": "https://sp156.prefeitura.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 20 (ID M19). Notas da planilha: Plataforma SP156 - requer fluxo autenticado (conta gov.br ou SP).",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m20",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "city",
+    "display_name": "Denúncia de Perturbação do Sossego (PSIU)",
+    "agency": "Secretaria de Subprefeituras",
+    "instructions": "Secretaria de Subprefeituras: Denúncia de Perturbação do Sossego (PSIU). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "som alto",
+      "psiu",
+      "perturbação do sossego",
+      "barulho vizinho"
+    ],
+    "links": [
+      {
+        "label": "Denúncia de Perturbação do Sossego (PSIU)",
+        "url": "https://sp156.prefeitura.sp.gov.br/portal/servicos/requisito?servico=343"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 21 (ID M20). Notas da planilha: Abertura de chamado via SP156 com descrição do local.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m21",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "city",
+    "display_name": "Solicitação de Limpeza de Bueiros e Galerias",
+    "agency": "Secretaria de Subprefeituras",
+    "instructions": "Secretaria de Subprefeituras: Solicitação de Limpeza de Bueiros e Galerias. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "bueiro entupido",
+      "alagamento rua",
+      "limpeza de bueiro"
+    ],
+    "links": [
+      {
+        "label": "Solicitação de Limpeza de Bueiros e Galerias",
+        "url": "https://sp156.prefeitura.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 22 (ID M21). Notas da planilha: Chamado operacional via SP156.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m22",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "city",
+    "display_name": "Programação de Teatros, Bibliotecas e Centros Culturais Municipais",
+    "agency": "Secretaria de Cultura",
+    "instructions": "Secretaria de Cultura: Programação de Teatros, Bibliotecas e Centros Culturais Municipais. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "cultura sp",
+      "bibliotecas municipais",
+      "teatro municipal",
+      "agenda cultural"
+    ],
+    "links": [
+      {
+        "label": "Programação de Teatros, Bibliotecas e Centros Culturais Municipais",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/cultura"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 23 (ID M22). Notas da planilha: Portal de notícias e eventos culturais.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m23",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "city",
+    "display_name": "Inscrição em Clubes Esportivos Municipais (CEUs) e Atividades",
+    "agency": "Secretaria de Esportes",
+    "instructions": "Secretaria de Esportes: Inscrição em Clubes Esportivos Municipais (CEUs) e Atividades. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "ceu",
+      "centro esportivo",
+      "piscina publica",
+      "aula de natacao",
+      "academia municipal"
+    ],
+    "links": [
+      {
+        "label": "Inscrição em Clubes Esportivos Municipais (CEUs) e Atividades",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/esportes"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 24 (ID M23). Notas da planilha: Informações e quadros de vagas por unidade.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m24",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "city",
+    "display_name": "Emissão de Orientação e Apoio ao Microempreendedor Individual (MEI)",
+    "agency": "Secretaria de Desenvolvimento Econômico",
+    "instructions": "Secretaria de Desenvolvimento Econômico: Emissão de Orientação e Apoio ao Microempreendedor Individual (MEI). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "mei sp",
+      "abrir empresa municipal",
+      "microempreendedor",
+      "alvara mei"
+    ],
+    "links": [
+      {
+        "label": "Emissão de Orientação e Apoio ao Microempreendedor Individual (MEI)",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/desenvolvimento/atendimento"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 25 (ID M24). Notas da planilha: Orientações de formalização municipal.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m25",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "social",
+    "display_name": "Consulta de Cadastros de Programas Habitacionais (Habita SP / COHAB)",
+    "agency": "Secretaria de Habitação (SEHAB)",
+    "instructions": "Secretaria de Habitação (SEHAB): Consulta de Cadastros de Programas Habitacionais (Habita SP / COHAB). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "habitacao sp",
+      "cohab",
+      "casa propria",
+      "inscricao habitacional",
+      "sorteio casa"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Cadastros de Programas Habitacionais (Habita SP / COHAB)",
+        "url": "https://www.cohab.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 26 (ID M25). Notas da planilha: Consulta de status habitacional com CPF.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m26",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "social",
+    "display_name": "Atendimento a Vítimas de Violência e Direitos da Cidadania",
+    "agency": "Secretaria de Direitos Humanos",
+    "instructions": "Secretaria de Direitos Humanos: Atendimento a Vítimas de Violência e Direitos da Cidadania. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "direitos humanos sp",
+      "centro de cidadania",
+      "apoio lgbtqia+",
+      "assistencia mulher"
+    ],
+    "links": [
+      {
+        "label": "Atendimento a Vítimas de Violência e Direitos da Cidadania",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/direitos_humanos"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 27 (ID M26). Notas da planilha: Telefones de emergência e endereços de atendimento.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_m27",
+    "category": null,
+    "kind": "service",
+    "scope": "municipal",
+    "coverage": "Município de São Paulo",
+    "area": "safety",
+    "display_name": "Solicitação de Apoio da Guarda Civil Metropolitana (Central 153)",
+    "agency": "Secretaria de Segurança Urbana (GCM)",
+    "instructions": "Secretaria de Segurança Urbana (GCM): Solicitação de Apoio da Guarda Civil Metropolitana (Central 153). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "gcm sp",
+      "guarda municipal",
+      "patrulhamento",
+      "seguranca bairro"
+    ],
+    "links": [
+      {
+        "label": "Solicitação de Apoio da Guarda Civil Metropolitana (Central 153)",
+        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/seguranca_urbana"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 28 (ID M27). Notas da planilha: Contatos de emergência e patrulhamento preventivo.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s01",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "vehicles",
+    "display_name": "Emissão da Carteira Nacional de Habilitação (CNH Digital / Renovação)",
+    "agency": "Poupatempo / Detran-SP",
+    "instructions": "Poupatempo / Detran-SP: Emissão da Carteira Nacional de Habilitação (CNH Digital / Renovação). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "cnh digital",
+      "tirar cnh",
+      "renovar cnh",
+      "segunda via cnh",
+      "carteira de motorista"
+    ],
+    "links": [
+      {
+        "label": "Emissão da Carteira Nacional de Habilitação (CNH Digital / Renovação)",
+        "url": "https://www.poupatempo.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 29 (ID S01). Notas da planilha: Requer validação facial e login integrado com gov.br.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s02",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "vehicles",
+    "display_name": "Consulta de Pontuação, Multas e Situação de Veículos",
+    "agency": "Detran-SP",
+    "instructions": "Detran-SP: Consulta de Pontuação, Multas e Situação de Veículos. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "pontos na cnh",
+      "consultar multa sp",
+      "ipva sp",
+      "veiculo",
+      "multas detran"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Pontuação, Multas e Situação de Veículos",
+        "url": "https://www.detran.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 30 (ID S02). Notas da planilha: Exige placa/RENAVAM e CPF do proprietário.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s03",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "vehicles",
+    "display_name": "Transferência de Propriedade de Veículo (Compra e Venda)",
+    "agency": "Detran-SP",
+    "instructions": "Detran-SP: Transferência de Propriedade de Veículo (Compra e Venda). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "transferencia de veiculo",
+      "comprar carro sp",
+      "ATPV-e",
+      "cartorio veiculo"
+    ],
+    "links": [
+      {
+        "label": "Transferência de Propriedade de Veículo (Compra e Venda)",
+        "url": "https://www.detran.sp.gov.br/veiculos/transferencia"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 31 (ID S03). Notas da planilha: Fluxo digital integrado com cartórios e vistoria.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s04",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "documents",
+    "display_name": "Emissão de Registro Geral (RG / Nova C.I. Nacional)",
+    "agency": "Secretaria da Segurança Pública",
+    "instructions": "Secretaria da Segurança Pública: Emissão de Registro Geral (RG / Nova C.I. Nacional). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "rg sp",
+      "carteira de identidade",
+      "emitir rg",
+      "segunda via rg",
+      "nova carteira de identidade"
+    ],
+    "links": [
+      {
+        "label": "Emissão de Registro Geral (RG / Nova C.I. Nacional)",
+        "url": "https://www.poupatempo.sp.gov.br/servicos/rg"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 32 (ID S04). Notas da planilha: Agendamento obrigatório de atendimento presencial via Poupatempo.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s05",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "safety",
+    "display_name": "Registro de Boletim de Ocorrência Policial Eletrônico (BO)",
+    "agency": "Secretaria da Segurança Pública",
+    "instructions": "Secretaria da Segurança Pública: Registro de Boletim de Ocorrência Policial Eletrônico (BO). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "boletim de ocorrencia",
+      "b.o. online",
+      "furtos",
+      "roubos",
+      "delegacia virtual",
+      "perderam documentos"
+    ],
+    "links": [
+      {
+        "label": "Registro de Boletim de Ocorrência Policial Eletrônico (BO)",
+        "url": "https://www.delegaciaseletronica.policiacivil.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 33 (ID S05). Notas da planilha: Formulário multi-etapas; exige validação de dados pessoais.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s06",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "safety",
+    "display_name": "Solicitação de Vistoria e Licenciamento (AVCB / CLCB)",
+    "agency": "Corpo de Bombeiros PMESP",
+    "instructions": "Corpo de Bombeiros PMESP: Solicitação de Vistoria e Licenciamento (AVCB / CLCB). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "bombeiros sp",
+      "avcb",
+      "clcb",
+      "vistoria de incendio",
+      "laudo bombeiro",
+      "habite-se bombeiros"
+    ],
+    "links": [
+      {
+        "label": "Solicitação de Vistoria e Licenciamento (AVCB / CLCB)",
+        "url": "https://www.corpodebombeiros.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 34 (ID S06). Notas da planilha: Sistema Via Rápida / Via Fácil Bombeiros.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s07",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "tax",
+    "display_name": "Consulta e Pagamento de IPVA (Imposto sobre Veículos)",
+    "agency": "Secretaria da Fazenda e Planejamento",
+    "instructions": "Secretaria da Fazenda e Planejamento: Consulta e Pagamento de IPVA (Imposto sobre Veículos). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "pagar ipva sp",
+      "consulta ipva",
+      "debito veicular",
+      "imposto carro"
+    ],
+    "links": [
+      {
+        "label": "Consulta e Pagamento de IPVA (Imposto sobre Veículos)",
+        "url": "https://portal.fazenda.sp.gov.br/servicos/ipva"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 35 (ID S07). Notas da planilha: Emissão de guia de pagamento (Boleto/PIX).",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s08",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "tax",
+    "display_name": "Consulta de Créditos da Nota Fiscal Paulista",
+    "agency": "Secretaria da Fazenda e Planejamento",
+    "instructions": "Secretaria da Fazenda e Planejamento: Consulta de Créditos da Nota Fiscal Paulista. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "nota fiscal paulista",
+      "resgatar creditos",
+      "cpf na nota",
+      "dinheiro nota fiscal"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Créditos da Nota Fiscal Paulista",
+        "url": "https://www.nfp.fazenda.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 36 (ID S08). Notas da planilha: Requer login com senha pessoal ou certificado digital.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s09",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "tax",
+    "display_name": "Consulta e Emissão de Certidão Negativa de Débitos (Tributos Estaduais)",
+    "agency": "Secretaria da Fazenda e Planejamento",
+    "instructions": "Secretaria da Fazenda e Planejamento: Consulta e Emissão de Certidão Negativa de Débitos (Tributos Estaduais). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "certidao negativa sp",
+      "divida ativa estadual",
+      "cnd fazenda sp",
+      "regularidade"
+    ],
+    "links": [
+      {
+        "label": "Consulta e Emissão de Certidão Negativa de Débitos (Tributos Estaduais)",
+        "url": "https://www10.fazenda.sp.gov.br/CertidaoNegativaDebitos/"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 37 (ID S09). Notas da planilha: Emissão imediata mediante CPF/CNPJ.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s10",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "social",
+    "display_name": "Balcão de Empregos e Seguro-Desemprego (PAT SP)",
+    "agency": "Secretaria de Desenvolvimento Econômico",
+    "instructions": "Secretaria de Desenvolvimento Econômico: Balcão de Empregos e Seguro-Desemprego (PAT SP). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "pat sp",
+      "seguro desemprego sp",
+      "vagas de emprego",
+      "emprego sp",
+      "desempregado"
+    ],
+    "links": [
+      {
+        "label": "Balcão de Empregos e Seguro-Desemprego (PAT SP)",
+        "url": "https://www.sistemapat.sde.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 38 (ID S10). Notas da planilha: Integração com o Ministério do Trabalho e Emprego.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s11",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "education",
+    "display_name": "Consulta de Matrícula Escolar da Rede Estadual e Boletim",
+    "agency": "Secretaria de Educação (SEDUC)",
+    "instructions": "Secretaria de Educação (SEDUC): Consulta de Matrícula Escolar da Rede Estadual e Boletim. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "escola estadual",
+      "matricula sp",
+      "boletim escolar sp",
+      "secretaria escolar digital"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Matrícula Escolar da Rede Estadual e Boletim",
+        "url": "https://sed.educacao.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 39 (ID S11). Notas da planilha: Plataforma SED (Secretaria Escolar Digital).",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s12",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "education",
+    "display_name": "Solicitação de Histórico Escolar e Declarações de Conclusão",
+    "agency": "Secretaria de Educação (SEDUC)",
+    "instructions": "Secretaria de Educação (SEDUC): Solicitação de Histórico Escolar e Declarações de Conclusão. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "historico escolar sp",
+      "certificado de conclusao ensino medio",
+      "diploma estadual"
+    ],
+    "links": [
+      {
+        "label": "Solicitação de Histórico Escolar e Declarações de Conclusão",
+        "url": "https://sed.educacao.sp.gov.br/consulta"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 40 (ID S12). Notas da planilha: Consulta por RA (Registro de Aluno).",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s13",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "health",
+    "display_name": "Agendamento e Consulta de Exames pelo SUS Estadual (CROSS)",
+    "agency": "Secretaria de Saúde (SES)",
+    "instructions": "Secretaria de Saúde (SES): Agendamento e Consulta de Exames pelo SUS Estadual (CROSS). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "sus sp",
+      "agendamento medico sp",
+      "saude sp",
+      "cross exames",
+      "cirurgia eletiva"
+    ],
+    "links": [
+      {
+        "label": "Agendamento e Consulta de Exames pelo SUS Estadual (CROSS)",
+        "url": "https://www.saude.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 41 (ID S13). Notas da planilha: Integração com centrais de regulação municipal/estadual.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s14",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "health",
+    "display_name": "Consulta e Retirada de Medicamentos de Alto Custo",
+    "agency": "Secretaria de Saúde (SES)",
+    "instructions": "Secretaria de Saúde (SES): Consulta e Retirada de Medicamentos de Alto Custo. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "farmacia de alto custo sp",
+      "remedio gratuito governo sp",
+      "remedio caro"
+    ],
+    "links": [
+      {
+        "label": "Consulta e Retirada de Medicamentos de Alto Custo",
+        "url": "https://www.saude.sp.gov.br/ses/perfil/cidadao/medicamentos-de-alto-custo"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 42 (ID S14). Notas da planilha: Informações de protocolo e unidades dispensadoras.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s15",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "vehicles",
+    "display_name": "Defesa de Autuação e Recursos de Multas Rodoviárias Estaduais",
+    "agency": "DER-SP",
+    "instructions": "DER-SP: Defesa de Autuação e Recursos de Multas Rodoviárias Estaduais. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "multas der",
+      "recorrer multa estrada sp",
+      "rodovia estadual",
+      "multa rodovia"
+    ],
+    "links": [
+      {
+        "label": "Defesa de Autuação e Recursos de Multas Rodoviárias Estaduais",
+        "url": "https://www.der.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 43 (ID S15). Notas da planilha: Consulta por edital de notificação ou auto de infração.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s16",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "city",
+    "display_name": "Abertura de Reclamações contra Empresas e Fornecedores",
+    "agency": "Procon-SP",
+    "instructions": "Procon-SP: Abertura de Reclamações contra Empresas e Fornecedores. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "procon sp",
+      "reclamar de empresa",
+      "direito do consumidor sp",
+      "golpe compra"
+    ],
+    "links": [
+      {
+        "label": "Abertura de Reclamações contra Empresas e Fornecedores",
+        "url": "https://www.procon.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 44 (ID S16). Notas da planilha: Portal de atendimento eletrônico do consumidor paulista.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s17",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "city",
+    "display_name": "Consulta de Contas, Segunda Via, Vazamentos e Falta de Água",
+    "agency": "Sabesp",
+    "instructions": "Sabesp: Consulta de Contas, Segunda Via, Vazamentos e Falta de Água. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "sabesp",
+      "conta de agua sp",
+      "segunda via sabesp",
+      "falta de agua",
+      "vazamento rua"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Contas, Segunda Via, Vazamentos e Falta de Água",
+        "url": "https://agenciavirtual.sabesp.com.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 45 (ID S17). Notas da planilha: Requer número da ligação (RGI) e CPF do titular.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s18",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "city",
+    "display_name": "Registro de Denúncias, Elogios e Reclamações do Estado",
+    "agency": "Ouvidoria Geral do Estado",
+    "instructions": "Ouvidoria Geral do Estado: Registro de Denúncias, Elogios e Reclamações do Estado. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "ouvidoria sp",
+      "reclamar do governo sp",
+      "denuncia corrupcao sp",
+      "ouvidoria geral"
+    ],
+    "links": [
+      {
+        "label": "Registro de Denúncias, Elogios e Reclamações do Estado",
+        "url": "https://www.ouvidoriageral.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 46 (ID S18). Notas da planilha: Sistema unificado de ouvidoria estadual.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s19",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "documents",
+    "display_name": "Emissão de Certidão de Antecedentes Criminais",
+    "agency": "Secretaria de Justiça e Cidadania",
+    "instructions": "Secretaria de Justiça e Cidadania: Emissão de Certidão de Antecedentes Criminais. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "antecedentes criminais sp",
+      "certidao criminal",
+      "nada consta policial",
+      "folha corrida"
+    ],
+    "links": [
+      {
+        "label": "Emissão de Certidão de Antecedentes Criminais",
+        "url": "https://www.ssp.sp.gov.br/atendimento/antecedentes-criminais"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 47 (ID S19). Notas da planilha: Consulta automatizada por dados pessoais e documento de identidade.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s20",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "city",
+    "display_name": "Licenciamento Ambiental Prévio e Consulta de Processos (ILA)",
+    "agency": "Secretaria de Meio Ambiente (CETESB)",
+    "instructions": "Secretaria de Meio Ambiente (CETESB): Licenciamento Ambiental Prévio e Consulta de Processos (ILA). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "licenciamento ambiental sp",
+      "cetesb",
+      "licenca ambiental",
+      "impacto ambiental"
+    ],
+    "links": [
+      {
+        "label": "Licenciamento Ambiental Prévio e Consulta de Processos (ILA)",
+        "url": "https://www.infraestruturameioambiente.sp.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 48 (ID S20). Notas da planilha: Sistema Integra Licenciamento Ambiental (ILA).",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_s21",
+    "category": null,
+    "kind": "service",
+    "scope": "state",
+    "coverage": "Estado de São Paulo",
+    "area": "tax",
+    "display_name": "Linhas de Financiamento para Pequenas e Médias Empresas e Inovação",
+    "agency": "Desenvolve SP",
+    "instructions": "Desenvolve SP: Linhas de Financiamento para Pequenas e Médias Empresas e Inovação. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "desenvolvesp",
+      "credito empresarial sp",
+      "financiamento juros baixos",
+      "microempresa"
+    ],
+    "links": [
+      {
+        "label": "Linhas de Financiamento para Pequenas e Médias Empresas e Inovação",
+        "url": "https://www.desenvolvesp.com.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 49 (ID S21). Notas da planilha: Simulação e envio de propostas para PJ.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f01",
+    "category": null,
+    "kind": "portal",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "documents",
+    "display_name": "Portal de Autenticação e Gestão da Conta Unificada (gov.br)",
+    "agency": "Governo Federal",
+    "instructions": "Governo Federal: Portal de Autenticação e Gestão da Conta Unificada (gov.br). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "gov.br",
+      "entrar no gov",
+      "senha gov",
+      "recuperar conta gov",
+      "nivel prata ouro"
+    ],
+    "links": [
+      {
+        "label": "Portal de Autenticação e Gestão da Conta Unificada (gov.br)",
+        "url": "https://sso.acesso.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 50 (ID F01). Notas da planilha: Autenticação centralizada; tratamento de Captcha e reconhecimento facial.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f02",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "documents",
+    "display_name": "Consulta de Situação Cadastral e Regularização de CPF",
+    "agency": "Receita Federal",
+    "instructions": "Receita Federal: Consulta de Situação Cadastral e Regularização de CPF. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "consultar cpf",
+      "regularizar cpf",
+      "situacao cadastral receita",
+      "cpf suspenso"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Situação Cadastral e Regularização de CPF",
+        "url": "https://servicos.receita.federal.gov.br/Servicos/CPF/ConsultaSituacao/ConsultaPublica.asp"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 51 (ID F02). Notas da planilha: Validação rápida por CPF e Data de Nascimento.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f03",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "documents",
+    "display_name": "Consulta de CNPJ e Emissão de Comprovante de Inscrição",
+    "agency": "Receita Federal",
+    "instructions": "Receita Federal: Consulta de CNPJ e Emissão de Comprovante de Inscrição. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "consultar cnpj",
+      "cartao cnpj",
+      "abrir empresa receita federal",
+      "situacao cnpj"
+    ],
+    "links": [
+      {
+        "label": "Consulta de CNPJ e Emissão de Comprovante de Inscrição",
+        "url": "https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/cadastros/consultas/consultar-cnpj"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 52 (ID F03). Notas da planilha: Consulta pública de dados cadastrais de pessoas jurídicas.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f04",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "tax",
+    "display_name": "Emissão de Certidão Negativa de Débitos Federais e Previdenciários",
+    "agency": "Receita Federal",
+    "instructions": "Receita Federal: Emissão de Certidão Negativa de Débitos Federais e Previdenciários. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "certidao federal",
+      "cnd federal",
+      "regularidade fiscal",
+      "receita federal"
+    ],
+    "links": [
+      {
+        "label": "Emissão de Certidão Negativa de Débitos Federais e Previdenciários",
+        "url": "https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/certidoes"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 53 (ID F04). Notas da planilha: Emissão imediata mediante CNPJ/CPF.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f05",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Emissão de Carteira de Trabalho Digital",
+    "agency": "Ministério do Trabalho",
+    "instructions": "Ministério do Trabalho: Emissão de Carteira de Trabalho Digital. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "carteira de trabalho digital",
+      "ctps",
+      "2 via carteira trabalho",
+      "anotação emprego"
+    ],
+    "links": [
+      {
+        "label": "Emissão de Carteira de Trabalho Digital",
+        "url": "https://www.gov.br/pt-br/servicos/obter-a-carteira-de-trabalho-digital"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 54 (ID F05). Notas da planilha: Acesso integrado via aplicativo ou gov.br.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f06",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Solicitação do Seguro-Desemprego",
+    "agency": "Ministério do Trabalho",
+    "instructions": "Ministério do Trabalho: Solicitação do Seguro-Desemprego. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "seguro desemprego",
+      "dar entrada no seguro",
+      "parcelas seguro",
+      "demitido"
+    ],
+    "links": [
+      {
+        "label": "Solicitação do Seguro-Desemprego",
+        "url": "https://www.gov.br/pt-br/servicos/requerer-o-seguro-desemprego"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 55 (ID F06). Notas da planilha: Requer login gov.br e número do requerimento.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f07",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Consulta de Abono Salarial (PIS/PASEP)",
+    "agency": "Ministério do Trabalho",
+    "instructions": "Ministério do Trabalho: Consulta de Abono Salarial (PIS/PASEP). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "abono salarial",
+      "pis pasep",
+      "sacar pis",
+      "direito ao pis"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Abono Salarial (PIS/PASEP)",
+        "url": "https://www.gov.br/pt-br/servicos/receber-o-abono-salarial"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 56 (ID F07). Notas da planilha: Consulta de elegibilidade e calendário de pagamento.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f08",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Consulta de Extrato de Pagamento e Benefícios (Meu INSS)",
+    "agency": "INSS",
+    "instructions": "INSS: Consulta de Extrato de Pagamento e Benefícios (Meu INSS). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "meu inss",
+      "extrato inss",
+      "aposentadoria",
+      "beneficio inss",
+      "provar vida"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Extrato de Pagamento e Benefícios (Meu INSS)",
+        "url": "https://meu.inss.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 57 (ID F08). Notas da planilha: Requer login gov.br e navegação autenticada no sistema Meu INSS.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f09",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Agendamento de Perícia Médica do INSS (Auxílio-Doença)",
+    "agency": "INSS",
+    "instructions": "INSS: Agendamento de Perícia Médica do INSS (Auxílio-Doença). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "pericia inss",
+      "auxilio doenca",
+      "agendar pericia medica",
+      "afastamento INSS"
+    ],
+    "links": [
+      {
+        "label": "Agendamento de Perícia Médica do INSS (Auxílio-Doença)",
+        "url": "https://www.gov.br/pt-br/servicos/agendar-pericia-medica-do-inss"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 58 (ID F09). Notas da planilha: Seleção de agências e horários disponíveis.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f10",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Solicitação de Aposentadoria (Idade, Tempo de Contribuição)",
+    "agency": "INSS",
+    "instructions": "INSS: Solicitação de Aposentadoria (Idade, Tempo de Contribuição). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "pedir aposentadoria",
+      "aposentar por idade",
+      "previdencia social",
+      "tempo de contribuicao"
+    ],
+    "links": [
+      {
+        "label": "Solicitação de Aposentadoria (Idade, Tempo de Contribuição)",
+        "url": "https://www.gov.br/pt-br/servicos/pedir-aposentadoria"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 59 (ID F10). Notas da planilha: Fluxo de requerimento guiado no Meu INSS.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f11",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "education",
+    "display_name": "Programa Pé-de-Meia (Poupança Ensino Médio)",
+    "agency": "Ministério da Educação (MEC)",
+    "instructions": "Ministério da Educação (MEC): Programa Pé-de-Meia (Poupança Ensino Médio). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "pé-de-meia",
+      "bolsa ensino medio",
+      "beneficio estudante mec",
+      "ajuda financeira escola"
+    ],
+    "links": [
+      {
+        "label": "Programa Pé-de-Meia (Poupança Ensino Médio)",
+        "url": "https://www.gov.br/mec/pt-br/pe-de-meia"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 60 (ID F11). Notas da planilha: Portal informativo e links para aplicativos oficiais dos bancos parceiros.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f12",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "education",
+    "display_name": "Consulta de Notas e Inscrição no ENEM",
+    "agency": "Ministério da Educação (MEC)",
+    "instructions": "Ministério da Educação (MEC): Consulta de Notas e Inscrição no ENEM. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "enem",
+      "nota do enem",
+      "inscricao enem",
+      "inep",
+      "exame nacional ensino medio"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Notas e Inscrição no ENEM",
+        "url": "https://enem.inep.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 61 (ID F12). Notas da planilha: Página do Participante com login gov.br.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f13",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "education",
+    "display_name": "Sistema de Seleção Unificada (SISU - Vagas Universidades)",
+    "agency": "Ministério da Educação (MEC)",
+    "instructions": "Ministério da Educação (MEC): Sistema de Seleção Unificada (SISU - Vagas Universidades). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "sisu",
+      "vaga universidade publica",
+      "nota do enem faculdade",
+      "federal sisu"
+    ],
+    "links": [
+      {
+        "label": "Sistema de Seleção Unificada (SISU - Vagas Universidades)",
+        "url": "https://sisu.mec.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 62 (ID F13). Notas da planilha: Abertura de inscrições em períodos específicos do ano.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f14",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "education",
+    "display_name": "Fundo de Financiamento Estudantil (FIES)",
+    "agency": "Ministério da Educação (MEC)",
+    "instructions": "Ministério da Educação (MEC): Fundo de Financiamento Estudantil (FIES). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "fies",
+      "financiamento estudantil",
+      "faculdade privada fies",
+      "pagar faculdade"
+    ],
+    "links": [
+      {
+        "label": "Fundo de Financiamento Estudantil (FIES)",
+        "url": "https://fies.mec.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 63 (ID F14). Notas da planilha: Portal de inscrição e acompanhamento contratual.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f15",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "education",
+    "display_name": "Programa Universidade Para Todos (ProUni - Bolsas)",
+    "agency": "Ministério da Educação (MEC)",
+    "instructions": "Ministério da Educação (MEC): Programa Universidade Para Todos (ProUni - Bolsas). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "prouni",
+      "bolsa de estudo faculdade privada",
+      "prouni mec",
+      "bolsa 100 por cento"
+    ],
+    "links": [
+      {
+        "label": "Programa Universidade Para Todos (ProUni - Bolsas)",
+        "url": "https://prouni.mec.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 64 (ID F15). Notas da planilha: Inscrições e regras de elegibilidade.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f16",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Simulação e Contratação do Minha Casa, Minha Vida (Baixa Renda)",
+    "agency": "Caixa Econômica Federal",
+    "instructions": "Caixa Econômica Federal: Simulação e Contratação do Minha Casa, Minha Vida (Baixa Renda). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "minha casa minha vida",
+      "financiar casa baixa renda",
+      "habitacao popular",
+      "caixa"
+    ],
+    "links": [
+      {
+        "label": "Simulação e Contratação do Minha Casa, Minha Vida (Baixa Renda)",
+        "url": "https://www.gov.br/cidades/pt-br/assuntos/habitacao/minha-casa-minha-vida"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 65 (ID F16). Notas da planilha: Simulador de financiamento habitacional e regras de faixa de renda.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f17",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "health",
+    "display_name": "Emissão do Certificado Nacional de Vacinação (Conecte SUS)",
+    "agency": "Ministério da Saúde / DATASUS",
+    "instructions": "Ministério da Saúde / DATASUS: Emissão do Certificado Nacional de Vacinação (Conecte SUS). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "conecte sus",
+      "certificado de vacina",
+      "comprovante vacinacao",
+      "carteira de vacinacao digital"
+    ],
+    "links": [
+      {
+        "label": "Emissão do Certificado Nacional de Vacinação (Conecte SUS)",
+        "url": "https://www.gov.br/pt-br/servicos/obter-certificado-de-vacinacao-covid-19"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 66 (ID F17). Notas da planilha: Acesso via aplicativo Conecte SUS / gov.br.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f18",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "documents",
+    "display_name": "Emissão de Passaporte Brasileiro",
+    "agency": "Ministério da Justiça (Polícia Federal)",
+    "instructions": "Ministério da Justiça (Polícia Federal): Emissão de Passaporte Brasileiro. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "passaporte",
+      "tirar passaporte",
+      "policia federal passaporte",
+      "viagem exterior"
+    ],
+    "links": [
+      {
+        "label": "Emissão de Passaporte Brasileiro",
+        "url": "https://www.gov.br/pf/pt-br/assuntos/passaporte"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 67 (ID F18). Notas da planilha: Preenchimento de formulário, emissão de GRU e agendamento presencial.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f19",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "documents",
+    "display_name": "Consulta de Antecedentes Criminais Federais",
+    "agency": "Ministério da Justiça (Polícia Federal)",
+    "instructions": "Ministério da Justiça (Polícia Federal): Consulta de Antecedentes Criminais Federais. Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "antecedentes federais",
+      "certidao criminal federal",
+      "policia federal",
+      "nada consta federal"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Antecedentes Criminais Federais",
+        "url": "https://www.gov.br/pf/pt-br/assuntos/antecedentes-criminais"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 68 (ID F19). Notas da planilha: Emissão automática por validação de dados pessoais.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f20",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Disque 100 - Direitos Humanos (Denúncias e Proteção)",
+    "agency": "Ministério dos Direitos Humanos",
+    "instructions": "Ministério dos Direitos Humanos: Disque 100 - Direitos Humanos (Denúncias e Proteção). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "disque 100",
+      "direitos humanos",
+      "denuncia direitos humanos",
+      "violacao direitos"
+    ],
+    "links": [
+      {
+        "label": "Disque 100 - Direitos Humanos (Denúncias e Proteção)",
+        "url": "https://www.gov.br/mdh/pt-br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 69 (ID F20). Notas da planilha: Canais de atendimento telefônico e chat web.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f21",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Central de Atendimento à Mulher (Ligue 180)",
+    "agency": "Ministério das Mulheres",
+    "instructions": "Ministério das Mulheres: Central de Atendimento à Mulher (Ligue 180). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "ligue 180",
+      "violencia contra mulher",
+      "central da mulher",
+      "agressao domestica"
+    ],
+    "links": [
+      {
+        "label": "Central de Atendimento à Mulher (Ligue 180)",
+        "url": "https://www.gov.br/smdh/pt-br/assuntos/ligue-180"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 70 (ID F21). Notas da planilha: Orientações e registro de denúncias anônimas.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f22",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "tax",
+    "display_name": "Consulta de Valores a Receber (Dinheiro Esquecido em Bancos)",
+    "agency": "Banco Central do Brasil",
+    "instructions": "Banco Central do Brasil: Consulta de Valores a Receber (Dinheiro Esquecido em Bancos). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "valores a receber",
+      "dinheiro esquecido banco central",
+      "svr",
+      "resgatar dinheiro banco"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Valores a Receber (Dinheiro Esquecido em Bancos)",
+        "url": "https://valoresareceber.bcb.gov.br"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 71 (ID F22). Notas da planilha: Requer login gov.br nível prata ou ouro.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f23",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "tax",
+    "display_name": "Consulta ao Registrato (Relatório de Empréstimos e Contas Bancárias)",
+    "agency": "Banco Central do Brasil",
+    "instructions": "Banco Central do Brasil: Consulta ao Registrato (Relatório de Empréstimos e Contas Bancárias). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "registrato",
+      "dividas no banco",
+      "minhas contas bancarias",
+      "emprestimos ativos",
+      "relatorio bcb"
+    ],
+    "links": [
+      {
+        "label": "Consulta ao Registrato (Relatório de Empréstimos e Contas Bancárias)",
+        "url": "https://www.bcb.gov.br/meubc/registrato"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 72 (ID F23). Notas da planilha: Extrato consolidado do sistema financeiro nacional.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  },
+  {
+    "id": "xl_f24",
+    "category": null,
+    "kind": "service",
+    "scope": "federal",
+    "coverage": "Brasil",
+    "area": "social",
+    "display_name": "Consulta de Benefícios e Cadastro Único (CadÚnico / Bolsa Família)",
+    "agency": "Ministério do Desenvolvimento Social",
+    "instructions": "Ministério do Desenvolvimento Social: Consulta de Benefícios e Cadastro Único (CadÚnico / Bolsa Família). Acesse a página oficial para ver como fazer.",
+    "keywords": [
+      "cadunico",
+      "bolsa familia",
+      "auxilio gas",
+      "baixa renda",
+      "atualizar cadastro unico"
+    ],
+    "links": [
+      {
+        "label": "Consulta de Benefícios e Cadastro Único (CadÚnico / Bolsa Família)",
+        "url": "https://www.gov.br/mds/pt-br/assuntos/cadunico"
+      }
+    ],
+    "phones": [],
+    "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 73 (ID F24). Notas da planilha: Consulta de situação do benefício e postos de atendimento.",
+    "verified_on": "2026-11-11",
+    "status": "approved"
+  }
+]

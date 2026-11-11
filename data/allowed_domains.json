@@ -2,5 +2,21 @@
   {
     "suffix": "gov.br",
     "reason": "Domínio de governo do Brasil: cobre o portal gov.br e os subdomínios dos órgãos federais (inss, receitafederal, mds, governodigital)."
+  },
+  {
+    "suffix": "cetsp.com.br",
+    "reason": "CET - Companhia de Engenharia de Tráfego (Prefeitura de São Paulo, municipal): multas e trânsito da capital."
+  },
+  {
+    "suffix": "sptrans.com.br",
+    "reason": "SPTrans - São Paulo Transporte (Prefeitura de São Paulo, municipal): Bilhete Único e ônibus da capital."
+  },
+  {
+    "suffix": "sabesp.com.br",
+    "reason": "Sabesp - Companhia de Saneamento Básico do Estado de São Paulo (estadual): contas, vazamentos e falta de água."
+  },
+  {
+    "suffix": "desenvolvesp.com.br",
+    "reason": "Desenvolve SP - Agência de Fomento do Estado de São Paulo (estadual): financiamento a pequenas e médias empresas."
   }
 ]

@@ -54,7 +54,7 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-03.14-importar-a-planilha-da-base-enriquecida](plan/plan-03.14-importar-a-planilha-da-base-enriquecida.md) | Importar a planilha da base enriquecida do usuário para o catálogo, com script reprodutível e allowlist ampliada | — | 🟡 Em execução | `specs/03.01-catalogo-e-allowlist.md` |
+| 1 | [plan-03.14-importar-a-planilha-da-base-enriquecida](plan/plan-03.14-importar-a-planilha-da-base-enriquecida.md) | Importar a planilha da base enriquecida do usuário para o catálogo, com script reprodutível e allowlist ampliada | — | 🟢 Aprovada | `specs/03.01-catalogo-e-allowlist.md` |
 | 2 | [plan-03.13-conversa-com-memoria-e-nova-conversa](plan/plan-03.13-conversa-com-memoria-e-nova-conversa.md) | Dar memória à conversa do chat (mensagens anteriores anonimizadas) e um botão de nova conversa | — | 🔴 A executar | `specs/04.02-interface.md` |
 
 ---

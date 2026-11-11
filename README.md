@@ -120,7 +120,8 @@ e modelo ausente nunca chamam o LLM.
 **Base enriquecida.** Além de `data/catalog.json`, o robô lê todo `data/catalog.d/*.json`: páginas oficiais por tarefa, cada uma
 com um trecho oficial (`content`) que ajuda a achar a fonte e que o LLM usa para responder com mais detalhe. O registro só
 responde se estiver `approved`, com domínio na allowlist e link no ar; `python scripts/verify_catalog.py` audita o conjunto.
-Formato e passo a passo: [`docs/guia-da-base-enriquecida.md`](docs/guia-da-base-enriquecida.md).
+Formato e passo a passo: [`docs/guia-da-base-enriquecida.md`](docs/guia-da-base-enriquecida.md). A base importada da planilha
+`docs/catalogo_servicos_publicos_expandido_rpa.xlsx` vira `data/catalog.d/sp_expanded.json` por `python scripts/import_catalog_xlsx.py`.
 
 **O que vai ao provedor.** Com o LLM ligado, **toda** pergunta anonimizada (ex.: `[NOME] pergunta...`) e as fontes
 candidatas saem do computador rumo ao provedor. Sem `llm.enabled` (o padrão) nada sai: o projeto roda e é avaliado

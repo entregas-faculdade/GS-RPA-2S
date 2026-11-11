@@ -218,8 +218,8 @@ def test_manual_check_does_not_bypass_the_allowlist(make_entry: Callable[..., Se
 
 
 def test_each_versioned_category_resolves_with_live_links() -> None:
-    lookup = CatalogLookup(load_catalog(), load_allowed_suffixes(), RecordingChecker())
-    for entry in (entry for entry in load_catalog() if entry.category):
+    lookup = CatalogLookup(load_catalog(extra_dir=None), load_allowed_suffixes(), RecordingChecker())
+    for entry in (entry for entry in load_catalog(extra_dir=None) if entry.category):
         resolution = lookup.resolve(entry.category)
         assert resolution.reason is None, entry.id
         assert resolution.service.links == entry.links

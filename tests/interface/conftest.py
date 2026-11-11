@@ -45,6 +45,6 @@ def repository(tmp_path: Path) -> Repository:
 
 @pytest.fixture
 def service(repository: Repository, settings: Settings, trained_model: Pipeline) -> AppService:
-    lookup = CatalogLookup(load_catalog(), load_allowed_suffixes(), _always_ok)
+    lookup = CatalogLookup(load_catalog(extra_dir=None), load_allowed_suffixes(), _always_ok)
     deps = Deps(repository=repository, lookup=lookup, settings=settings, model=trained_model, sleep=_no_sleep)
     return AppService(deps)
