@@ -18,7 +18,7 @@ Resume as decisões de base do **GS RPA 2S**: robô de triagem de pedidos de ser
 | Persistência | CSV/JSON + SQLite local; sem cache | [[002-persistencia-sqlite-e-arquivos]] |
 | Segurança | Sem login; sanitização, anonimização de PII, allowlist, revisão humana | [[003-seguranca-sem-autenticacao]] |
 | Infraestrutura | Execução local/Colab; sem deploy e sem CI/CD | [[004-infra-execucao-local]] |
-| LLM | Só reformula a resposta final; núcleo determinístico | [[005-llm-apenas-reformula-resposta]] |
+| LLM | Reformula a resposta final; só no modo opt-in escolhe entre fontes aprovadas; núcleo determinístico | [[005-llm-apenas-reformula-resposta]] · [[006-llm-escolhe-apenas-entre-fontes-aprovadas]] |
 
 # 3. Diagramas / Estruturas
 ```mermaid

@@ -65,7 +65,8 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 - **PII (CPF, telefone, e-mail, nome, endereço, CEP, RG, data e documentos) é anonimizada antes de qualquer log ou chamada a API** ([[003-seguranca-sem-autenticacao]]).
 - **Segredos só em `.env`** (fora do Git); `.env.example` sem valor.
 - **O robô só responde com link da allowlist** de domínios do catálogo (`.gov.br` e órgãos oficiais).
-- **O LLM apenas reformula** a resposta já decidida; nunca classifica nem escolhe URL ([[005-llm-apenas-reformula-resposta]]).
+- **O LLM reformula** a resposta já decidida e nunca classifica nem escolhe URL ([[005-llm-apenas-reformula-resposta]]); só no
+  modo opt-in escolhe um `id` entre fontes aprovadas, e o texto mostrado vem do catálogo ([[006-llm-escolhe-apenas-entre-fontes-aprovadas]]).
 - **Falha previsível nunca derruba a execução**: registra em log e segue por caminho seguro.
 - **Sem deploy em nuvem e sem CI/CD** ([[004-infra-execucao-local]]). O gate de commit só barra segredos.
 
@@ -142,7 +143,7 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 | Mexer no robô ponta a ponta, relatório ou agendamento | [[04.03-orquestracao-rpa]] | [[00-knowledge]] |
 | Mexer em PII, sanitização, allowlist ou revisão humana | [[003-seguranca-sem-autenticacao]] | [[00-knowledge]] |
 | Execução, ambiente ou publicação | [[004-infra-execucao-local]] | [[00-knowledge]] |
-| Usar ou alterar o LLM | [[005-llm-apenas-reformula-resposta]] + [[003-seguranca-sem-autenticacao]] + [[03.04-agente-llm]] | [[00-knowledge]] |
+| Usar ou alterar o LLM | [[005-llm-apenas-reformula-resposta]] + [[006-llm-escolhe-apenas-entre-fontes-aprovadas]] + [[003-seguranca-sem-autenticacao]] + [[03.04-agente-llm]] | [[00-knowledge]] |
 | Mudar decisão estrutural | todos os `adr/` + [[00-fundacao-tecnologica]] | [[00-knowledge]] |
 | Criar ou executar uma plan | [[00-indice]] + [[00-prompt-revisor]] / [[00-prompt-executor]] | [[00-knowledge]] |
 | Achado fora do escopo | [[00-backlog]] | [[00-knowledge]] |

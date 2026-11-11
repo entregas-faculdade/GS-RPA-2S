@@ -5,7 +5,7 @@ status: "🟢 Aceito"
 tags: ["adr", "llm", "governanca"]
 relacionados: ["[[003-seguranca-sem-autenticacao]]", "[[001-stack-principal]]"]
 substitui: ""
-substituido_por: ""
+substituido_por: "[[006-llm-escolhe-apenas-entre-fontes-aprovadas]] (parcial: só quanto à escolha da fonte)"
 alternativas_consideradas:
   - "LLM como classificador/roteador — descartada porque torna a decisão não determinística, difícil de medir e de auditar, e aumenta risco de alucinação e injeção de prompt."
   - "Sem LLM — descartada como padrão porque a interação em linguagem natural foi um desejo explícito do grupo, e o LLM é opcional e permitido pelo enunciado."

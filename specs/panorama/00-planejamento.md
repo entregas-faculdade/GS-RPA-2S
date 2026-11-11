@@ -92,7 +92,7 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 - ✅ **R03.6** Resposta em degraus — serviço, canal geral, "não tenho a informação" e emergência (✅ 2026-11-10)
 - ✅ **R03.8** Agente LLM — persona, regras, fluxo e parâmetros em arquivos versionados, com validador (✅ 2026-11-10)
 - ✅ **R03.9** Verificação de links — identificação do robô e links bloqueados validados à mão (✅ 2026-11-10)
-- 🔷 **R03.7** LLM assistente de localização — escolha entre fontes aprovadas, opcional
+- ✅ **R03.7** LLM assistente de localização — escolha entre fontes aprovadas, opcional (✅ 2026-11-10)
 
 ## 04 · Operação e interface
 - ✅ **R04.1** Persistência SQLite — idempotência, fila, feedback e execuções (✅ 2026-11-09)
