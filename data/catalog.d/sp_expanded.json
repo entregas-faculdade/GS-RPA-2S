@@ -99,7 +99,7 @@
     "links": [
       {
         "label": "Consulta de CADIN Municipal (Inadimplência)",
-        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/fazenda/cadin"
+        "url": "https://prefeitura.sp.gov.br/web/fazenda/servicos/cadin/"
       }
     ],
     "phones": [],
@@ -126,7 +126,7 @@
     "links": [
       {
         "label": "Parcelamento de Débitos Tributários e Não Tributários",
-        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/fazenda/parcelamento"
+        "url": "https://prefeitura.sp.gov.br/web/fazenda/servicos/parcelamentos/"
       }
     ],
     "phones": [],
@@ -179,7 +179,7 @@
     "links": [
       {
         "label": "Consulta de Viabilidade de Localização (Consulta Prévia)",
-        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/licenciamento/viabilidade"
+        "url": "https://e-licenca.prefeitura.sp.gov.br/ConsultaPublica"
       }
     ],
     "phones": [],
@@ -206,7 +206,7 @@
     "links": [
       {
         "label": "Localização de Unidades Básicas de Saúde (UBS)",
-        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/saude/profissionais/ubs"
+        "url": "https://prefeitura.sp.gov.br/web/saude/w/unidades-basicas-de-saude-ubs"
       }
     ],
     "phones": [],
@@ -260,7 +260,7 @@
     "links": [
       {
         "label": "Consulta de Rede de Atendimento AMAs e Hospitais Municipais",
-        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/saude/atendimento"
+        "url": "https://prefeitura.sp.gov.br/web/saude/estabelecimento_saude"
       }
     ],
     "phones": [],
@@ -287,7 +287,7 @@
     "links": [
       {
         "label": "Consulta de Vagas em Centros de Educação Infantil (CEI/Creches)",
-        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/educacao/educacao_infantil/cei"
+        "url": "https://educacao.sme.prefeitura.sp.gov.br/solicitacao-de-vaga-e-matricula/"
       }
     ],
     "phones": [],
@@ -531,7 +531,7 @@
     "links": [
       {
         "label": "Denúncia de Perturbação do Sossego (PSIU)",
-        "url": "https://sp156.prefeitura.sp.gov.br/portal/servicos/requisito?servico=343"
+        "url": "https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=824"
       }
     ],
     "phones": [],
@@ -639,7 +639,7 @@
     "links": [
       {
         "label": "Emissão de Orientação e Apoio ao Microempreendedor Individual (MEI)",
-        "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/desenvolvimento/atendimento"
+        "url": "https://prefeitura.sp.gov.br/web/desenvolvimento/mei"
       }
     ],
     "phones": [],
@@ -832,7 +832,7 @@
     "links": [
       {
         "label": "Emissão de Registro Geral (RG / Nova C.I. Nacional)",
-        "url": "https://www.poupatempo.sp.gov.br/servicos/rg"
+        "url": "https://www.poupatempo.sp.gov.br/servicos/"
       }
     ],
     "phones": [],
@@ -861,7 +861,7 @@
     "links": [
       {
         "label": "Registro de Boletim de Ocorrência Policial Eletrônico (BO)",
-        "url": "https://www.delegaciaseletronica.policiacivil.sp.gov.br"
+        "url": "https://delegaciadigital.policia-civil.sp.gov.br/pagina-inicial"
       }
     ],
     "phones": [],
@@ -890,7 +890,7 @@
     "links": [
       {
         "label": "Solicitação de Vistoria e Licenciamento (AVCB / CLCB)",
-        "url": "https://www.corpodebombeiros.sp.gov.br"
+        "url": "https://www.ssp.sp.gov.br/servicos/seguranca-contra-incendios"
       }
     ],
     "phones": [],
@@ -971,7 +971,7 @@
     "links": [
       {
         "label": "Consulta e Emissão de Certidão Negativa de Débitos (Tributos Estaduais)",
-        "url": "https://www10.fazenda.sp.gov.br/CertidaoNegativaDebitos/"
+        "url": "https://www4.fazenda.sp.gov.br/SIDEB/CertidaoNegativaDebitos"
       }
     ],
     "phones": [],
@@ -999,7 +999,7 @@
     "links": [
       {
         "label": "Balcão de Empregos e Seguro-Desemprego (PAT SP)",
-        "url": "https://www.sistemapat.sde.sp.gov.br"
+        "url": "https://www.desenvolvimentoeconomico.sp.gov.br/DesenvolvimentoEconomico/institucional/Programas/pat_programa"
       }
     ],
     "phones": [],
@@ -1106,7 +1106,7 @@
     "links": [
       {
         "label": "Consulta e Retirada de Medicamentos de Alto Custo",
-        "url": "https://www.saude.sp.gov.br/ses/perfil/cidadao/medicamentos-de-alto-custo"
+        "url": "https://www.saude.sp.gov.br/ses/perfil/gestor/assistencia-farmaceutica/medicamentos-dos-componentes-da-assistencia-farmaceutica/medicamentos-do-componente-especializado-da-assistencia-farmaceutica/o-que-e"
       }
     ],
     "phones": [],
@@ -1215,7 +1215,7 @@
     "links": [
       {
         "label": "Registro de Denúncias, Elogios e Reclamações do Estado",
-        "url": "https://www.ouvidoriageral.sp.gov.br"
+        "url": "https://fala.sp.gov.br/"
       }
     ],
     "phones": [],
@@ -1351,7 +1351,7 @@
     "links": [
       {
         "label": "Consulta de Situação Cadastral e Regularização de CPF",
-        "url": "https://servicos.receita.federal.gov.br/Servicos/CPF/ConsultaSituacao/ConsultaPublica.asp"
+        "url": "https://www.gov.br/pt-br/servicos/consultar-cadastro-de-pessoas-fisicas"
       }
     ],
     "phones": [],
@@ -1378,7 +1378,7 @@
     "links": [
       {
         "label": "Consulta de CNPJ e Emissão de Comprovante de Inscrição",
-        "url": "https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/cadastros/consultas/consultar-cnpj"
+        "url": "https://www.gov.br/pt-br/servicos/consultar-cadastro-nacional-de-pessoas-juridicas"
       }
     ],
     "phones": [],
@@ -1405,7 +1405,7 @@
     "links": [
       {
         "label": "Emissão de Certidão Negativa de Débitos Federais e Previdenciários",
-        "url": "https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/certidoes"
+        "url": "https://www.gov.br/pt-br/servicos/emitir-certidao-de-regularidade-fiscal-perante-a-fazenda-nacional"
       }
     ],
     "phones": [],
@@ -1432,7 +1432,7 @@
     "links": [
       {
         "label": "Emissão de Carteira de Trabalho Digital",
-        "url": "https://www.gov.br/pt-br/servicos/obter-a-carteira-de-trabalho-digital"
+        "url": "https://www.gov.br/pt-br/servicos/obter-a-carteira-de-trabalho"
       }
     ],
     "phones": [],
@@ -1459,7 +1459,7 @@
     "links": [
       {
         "label": "Solicitação do Seguro-Desemprego",
-        "url": "https://www.gov.br/pt-br/servicos/requerer-o-seguro-desemprego"
+        "url": "https://www.gov.br/pt-br/servicos/solicitar-o-seguro-desemprego"
       }
     ],
     "phones": [],
@@ -1541,7 +1541,7 @@
     "links": [
       {
         "label": "Agendamento de Perícia Médica do INSS (Auxílio-Doença)",
-        "url": "https://www.gov.br/pt-br/servicos/agendar-pericia-medica-do-inss"
+        "url": "https://www.gov.br/inss/pt-br/noticias/precisa-fazer-pericia-medica-confira-o-passo-a-passo-do-atestmed"
       }
     ],
     "phones": [],
@@ -1568,7 +1568,7 @@
     "links": [
       {
         "label": "Solicitação de Aposentadoria (Idade, Tempo de Contribuição)",
-        "url": "https://www.gov.br/pt-br/servicos/pedir-aposentadoria"
+        "url": "https://www.gov.br/pt-br/servicos/solicitar-aposentadoria-por-idade-trabalhador-urbano"
       }
     ],
     "phones": [],
@@ -1677,7 +1677,7 @@
     "links": [
       {
         "label": "Fundo de Financiamento Estudantil (FIES)",
-        "url": "https://fies.mec.gov.br"
+        "url": "https://acessounico.mec.gov.br/fies"
       }
     ],
     "phones": [],
@@ -1704,7 +1704,7 @@
     "links": [
       {
         "label": "Programa Universidade Para Todos (ProUni - Bolsas)",
-        "url": "https://prouni.mec.gov.br"
+        "url": "https://www.gov.br/pt-br/servicos/obter-bolsa-de-estudo-do-prouni"
       }
     ],
     "phones": [],
@@ -1731,7 +1731,7 @@
     "links": [
       {
         "label": "Simulação e Contratação do Minha Casa, Minha Vida (Baixa Renda)",
-        "url": "https://www.gov.br/cidades/pt-br/assuntos/habitacao/minha-casa-minha-vida"
+        "url": "https://www.gov.br/cidades/pt-br/assuntos/materias/programa-minha-casa-minha-vida"
       }
     ],
     "phones": [],
@@ -1758,7 +1758,7 @@
     "links": [
       {
         "label": "Emissão do Certificado Nacional de Vacinação (Conecte SUS)",
-        "url": "https://www.gov.br/pt-br/servicos/obter-certificado-de-vacinacao-covid-19"
+        "url": "https://www.gov.br/pt-br/servicos/certificado-nacional-de-vacinacao-covid-19"
       }
     ],
     "phones": [],
@@ -1866,7 +1866,7 @@
     "links": [
       {
         "label": "Central de Atendimento à Mulher (Ligue 180)",
-        "url": "https://www.gov.br/smdh/pt-br/assuntos/ligue-180"
+        "url": "https://www.gov.br/mulheres/pt-br/ligue180"
       }
     ],
     "phones": [],
@@ -1949,7 +1949,7 @@
     "links": [
       {
         "label": "Consulta de Benefícios e Cadastro Único (CadÚnico / Bolsa Família)",
-        "url": "https://www.gov.br/mds/pt-br/assuntos/cadunico"
+        "url": "https://www.gov.br/pt-br/servicos/inscrever-se-no-cadastro-unico-para-programas-sociais-do-governo-federal"
       }
     ],
     "phones": [],

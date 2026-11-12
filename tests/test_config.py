@@ -89,7 +89,7 @@ def test_shipped_config_loads_without_warning(missing_env: Path, caplog: pytest.
 def test_shipped_config_equals_the_code_defaults(missing_env: Path) -> None:
     settings = load_settings(missing_env)
 
-    assert settings.llm_enabled is False
+    assert settings.llm_enabled is True
     assert settings.llm_agent_id == "triage-assistant"
     assert settings.log_level == DEFAULT_LOG_LEVEL
     assert (settings.confidence_min, settings.ambiguity_margin) == (CONFIDENCE_MIN, AMBIGUITY_MARGIN)

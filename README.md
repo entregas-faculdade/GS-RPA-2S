@@ -5,9 +5,9 @@ Protótipo acadêmico da **FIAP — Global Solution 2026.2**, disciplina *AI for
 
 ## Integrantes
 
-- `<preencher>`
-- `<preencher>`
-- `<preencher>`
+- Igor Paixão Sarak (RM 563726)
+- Lucca Phelipe Masini (RM 564121)
+- Bernardo Braga Perobeli (RM 562468)
 
 ## O problema e o público
 
@@ -100,22 +100,22 @@ python -m ruff check run.py src tests
 
 ## Como configurar as chaves
 
-O robô funciona **sem nenhuma chave e sem LLM**: o LLM é opcional e vem **desligado**. A configuração tem duas fontes:
+A configuração entregue **liga o LLM** (`llm.enabled: true`); sem `LLM_API_KEY`, o robô cai no **modo determinístico** (texto-modelo), sem LLM e sem nenhuma chave. A configuração tem duas fontes:
 
 - **`.env`** (fora do Git): guarda **só a chave** do LLM, `LLM_API_KEY`. Nenhuma outra variável de ambiente altera o robô.
 - **`config/settings.json`** (versionado): todo o resto. Arquivo ausente ou JSON inválido impede o robô de subir (código de
   saída `1` no `run.py`; mensagem na tela no `app.py`). Campo ausente ou inválido volta ao padrão e é avisado no log.
 
-Para ligar o LLM:
+Para usar o LLM:
 
 1. Copie `.env.example` para `.env` (o `.env` está no `.gitignore` e nunca vai ao repositório) e preencha `LLM_API_KEY`
    com a chave de um provedor de API compatível com `/chat/completions` (os modelos de `config/settings.json` são do OpenRouter).
-2. Em `config/settings.json`, troque `llm.enabled` para `true`. Também dá para ligar só numa execução: `python run.py --llm`.
+2. O `llm.enabled` já vem `true` em `config/settings.json`; para desligar, troque para `false`. Também dá para ligar só numa execução: `python run.py --llm`.
 
 | Chave de `config/settings.json` | Para que serve |
 |---|---|
 | `log_level` | nível do log (padrão `INFO`) |
-| `llm.enabled` | liga (`true`) ou desliga o LLM; padrão desligado |
+| `llm.enabled` | liga (`true`) ou desliga o LLM; entregue ligado |
 | `llm.base_url`, `llm.model` | provedor (formato `/chat/completions`) e modelo principal |
 | `llm.fallback_models` | lista de modelos alternativos, tentados na ordem se o principal falhar; pode ser vazia |
 | `llm.agent_id` | agente em `data/agents/<id>/` (padrão `triage-assistant`) |
@@ -181,7 +181,7 @@ Em `config/settings.json`:
 }
 ```
 
-O LLM é opcional e vem **desligado**; o robô roda e é avaliado sem ele. Agente ausente ou inválido também desliga o LLM
+A configuração entregue liga o LLM; sem `LLM_API_KEY`, o robô cai no modo determinístico e é avaliado sem ele. Agente ausente ou inválido também desliga o LLM
 (com log de erro) e o texto-modelo responde. Para validar os arquivos do agente:
 
 ```powershell

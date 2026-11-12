@@ -197,5 +197,5 @@ def test_context_masks_names_even_without_the_list(monkeypatch: pytest.MonkeyPat
 def test_labeled_csv_is_unchanged() -> None:
     with LABELED_CSV.open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
-    assert len(rows) == 180
+    assert len(rows) == 418
     assert [row["id"] for row in rows if anonymize(row["text"]).text != row["text"]] == []
