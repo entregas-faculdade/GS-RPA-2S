@@ -1,11 +1,11 @@
 # Fontes públicas (piloto São Paulo) — lista para aprovação
 
-**Estado: lista aprovada pelo usuário em 2026-11-10** (todas as linhas `[x]`; as quatro da prefeitura com HTTP 403 ficam `[?]`).
+**Estado: lista aprovada pelo usuário em 2026-11-10** (todas as linhas `[x]`; as quatro da prefeitura, que deram HTTP 403 nessa data, foram aprovadas em 2026-11-12).
 
 Documento de trabalho: **não é o catálogo** (`data/catalog.json`). Ele reúne a lista que você enviou, o que o
 revisor acrescentou e o resultado da verificação automática. Nada daqui entra no catálogo sem a sua marca. A lista
 aprovada já está carregada no catálogo (`data/catalog.d/sp_expanded.json`); as quatro fontes da Prefeitura (M04 a M07)
-seguem `candidate` no catálogo e não respondem ao cidadão (ver a nota da seção 3).
+foram aprovadas em 2026-11-12 e estão `approved` em `data/catalog.json` (ver a nota da seção 3).
 
 - **Verificação:** feita em 2026-11-10 com o `check_link` do projeto (HEAD, depois GET; cliente sem disfarce de
   navegador). `✓` = respondeu 200–399; `✗` = falhou (motivo ao lado). Telefone `confirmado` = o número aparece no texto
@@ -65,17 +65,16 @@ coluna **Notas**.
 | M01 | SP156 | zeladoria (buraco, poda, iluminação) e serviços da cidade | `https://sp156.prefeitura.sp.gov.br`; `https://sp156.prefeitura.sp.gov.br/portal/servicos`; `https://sp156.prefeitura.sp.gov.br/portal/perguntas-frequentes` | 156 | 3 links ✓; 156 **confirmado** | usuário (+ revisor) | [x] | |
 | M02 | Secretaria Municipal de Educação (SME) | matrícula e vaga em creche | `https://educacao.sme.prefeitura.sp.gov.br` | 156 | link ✓ | revisor | [x] | |
 | M03 | Nota Fiscal Paulistana (NF-e) | notas fiscais municipais | `https://nfe.prefeitura.sp.gov.br` | — | link ✓ | revisor | [x] | |
-| M04 | Portal da Prefeitura | institucional | `https://www.prefeitura.sp.gov.br` | — | **✗ HTTP 403** | usuário | [?] | Bloqueio ao cliente automatizado |
-| M05 | Secretaria Municipal da Fazenda | IPTU, alvará, taxas | `https://www.prefeitura.sp.gov.br/cidade/secretarias/fazenda` | 156 | **✗ HTTP 403** | usuário | [?] | |
-| M06 | Secretaria Municipal da Saúde | UBS, AMA, vacinação | `https://www.prefeitura.sp.gov.br/cidade/secretarias/saude` | 156 | **✗ HTTP 403** | usuário | [?] | |
-| M07 | Secretaria Municipal de Educação (página da secretaria) | matrícula | `https://www.prefeitura.sp.gov.br/cidade/secretarias/educacao` | 156 | **✗ HTTP 403** | usuário | [?] | M02 cobre o mesmo assunto em outro endereço |
+| M04 | Portal da Prefeitura | institucional | `https://www.prefeitura.sp.gov.br` | — | **✓ HTTP 200** (2026-11-12; 403 em 2026-11-10) | usuário | [x] | Aprovada em 2026-11-12 |
+| M05 | Secretaria Municipal da Fazenda | IPTU, alvará, taxas | `https://www.prefeitura.sp.gov.br/cidade/secretarias/fazenda` | 156 | **✓ HTTP 200** (2026-11-12; 403 em 2026-11-10) | usuário | [x] | |
+| M06 | Secretaria Municipal da Saúde | UBS, AMA, vacinação | `https://www.prefeitura.sp.gov.br/cidade/secretarias/saude` | 156 | **✓ HTTP 200** (2026-11-12; 403 em 2026-11-10) | usuário | [x] | |
+| M07 | Secretaria Municipal de Educação (página da secretaria) | matrícula | `https://www.prefeitura.sp.gov.br/cidade/secretarias/educacao` | 156 | **✓ HTTP 200** (2026-11-12; 403 em 2026-11-10) | usuário | [x] | M02 cobre o mesmo assunto em outro endereço |
 
 > **Prefeitura (M04 a M07):** em 2026-11-10, `www.prefeitura.sp.gov.br` recusou (HTTP 403) o cliente automatizado, e as
 > quatro linhas ficaram `candidate`. O verificador agora se identifica com o User-Agent descritivo do projeto
 > (`link_check.user_agent` em `config/settings.json`); em 2026-11-12, `check_link` com esse identificador devolveu **HTTP
-> 200** nas quatro páginas. Mesmo assim, o catálogo ainda as guarda como `candidate`, e só uma decisão sua as promove a
-> `approved`. Enquanto isso, essas quatro linhas **não respondem ao cidadão**, e "alvará" e "IPTU municipal" seguem o
-> caminho geral da seção 5.
+> 200** nas quatro páginas. Nessa data o usuário aprovou as quatro: estão `approved` no catálogo, com `verified_on`
+> 2026-11-12, e respondem ao cidadão.
 
 ## 4. Emergência e direitos (transversais)
 
@@ -107,31 +106,29 @@ dizendo ao cidadão que é o caminho geral e não o serviço específico. O cami
 | Bombeiros | telefone **193** (sem página verificável hoje) | S02 | [x] |
 
 ## 6. Decisões do usuário (2026-11-10)
-1. **Prefeitura (M04 a M07):** decisão **pendente**; ficam `candidate` até lá (o bloqueio HTTP 403 não se repetiu com o
-   identificador do projeto: nota da seção 3).
+1. **Prefeitura (M04 a M07):** aprovadas em 2026-11-12, depois de o link responder HTTP 200 com o identificador do
+   projeto (nota da seção 3); estavam pendentes por causa do HTTP 403 de 2026-11-10.
 2. **Telefones:** só números **oficiais**. Valem os confirmados numa página oficial da própria fonte e os códigos oficiais
    de emergência e atendimento (190, 192, 193, 199, 100, 180, 136 e 156). O restante só entra se o executor o achar e
    confirmar na página de contato do órgão; senão fica de fora.
 3. **Propostas do revisor:** aprovadas (todas as linhas `[x]`).
 4. **Lacunas:** informar o caminho oficial, conforme a seção 5.
 
-## 7. Validação manual (páginas que o robô não consegue abrir)
+## 7. Validação manual: estado em 2026-11-12
 
-O usuário valida estas páginas **à mão**, num navegador. Para cada uma: abra o link, confira que é do órgão certo e que o
-conteúdo corresponde ao assunto, e marque `[x]` (e escreva a data de hoje em **Data**) ou `[-]` (não aprovar). Link que
-você aprovar aqui e que o robô continuar sem conseguir abrir (HTTP 403) será aceito **por atestado manual, com validade de
-180 dias**. Link com erro de conexão ou de SSL, ou 404, **não** pode ser aceito por atestado.
+Com o identificador descritivo do robô, `check_link` abre hoje quase todas as páginas que antes exigiam validação à mão.
+Resultado de 2026-11-12:
 
-| ID | Página | O que conferir | Erro do robô | Validada? | Data |
-|---|---|---|---|---|---|
-| M04 | `https://www.prefeitura.sp.gov.br` | portal oficial da Prefeitura de São Paulo | HTTP 403 | [ ] | |
-| M05 | `https://www.prefeitura.sp.gov.br/cidade/secretarias/fazenda` | Secretaria Municipal da Fazenda: IPTU, alvará, taxas | HTTP 403 | [ ] | |
-| M06 | `https://www.prefeitura.sp.gov.br/cidade/secretarias/saude` | Secretaria Municipal da Saúde: UBS, AMA, vacinação | HTTP 403 | [ ] | |
-| M07 | `https://www.prefeitura.sp.gov.br/cidade/secretarias/educacao` | Secretaria Municipal de Educação | HTTP 403 | [ ] | |
-| S05 | `https://www.gov.br/mdh/pt-br` | Ministério dos Direitos Humanos (Disque 100) | HTTP 403 | [ ] | |
-| F09 | `https://www.gov.br/mec/pt-br` | Ministério da Educação | erro de conexão (não aceitável por atestado) | [ ] | |
-| F12 | `https://www.gov.br/mec/pt-br/pe-de-meia` | programa Pé-de-Meia | erro de conexão (não aceitável por atestado) | [ ] | |
-| S02 | `https://www.corpodebombeiros.sp.gov.br` | Corpo de Bombeiros de SP | erro de SSL (não aceitável por atestado) | [ ] | |
+| ID | Página | Erro antigo | `check_link` hoje | Situação |
+|---|---|---|---|---|
+| M04 | `https://www.prefeitura.sp.gov.br` | HTTP 403 | HTTP 200 | resolvida: aprovada em 2026-11-12 |
+| M05 | `https://www.prefeitura.sp.gov.br/cidade/secretarias/fazenda` | HTTP 403 | HTTP 200 | resolvida: aprovada em 2026-11-12 |
+| M06 | `https://www.prefeitura.sp.gov.br/cidade/secretarias/saude` | HTTP 403 | HTTP 200 | resolvida: aprovada em 2026-11-12 |
+| M07 | `https://www.prefeitura.sp.gov.br/cidade/secretarias/educacao` | HTTP 403 | HTTP 200 | resolvida: aprovada em 2026-11-12 |
+| S05 | `https://www.gov.br/mdh/pt-br` | HTTP 403 | HTTP 200 | resolvida: o robô abre a página (registro `xl_f20`, `approved`) |
+| F09 | `https://www.gov.br/mec/pt-br` | erro de conexão | HTTP 200 | resolvida (registro `mec`, `approved`) |
+| F12 | `https://www.gov.br/mec/pt-br/pe-de-meia` | erro de conexão | HTTP 200 | resolvida (registros `pe_de_meia` e `xl_f11`, `approved`) |
+| S02 | `https://www.corpodebombeiros.sp.gov.br` | erro de SSL | **erro de SSL** (`CERTIFICATE_VERIFY_FAILED`) | **pendente** `[ ]`: o robô não abre; o canal segue só com o telefone 193 |
 
-As três últimas linhas servem só para você conferir **se a página existe e é a certa**; se o robô continuar sem abri-las
-depois do novo identificador, elas ficam `candidate` (o canal pode ficar só com o telefone, conforme as regras do catálogo).
+Nenhuma validação manual por atestado é necessária: a única pendência real é o S02, que não pode ser aceito por atestado
+(erro de SSL) e fica sem link no catálogo até o certificado do site passar na verificação.

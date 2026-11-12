@@ -989,9 +989,9 @@
       }
     ],
     "phones": [],
-    "source_note": "Linha M04 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Decisão do usuário pendente ([?]); o site responde HTTP 403 ao verificador.",
-    "verified_on": "2026-11-10",
-    "status": "candidate"
+    "source_note": "Linha M04 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md); aprovada pelo usuário em 2026-11-12; link verificado com o identificador do robô (HTTP 200) em 2026-11-12.",
+    "verified_on": "2026-11-12",
+    "status": "approved"
   },
   {
     "id": "sp_finance_secretariat",
@@ -1016,9 +1016,9 @@
         "number": "156"
       }
     ],
-    "source_note": "Linha M05 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Decisão do usuário pendente ([?]); HTTP 403 ao verificador.",
-    "verified_on": "2026-11-10",
-    "status": "candidate"
+    "source_note": "Linha M05 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md); aprovada pelo usuário em 2026-11-12; link verificado com o identificador do robô (HTTP 200) em 2026-11-12.",
+    "verified_on": "2026-11-12",
+    "status": "approved"
   },
   {
     "id": "sp_city_health",
@@ -1043,9 +1043,9 @@
         "number": "156"
       }
     ],
-    "source_note": "Linha M06 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Decisão do usuário pendente ([?]); HTTP 403 ao verificador.",
-    "verified_on": "2026-11-10",
-    "status": "candidate"
+    "source_note": "Linha M06 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md); aprovada pelo usuário em 2026-11-12; link verificado com o identificador do robô (HTTP 200) em 2026-11-12.",
+    "verified_on": "2026-11-12",
+    "status": "approved"
   },
   {
     "id": "sp_city_education_page",
@@ -1070,9 +1070,9 @@
         "number": "156"
       }
     ],
-    "source_note": "Linha M07 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md). Decisão do usuário pendente ([?]); HTTP 403 ao verificador.",
-    "verified_on": "2026-11-10",
-    "status": "candidate"
+    "source_note": "Linha M07 da lista aprovada pelo usuário em 2026-11-10 (docs/fontes-publicas-sp-para-aprovacao.md); aprovada pelo usuário em 2026-11-12; link verificado com o identificador do robô (HTTP 200) em 2026-11-12.",
+    "verified_on": "2026-11-12",
+    "status": "approved"
   },
   {
     "id": "police_190",

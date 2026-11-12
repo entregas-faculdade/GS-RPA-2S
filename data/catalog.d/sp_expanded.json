@@ -23,7 +23,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 2 (ID M01). Notas da planilha: Proteção Cloudflare (HTTP 403) - Playwright com User-Agent rotativo.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -50,7 +50,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 3 (ID M02). Notas da planilha: Requer inserção de SQL / Número do Contribuinte.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -78,7 +78,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 4 (ID M03). Notas da planilha: Sistema legado com login por certificado digital ou senha web.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -104,7 +104,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 5 (ID M04). Notas da planilha: Consulta mediante CPF/CNPJ.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -131,7 +131,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 6 (ID M05). Notas da planilha: Fluxo autenticado com senha web.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -158,7 +158,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 7 (ID M06). Notas da planilha: Integração com o sistema SEL/Licenciamento.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -184,7 +184,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 8 (ID M07). Notas da planilha: Validação de endereço e atividade econômica.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -211,7 +211,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 9 (ID M08). Notas da planilha: Páginas estáticas com listagem de endereços e telefones.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -238,7 +238,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 10 (ID M09). Notas da planilha: Conteúdo informativo com links para plataformas de agendamento.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -265,7 +265,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 11 (ID M10). Notas da planilha: Diretório de unidades de saúde.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -292,7 +292,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 12 (ID M11). Notas da planilha: Consulta por distrito e faixa etária.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -318,7 +318,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 13 (ID M12). Notas da planilha: Portal SP 156 integrado.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -346,7 +346,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 14 (ID M13). Notas da planilha: Mapa interativo em GIS; automação exige extração de coordenadas ou API.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -373,7 +373,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 15 (ID M14). Notas da planilha: Redirecionamento para sistema de infrações municipais.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -401,7 +401,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 16 (ID M15). Notas da planilha: Requer login de usuário e integração com sistemas de pagamento.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -427,7 +427,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 17 (ID M16). Notas da planilha: Envio de comprovante de matrícula e foto.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -454,7 +454,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 18 (ID M17). Notas da planilha: Listagem de unidades por região e diretrizes de atendimento.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -481,7 +481,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 19 (ID M18). Notas da planilha: Atendimento especializado a famílias em situação de risco.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -509,7 +509,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 20 (ID M19). Notas da planilha: Plataforma SP156 - requer fluxo autenticado (conta gov.br ou SP).",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -536,7 +536,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 21 (ID M20). Notas da planilha: Abertura de chamado via SP156 com descrição do local.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -562,7 +562,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 22 (ID M21). Notas da planilha: Chamado operacional via SP156.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -589,7 +589,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 23 (ID M22). Notas da planilha: Portal de notícias e eventos culturais.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -617,7 +617,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 24 (ID M23). Notas da planilha: Informações e quadros de vagas por unidade.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -644,7 +644,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 25 (ID M24). Notas da planilha: Orientações de formalização municipal.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -672,7 +672,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 26 (ID M25). Notas da planilha: Consulta de status habitacional com CPF.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -699,7 +699,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 27 (ID M26). Notas da planilha: Telefones de emergência e endereços de atendimento.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -726,7 +726,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 28 (ID M27). Notas da planilha: Contatos de emergência e patrulhamento preventivo.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -754,7 +754,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 29 (ID S01). Notas da planilha: Requer validação facial e login integrado com gov.br.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -782,7 +782,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 30 (ID S02). Notas da planilha: Exige placa/RENAVAM e CPF do proprietário.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -809,7 +809,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 31 (ID S03). Notas da planilha: Fluxo digital integrado com cartórios e vistoria.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -837,7 +837,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 32 (ID S04). Notas da planilha: Agendamento obrigatório de atendimento presencial via Poupatempo.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -866,7 +866,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 33 (ID S05). Notas da planilha: Formulário multi-etapas; exige validação de dados pessoais.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -895,7 +895,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 34 (ID S06). Notas da planilha: Sistema Via Rápida / Via Fácil Bombeiros.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -922,7 +922,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 35 (ID S07). Notas da planilha: Emissão de guia de pagamento (Boleto/PIX).",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -949,7 +949,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 36 (ID S08). Notas da planilha: Requer login com senha pessoal ou certificado digital.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -976,7 +976,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 37 (ID S09). Notas da planilha: Emissão imediata mediante CPF/CNPJ.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1004,7 +1004,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 38 (ID S10). Notas da planilha: Integração com o Ministério do Trabalho e Emprego.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1031,7 +1031,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 39 (ID S11). Notas da planilha: Plataforma SED (Secretaria Escolar Digital).",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1057,7 +1057,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 40 (ID S12). Notas da planilha: Consulta por RA (Registro de Aluno).",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1085,7 +1085,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 41 (ID S13). Notas da planilha: Integração com centrais de regulação municipal/estadual.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1111,7 +1111,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 42 (ID S14). Notas da planilha: Informações de protocolo e unidades dispensadoras.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1138,7 +1138,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 43 (ID S15). Notas da planilha: Consulta por edital de notificação ou auto de infração.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1165,7 +1165,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 44 (ID S16). Notas da planilha: Portal de atendimento eletrônico do consumidor paulista.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1193,7 +1193,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 45 (ID S17). Notas da planilha: Requer número da ligação (RGI) e CPF do titular.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1220,7 +1220,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 46 (ID S18). Notas da planilha: Sistema unificado de ouvidoria estadual.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1247,7 +1247,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 47 (ID S19). Notas da planilha: Consulta automatizada por dados pessoais e documento de identidade.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1269,12 +1269,12 @@
     "links": [
       {
         "label": "Licenciamento Ambiental Prévio e Consulta de Processos (ILA)",
-        "url": "https://www.infraestruturameioambiente.sp.gov.br"
+        "url": "https://www.cetesb.sp.gov.br/cetesb/licenciamento_ambiental"
       }
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 48 (ID S20). Notas da planilha: Sistema Integra Licenciamento Ambiental (ILA).",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1296,12 +1296,12 @@
     "links": [
       {
         "label": "Linhas de Financiamento para Pequenas e Médias Empresas e Inovação",
-        "url": "https://www.desenvolvesp.com.br"
+        "url": "https://servicos.sp.gov.br/fcarta/740DDEBA-7036-4EAC-BE8A-7900D05895C9"
       }
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 49 (ID S21). Notas da planilha: Simulação e envio de propostas para PJ.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1324,12 +1324,12 @@
     "links": [
       {
         "label": "Portal de Autenticação e Gestão da Conta Unificada (gov.br)",
-        "url": "https://sso.acesso.gov.br"
+        "url": "https://www.gov.br/governodigital/pt-br/identidade/conta-gov-br"
       }
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 50 (ID F01). Notas da planilha: Autenticação centralizada; tratamento de Captcha e reconhecimento facial.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1356,7 +1356,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 51 (ID F02). Notas da planilha: Validação rápida por CPF e Data de Nascimento.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1383,7 +1383,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 52 (ID F03). Notas da planilha: Consulta pública de dados cadastrais de pessoas jurídicas.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1410,7 +1410,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 53 (ID F04). Notas da planilha: Emissão imediata mediante CNPJ/CPF.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1437,7 +1437,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 54 (ID F05). Notas da planilha: Acesso integrado via aplicativo ou gov.br.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1464,7 +1464,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 55 (ID F06). Notas da planilha: Requer login gov.br e número do requerimento.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1491,7 +1491,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 56 (ID F07). Notas da planilha: Consulta de elegibilidade e calendário de pagamento.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1519,7 +1519,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 57 (ID F08). Notas da planilha: Requer login gov.br e navegação autenticada no sistema Meu INSS.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1546,7 +1546,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 58 (ID F09). Notas da planilha: Seleção de agências e horários disponíveis.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1573,7 +1573,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 59 (ID F10). Notas da planilha: Fluxo de requerimento guiado no Meu INSS.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1600,7 +1600,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 60 (ID F11). Notas da planilha: Portal informativo e links para aplicativos oficiais dos bancos parceiros.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1628,7 +1628,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 61 (ID F12). Notas da planilha: Página do Participante com login gov.br.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1655,7 +1655,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 62 (ID F13). Notas da planilha: Abertura de inscrições em períodos específicos do ano.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1682,7 +1682,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 63 (ID F14). Notas da planilha: Portal de inscrição e acompanhamento contratual.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1709,7 +1709,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 64 (ID F15). Notas da planilha: Inscrições e regras de elegibilidade.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1736,7 +1736,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 65 (ID F16). Notas da planilha: Simulador de financiamento habitacional e regras de faixa de renda.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1763,7 +1763,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 66 (ID F17). Notas da planilha: Acesso via aplicativo Conecte SUS / gov.br.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1790,7 +1790,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 67 (ID F18). Notas da planilha: Preenchimento de formulário, emissão de GRU e agendamento presencial.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1817,7 +1817,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 68 (ID F19). Notas da planilha: Emissão automática por validação de dados pessoais.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1844,7 +1844,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 69 (ID F20). Notas da planilha: Canais de atendimento telefônico e chat web.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1871,7 +1871,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 70 (ID F21). Notas da planilha: Orientações e registro de denúncias anônimas.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1898,7 +1898,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 71 (ID F22). Notas da planilha: Requer login gov.br nível prata ou ouro.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1926,7 +1926,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 72 (ID F23). Notas da planilha: Extrato consolidado do sistema financeiro nacional.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   },
   {
@@ -1954,7 +1954,7 @@
     ],
     "phones": [],
     "source_note": "Importado da planilha catalogo_servicos_publicos_expandido_rpa.xlsx, linha 73 (ID F24). Notas da planilha: Consulta de situação do benefício e postos de atendimento.",
-    "verified_on": "2026-11-11",
+    "verified_on": "2026-11-12",
     "status": "approved"
   }
 ]
