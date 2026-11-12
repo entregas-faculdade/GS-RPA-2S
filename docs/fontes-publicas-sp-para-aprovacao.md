@@ -3,8 +3,9 @@
 **Estado: lista aprovada pelo usuário em 2026-11-10** (todas as linhas `[x]`; as quatro da prefeitura com HTTP 403 ficam `[?]`).
 
 Documento de trabalho: **não é o catálogo** (`data/catalog.json`). Ele reúne a lista que você enviou, o que o
-revisor acrescentou e o resultado da verificação automática, para você aprovar, cortar ou completar. Nada daqui entra
-no catálogo sem a sua marca; depois da sua revisão o conteúdo é carregado pela plan 03.04.
+revisor acrescentou e o resultado da verificação automática. Nada daqui entra no catálogo sem a sua marca. A lista
+aprovada já está carregada no catálogo (`data/catalog.d/sp_expanded.json`); as quatro fontes da Prefeitura (M04 a M07)
+seguem `candidate` no catálogo e não respondem ao cidadão (ver a nota da seção 3).
 
 - **Verificação:** feita em 2026-11-10 com o `check_link` do projeto (HEAD, depois GET; cliente sem disfarce de
   navegador). `✓` = respondeu 200–399; `✗` = falhou (motivo ao lado). Telefone `confirmado` = o número aparece no texto
@@ -69,11 +70,12 @@ coluna **Notas**.
 | M06 | Secretaria Municipal da Saúde | UBS, AMA, vacinação | `https://www.prefeitura.sp.gov.br/cidade/secretarias/saude` | 156 | **✗ HTTP 403** | usuário | [?] | |
 | M07 | Secretaria Municipal de Educação (página da secretaria) | matrícula | `https://www.prefeitura.sp.gov.br/cidade/secretarias/educacao` | 156 | **✗ HTTP 403** | usuário | [?] | M02 cobre o mesmo assunto em outro endereço |
 
-> **Bloqueio da prefeitura (M04 a M07):** `www.prefeitura.sp.gov.br` recusa (HTTP 403) o cliente automatizado em todas as
-> páginas testadas, então o robô não consegue provar que o link está no ar. Enquanto você não escolher o caminho (manter
-> como candidato, identificar o cliente com um User-Agent descritivo do projeto ou aceitar confirmação manual), essas quatro
-> linhas ficam `candidate` e **não respondem ao cidadão**. Consequência: sem a Fazenda municipal, "alvará" e "IPTU
-> municipal" caem em "não tenho a informação".
+> **Prefeitura (M04 a M07):** em 2026-11-10, `www.prefeitura.sp.gov.br` recusou (HTTP 403) o cliente automatizado, e as
+> quatro linhas ficaram `candidate`. O verificador agora se identifica com o User-Agent descritivo do projeto
+> (`link_check.user_agent` em `config/settings.json`); em 2026-11-12, `check_link` com esse identificador devolveu **HTTP
+> 200** nas quatro páginas. Mesmo assim, o catálogo ainda as guarda como `candidate`, e só uma decisão sua as promove a
+> `approved`. Enquanto isso, essas quatro linhas **não respondem ao cidadão**, e "alvará" e "IPTU municipal" seguem o
+> caminho geral da seção 5.
 
 ## 4. Emergência e direitos (transversais)
 
@@ -105,7 +107,8 @@ dizendo ao cidadão que é o caminho geral e não o serviço específico. O cami
 | Bombeiros | telefone **193** (sem página verificável hoje) | S02 | [x] |
 
 ## 6. Decisões do usuário (2026-11-10)
-1. **Prefeitura (M04 a M07, HTTP 403):** o usuário pediu mais explicação; **pendente**. Enquanto isso, ficam `candidate`.
+1. **Prefeitura (M04 a M07):** decisão **pendente**; ficam `candidate` até lá (o bloqueio HTTP 403 não se repetiu com o
+   identificador do projeto: nota da seção 3).
 2. **Telefones:** só números **oficiais**. Valem os confirmados numa página oficial da própria fonte e os códigos oficiais
    de emergência e atendimento (190, 192, 193, 199, 100, 180, 136 e 156). O restante só entra se o executor o achar e
    confirmar na página de contato do órgão; senão fica de fora.

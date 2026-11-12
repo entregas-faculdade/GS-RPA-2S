@@ -1,7 +1,7 @@
 # Robô de triagem de pedidos de serviços públicos
 
 Protótipo acadêmico da **FIAP — Global Solution 2026.2**, disciplina *AI for Robotic Process Automation*
-(CitizenTech com RPA e IA).
+(CitizenTech com RPA e IA). O enunciado está em [docs/enunciado-gs-2026-2-rpa-ia.pdf](docs/enunciado-gs-2026-2-rpa-ia.pdf).
 
 ## Integrantes
 
@@ -9,13 +9,37 @@ Protótipo acadêmico da **FIAP — Global Solution 2026.2**, disciplina *AI for
 - Lucca Phelipe Masini (RM 564121)
 - Bernardo Braga Perobeli (RM 562468)
 
+## Execução rápida
+
+Requisitos: Python (verificado com 3.14) e internet (para instalar os pacotes e para o robô verificar os links). Comandos
+para o PowerShell, na raiz do repositório:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements-dev.txt
+Copy-Item .env.example .env        # depois preencha LLM_API_KEY no .env (opcional)
+python scripts/train_model.py
+python run.py --input data/samples
+python -m streamlit run app.py
+```
+
+- **A chave vai só no `.env`** (`LLM_API_KEY`, copiado de `.env.example`; o `.env` não vai ao Git).
+- **Sem chave, o robô funciona do mesmo jeito, em modo determinístico**: a resposta sai do texto-modelo do catálogo e a
+  categoria da interação sai das regras. Para rodar de propósito sem o LLM: `python run.py --input data/samples --no-llm`.
+- Rode `python scripts/train_model.py` **antes** do robô: sem o modelo, todo pedido vai à revisão humana.
+
 ## O problema e o público
 
 Muita gente não sabe a qual órgão recorrer para tirar a CNH, atualizar o título de eleitor ou consultar um benefício
 do INSS, e acaba perdida entre sites diferentes. Este robô atende o **cidadão** que descreve o que precisa em uma
 frase: ele lê o pedido, descobre o assunto e responde com o **link oficial** do serviço, ou encaminha o pedido a
-uma **fila de revisão humana** quando não tem segurança para responder. O recorte são 8 serviços públicos federais
-(CNH, CPF, identidade, certidão de nascimento, título de eleitor, Cadastro Único, INSS e IPTU).
+uma **fila de revisão humana** quando não tem segurança para responder.
+
+**Recorte (piloto de São Paulo):** o **estado e a capital de São Paulo**, mais as **fontes federais**. O catálogo
+(`data/catalog.json` mais `data/catalog.d/`) tem **127 fontes**, contadas por script sobre esses arquivos: **123
+aprovadas**, que respondem ao cidadão (58 federais, 33 do Estado de São Paulo e 32 da cidade de São Paulo), e **4
+candidatas** da Prefeitura, que ainda não respondem.
 
 O que o protótipo **não** é: não é um sistema de produção, não usa dado pessoal real, não faz deploy em nuvem e não é
 um chatbot generalista.
@@ -24,72 +48,68 @@ um chatbot generalista.
 
 ```mermaid
 flowchart LR
-  A[Entrada txt/csv/json] --> B[1 Sanitização + anonimização de PII]
+  A[Entrada txt/csv/json ou chat] --> B[1 Sanitização + anonimização de PII]
   B --> C[2 Classificação regex + TF-IDF + confiança]
   C -->|alta confiança| D[3 Catálogo + allowlist → link]
-  C -->|baixa, ambígua, urgente, fora do catálogo| H[Fila de revisão humana]
+  C -->|baixa confiança| F[Localizador de fontes aprovadas]
+  F --> D
+  C -->|ambígua, urgente, fora do catálogo| H[Fila de revisão humana]
   D --> L[LLM opcional redige a resposta sobre as fontes do catálogo]
   L --> R[Resposta + feedback 👍/👎]
   D --> R
-  R --> G[Log + relatório de execução]
-  H --> G
+  R --> K[Catalogação: categoria + needs_human]
+  H --> K
+  K --> G[Log, relatório e CSV da execução]
 ```
 
 1. **Sanitização e anonimização:** limita o tamanho, neutraliza HTML e caracteres de controle e troca CPF, telefone,
    e-mail, nome, endereço, CEP, RG, data e documentos por marcadores antes de qualquer outro passo.
 2. **Classificação:** atalho por regex quando o assunto é explícito; senão, TF-IDF com regressão logística. A
    confiança e a folga para a segunda melhor categoria decidem se o robô responde sozinho.
-3. **Resposta:** só links do catálogo curado e da allowlist (`.gov.br`), com o link verificado na rede. Pedido de
-   urgência, fora do catálogo, ambíguo, de baixa confiança, inválido ou com link fora do ar vai à revisão humana.
+3. **Resposta:** só links do catálogo curado e da allowlist (`.gov.br` e órgãos oficiais), com o link verificado na rede.
+   Pedido de urgência, fora do catálogo, ambíguo, de baixa confiança, inválido ou com link fora do ar vai à revisão
+   humana. Antes de desistir de um pedido de baixa confiança ou fora do catálogo, o **localizador** procura entre as
+   fontes aprovadas a que atende o texto.
+4. **Catalogação:** cada interação recebe uma **categoria** (saúde, impostos, trânsito, documentos…) de uma lista
+   fechada em `data/interaction_topics.json`. Quem escolhe é o **LLM**; sem ele, ou quando ele falha, escolhem as regras
+   (a área da fonte do catálogo ou o mapa do classificador), e urgência vira `safety` por regra, sem chamar o LLM. A
+   interação ganha também a tag **`needs_human`**, verdadeira quando o pedido **não** foi respondido (foi à revisão ou
+   foi rejeitado). Cada execução em lote grava as interações em `exports/interactions-run-<id>.csv` (dentro da pasta
+   `--output`), além do relatório em `reports/`.
 
-## Conversa com memória
+### A interface
 
-No chat da aba **Cidadão**, a conversa tem memória: para achar a fonte e redigir a resposta, o robô considera também as
-últimas mensagens do cidadão naquela conversa (`chat.history_turns` em `config/settings.json`, padrão 6). Assim,
-"me passe o link correto para parcelamento" entende que o assunto é o IPTU da mensagem anterior. A classificação, a
-urgência e a revisão humana continuam decididas só pela mensagem atual. Repetir uma pergunta no chat gera uma nova
-resposta, e não o aviso de pedido já registrado.
+`python -m streamlit run app.py` abre duas abas:
 
-O botão **Nova conversa** limpa o histórico, a memória e as avaliações da tela e começa outra conversa. O histórico vive
-só na sessão do Streamlit e some ao recarregar a página; o banco guarda apenas a mensagem atual, anonimizada.
+- **Cidadão:** um **chat com memória**. O robô considera as últimas mensagens da conversa (`chat.history_turns` em
+  `config/settings.json`, padrão 6) para achar a fonte e redigir a resposta; assim, "me passe o link correto para
+  parcelamento" entende que o assunto é o IPTU da mensagem anterior. Cada resposta traz os botões **👍/👎**, e **Nova
+  conversa** limpa o histórico, a memória e as avaliações da tela. A classificação, a urgência e a revisão humana
+  continuam decididas só pela mensagem atual.
+- **Revisão:** a fila de pedidos pendentes, com o texto **anonimizado**, a categoria sugerida e a confiança. A pessoa
+  escolhe a **categoria correta**, escreve uma nota e marca como resolvido; o botão de **exportação** grava um CSV de
+  pedidos rotulados (só com texto anonimizado, que precisa de revisão humana antes de virar dado de treino).
 
-**O que a mais vai ao provedor:** com o LLM ligado, as mensagens anteriores da conversa, já anonimizadas, saem rumo ao
-provedor a cada turno, além da mensagem atual. A anonimização reduz o risco, mas não o elimina (limites em *Proteção de
-dados, ética e ODS*), e o risco residual cresce com o tamanho da conversa. Sem o LLM, nada da conversa sai do computador.
+O histórico da conversa vive só na sessão do Streamlit e some ao recarregar a página; o banco guarda apenas a mensagem
+atual, anonimizada. **Com o LLM ligado**, as mensagens anteriores, já anonimizadas, também saem rumo ao provedor a cada
+turno, e o risco residual cresce com o tamanho da conversa (limites em *Proteção de dados, ética e ODS*). Sem o LLM,
+nada da conversa sai do computador.
 
 ## Como instalar e rodar
 
-Requisitos: Python (verificado com 3.14) e acesso à internet para instalar os pacotes e para o robô verificar os
-links. Os comandos abaixo são para o PowerShell, na raiz do repositório.
-
-```powershell
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -r requirements-dev.txt
-python scripts/train_model.py
-python run.py --input data/samples
-streamlit run app.py
-```
+Os comandos do bloco **Execução rápida** são o caminho completo. O que cada um faz:
 
 | Passo | O que faz |
 |---|---|
 | `pip install -r requirements-dev.txt` | instala o robô (`requirements.txt`) e as ferramentas de teste, lint e notebook |
-| `python scripts/train_model.py` | treina o classificador com `split=train` e grava `output/models/classifier.joblib`. **Rode antes do robô:** sem o modelo, todo pedido vai à revisão humana |
-| `python run.py --input data/samples` | processa a pasta de pedidos; grava log, banco SQLite e relatório em `output/` |
-| `streamlit run app.py` | abre a interface local: aba **Cidadão** (pedido, resposta e 👍/👎) e aba **Revisão** (fila pendente) |
+| `python scripts/train_model.py` | treina o classificador com `split=train` e grava `output/models/classifier.joblib` |
+| `python run.py --input data/samples` | processa a pasta de pedidos; grava log, banco SQLite, relatório e CSV das interações em `output/` |
+| `python -m streamlit run app.py` | abre a interface local (abas **Cidadão** e **Revisão**) |
 
 Opções do robô: `--input <pasta>` (padrão `data/samples`), `--output <pasta>` (padrão `output`), `--db <arquivo>`,
 `--watch` com `--interval <segundos>` (reexecuta até Ctrl+C) e `--llm` / `--no-llm`. Código de saída: `0` ok, `1`
 falha de infraestrutura (banco ou disco), `2` pasta de entrada inválida. Rodar a mesma pasta de novo não repete os
 pedidos já processados.
-
-**Notebook de evidências:** `notebooks/evidence.ipynb` já traz as saídas salvas. Para reexecutar:
-
-```powershell
-jupyter nbconvert --to notebook --execute notebooks/evidence.ipynb --output evidence-reexecutado.ipynb
-```
-
-(o notebook treina o modelo em memória e remove o que cria em `output/`; apague `evidence-reexecutado.ipynb` depois).
 
 **Testes e lint:**
 
@@ -98,9 +118,27 @@ python -m pytest -q
 python -m ruff check run.py src tests
 ```
 
+## Notebook de evidências
+
+`notebooks/evidence.ipynb` **já vem executado, de ponta a ponta, com o LLM real**: as saídas salvas são as evidências.
+Ele mostra o robô rodando em lote e por perguntas (com a categoria e a tag `needs_human` de cada interação), as métricas
+de classificação e do localizador, e cada falha tratada (pasta inexistente, JSON inválido, link fora do ar, resposta vazia
+do LLM, LLM fora do ar, modelo ausente).
+
+Para **reexecutar**, o notebook precisa da chave no `.env` da **raiz** do projeto e de rede. Grave num arquivo novo, para
+não sobrescrever o entregue:
+
+```powershell
+jupyter nbconvert --to notebook --execute notebooks/evidence.ipynb --output evidence-reexecutado.ipynb
+```
+
+O notebook treina o modelo em memória e remove o que cria; apague `evidence-reexecutado.ipynb` depois. Como a saída do
+LLM varia entre execuções, os totais da seção por perguntas podem mudar.
+
 ## Como configurar as chaves
 
-A configuração entregue **liga o LLM** (`llm.enabled: true`); sem `LLM_API_KEY`, o robô cai no **modo determinístico** (texto-modelo), sem LLM e sem nenhuma chave. A configuração tem duas fontes:
+A configuração entregue **liga o LLM** (`llm.enabled: true`); sem `LLM_API_KEY`, o robô cai no **modo determinístico**
+(texto-modelo), sem LLM e sem nenhuma chave. A configuração tem duas fontes:
 
 - **`.env`** (fora do Git): guarda **só a chave** do LLM, `LLM_API_KEY`. Nenhuma outra variável de ambiente altera o robô.
 - **`config/settings.json`** (versionado): todo o resto. Arquivo ausente ou JSON inválido impede o robô de subir (código de
@@ -108,9 +146,10 @@ A configuração entregue **liga o LLM** (`llm.enabled: true`); sem `LLM_API_KEY
 
 Para usar o LLM:
 
-1. Copie `.env.example` para `.env` (o `.env` está no `.gitignore` e nunca vai ao repositório) e preencha `LLM_API_KEY`
-   com a chave de um provedor de API compatível com `/chat/completions` (os modelos de `config/settings.json` são do OpenRouter).
-2. O `llm.enabled` já vem `true` em `config/settings.json`; para desligar, troque para `false`. Também dá para ligar só numa execução: `python run.py --llm`.
+1. Copie `.env.example` para `.env` e preencha `LLM_API_KEY` com a chave de um provedor de API compatível com
+   `/chat/completions` (os modelos de `config/settings.json` são do OpenRouter).
+2. O `llm.enabled` já vem `true`; para desligar, troque para `false`. Também dá para escolher por execução:
+   `python run.py --llm` ou `--no-llm`.
 
 | Chave de `config/settings.json` | Para que serve |
 |---|---|
@@ -122,54 +161,49 @@ Para usar o LLM:
 | `triage.confidence_min`, `triage.ambiguity_margin` | limiares da revisão humana (padrão `0.60` e `0.15`), em [0, 1] |
 | `finder.min_score`, `finder.margin` | limiares do localizador de fontes (padrão `0.25` e `0.15`), em [0, 1] |
 | `link_check.user_agent` | identificação do verificador de links (nome do projeto; não imita navegador) |
+| `chat.history_turns` | quantas mensagens anteriores o chat considera (padrão 6) |
 
-**Fluxo único.** Com `llm.enabled: true`, a resposta é **redigida pelo LLM** a partir da pergunta **anonimizada** e das
-**fontes aprovadas recuperadas do catálogo** (o catálogo é o RAG do agente): para cada fonte, nome, órgão, abrangência,
-instruções, links e telefones, exatamente como estão no catálogo, só com link no ar. O LLM nunca decide a categoria nem
-recebe o texto bruto. A saída passa por uma guarda: todo link e todo telefone têm de ser de uma das fontes enviadas, e ao
-menos um deles tem de aparecer; saída vazia, longa demais ou com link ou telefone alheio é descartada e responde o
-texto-modelo do catálogo (ou "não tenho a informação"), com o motivo no log e no relatório. Se o LLM disser
-`NENHUMA_FONTE`, vale o texto-modelo no degrau 1 e "não tenho a informação" nos degraus 2 e 3. Urgência, pedido ambíguo
-e modelo ausente nunca chamam o LLM.
-
-**Base enriquecida.** Além de `data/catalog.json`, o robô lê todo `data/catalog.d/*.json`: páginas oficiais por tarefa, cada uma
-com um trecho oficial (`content`) que ajuda a achar a fonte e que o LLM usa para responder com mais detalhe. O registro só
-responde se estiver `approved`, com domínio na allowlist e link no ar; `python scripts/verify_catalog.py` audita o conjunto.
-Formato e passo a passo: [`docs/guia-da-base-enriquecida.md`](docs/guia-da-base-enriquecida.md). A base importada da planilha
-`docs/catalogo_servicos_publicos_expandido_rpa.xlsx` vira `data/catalog.d/sp_expanded.json` por `python scripts/import_catalog_xlsx.py`.
-
-**O que vai ao provedor.** Com o LLM ligado, **toda** pergunta anonimizada (ex.: `[NOME] pergunta...`) e as fontes
-candidatas saem do computador rumo ao provedor. Sem `llm.enabled` (o padrão) nada sai: o projeto roda e é avaliado
-sem LLM, com a resposta determinística por texto-modelo.
-
-**Risco residual.** A anonimização reduz o risco, mas não o elimina: nome fora da lista de prenomes, endereço sem número e
-cidade ou bairro podem passar (limites em `specs/01.03-anonimizacao-de-pii.md`). **Nenhum dado pessoal real deve ser digitado**
-no sistema, com ou sem LLM. A chave do provedor fica só no `.env`, fora do Git.
+**Base enriquecida.** Além de `data/catalog.json`, o robô lê todo `data/catalog.d/*.json`: páginas oficiais por tarefa,
+cada uma com um trecho oficial (`content`) que ajuda a achar a fonte e que o LLM usa para responder com mais detalhe.
+O registro só responde se estiver `approved`, com domínio na allowlist e link no ar; `python scripts/verify_catalog.py`
+audita o conjunto. Formato e passo a passo: [docs/guia-da-base-enriquecida.md](docs/guia-da-base-enriquecida.md). A base
+importada da planilha [docs/catalogo_servicos_publicos_expandido_rpa.xlsx](docs/catalogo_servicos_publicos_expandido_rpa.xlsx)
+vira `data/catalog.d/sp_expanded.json` por `python scripts/import_catalog_xlsx.py`. A lista de fontes de São Paulo e o
+que ficou pendente: [docs/fontes-publicas-sp-para-aprovacao.md](docs/fontes-publicas-sp-para-aprovacao.md).
 
 ## Agente LLM
 
-O comportamento do LLM não está no código: o **agente** é definido por arquivos versionados em `data/agents/`.
+O LLM é **opcional**: o robô funciona por inteiro sem ele. A configuração entregue o liga, e o comportamento dele não
+está no código: o **agente** é definido por arquivos versionados em `data/agents/`.
+
+O agente executa **duas tarefas**, ambas em `workflow.md`:
+
+| Tarefa | O que o LLM faz | Se o LLM faltar ou falhar |
+|---|---|---|
+| `answer` | **redige a resposta** ao cidadão a partir da pergunta anonimizada e das **fontes aprovadas** recuperadas do catálogo (o catálogo é o RAG do agente) | responde o texto-modelo do catálogo (ou "não tenho a informação") |
+| `categorize` | **escolhe a categoria da interação**, só entre os ids de `data/interaction_topics.json` | escolhem as regras: área da fonte ou mapa do classificador |
+
+O LLM nunca decide se o pedido é respondido nem escolhe URL: recebe só texto anonimizado e fontes já aprovadas, e a
+**saída passa por uma guarda**. Na resposta, todo link e todo telefone têm de ser de uma das fontes enviadas, e ao menos um
+deles tem de aparecer; saída vazia, longa demais ou com link ou telefone alheio é descartada, e responde o texto-modelo
+com o motivo no log e no relatório. Na categoria, só vale o id exato da lista. Urgência, pedido ambíguo e modelo ausente
+nunca chamam o LLM.
+
+**Modelos gratuitos.** A lista `llm.fallback_models` entregue inclui modelos gratuitos do OpenRouter (os terminados em
+`:free`). Um modelo pode devolver **conteúdo vazio**: o robô registra a falha, **passa ao modelo seguinte** da lista e,
+esgotados todos, cai no **template**. O nome de um modelo gratuito muda com o tempo; confira a lista do provedor.
 
 | Arquivo | Papel |
 |---|---|
 | `data/agents/global_rules.md` | regras que valem para todo agente |
 | `data/agents/<id>/identity.md` | persona e tom de voz |
 | `data/agents/<id>/rules.md` | limites rígidos |
-| `data/agents/<id>/workflow.md` | uma seção `## Tarefa: <nome>` por tarefa (hoje, `answer`) |
+| `data/agents/<id>/workflow.md` | uma seção `## Tarefa: <nome>` por tarefa (`answer` e `categorize`) |
 | `data/agents/<id>/config.json` | temperatura, `max_tokens`, timeout e política de tentativas |
 
-**`.env` × versionado:** o `.env` guarda só a chave (`LLM_API_KEY`); provedor, modelos, `llm.agent_id` e o interruptor `llm.enabled`
-ficam em `config/settings.json`; o comportamento do agente fica nos arquivos acima. Provedor e modelo se trocam só em
-`config/settings.json`: Groq e OpenRouter, por exemplo, falam o mesmo formato de chat.
-
-Exemplo no OpenRouter (modelos do `config/settings.json` entregue; o nome de modelo gratuito muda com o tempo, confira a
-lista do provedor). No `.env`:
-
-```
-LLM_API_KEY=<sua chave>
-```
-
-Em `config/settings.json`:
+**`.env` × versionado:** o `.env` guarda só a chave (`LLM_API_KEY`); provedor, modelos, `llm.agent_id` e o interruptor
+`llm.enabled` ficam em `config/settings.json`; o comportamento do agente fica nos arquivos acima. Provedor e modelo se
+trocam só em `config/settings.json`: Groq e OpenRouter, por exemplo, falam o mesmo formato de chat. A seção `llm` entregue:
 
 ```json
 "llm": {
@@ -181,8 +215,8 @@ Em `config/settings.json`:
 }
 ```
 
-A configuração entregue liga o LLM; sem `LLM_API_KEY`, o robô cai no modo determinístico e é avaliado sem ele. Agente ausente ou inválido também desliga o LLM
-(com log de erro) e o texto-modelo responde. Para validar os arquivos do agente:
+Agente ausente ou inválido também desliga o LLM (com log de erro) e o texto-modelo responde. Para validar os arquivos do
+agente:
 
 ```powershell
 python scripts/validate_agent.py
@@ -193,21 +227,34 @@ python scripts/validate_agent.py
 ```text
 run.py                   ponto de entrada do robô
 app.py                   interface Streamlit
-scripts/train_model.py   treina e grava o classificador
+.env.example             modelo do .env (só LLM_API_KEY)
+config/settings.json     configuração versionada
+scripts/                 train_model.py, validate_agent.py, verify_catalog.py, import_catalog_xlsx.py
 src/triage/
   ingestion/             leitura de txt/csv/json e sanitização
   privacy/               anonimização de PII (CPF, contato, nome, endereço, documentos)
   classification/        regex, TF-IDF, confiança e decisão de revisão
-  automation/            catálogo, allowlist, verificação de links, resposta e LLM opcional
-  storage/               SQLite: idempotência, fila de revisão e feedback
+  automation/            catálogo, allowlist, verificação de links, localizador, resposta e LLM opcional
+    topics.py            categoria da interação (LLM, com regras como caminho seguro)
+  agent/                 leitura do agente LLM de data/agents/ e linter
+  storage/               SQLite: idempotência, fila de revisão, feedback e catalogação
   pipeline/              orquestração, retry, relatório e agendamento
+    export.py            CSV das interações de cada execução
   interface/             serviço e telas do Streamlit
   evaluation/            métricas de validação (usadas pelo notebook)
-data/                    catálogo, allowlist, léxico de urgência, amostras e conjunto rotulado
-notebooks/               evidence.ipynb (evidências de validação)
-docs/                    quadro de temas
+data/
+  catalog.json           catálogo curado de fontes públicas
+  catalog.d/             base enriquecida (páginas oficiais por tarefa)
+  allowed_domains.json   allowlist de domínios
+  interaction_topics.json  vocabulário fechado das categorias de interação
+  agents/                agente LLM versionado (persona, regras, tarefas, parâmetros)
+  labeled/               conjuntos rotulados (classificador e localizador)
+  samples/               pedidos de exemplo, inclusive arquivos defeituosos
+notebooks/               evidence.ipynb (evidências de validação, já executado)
+docs/                    enunciado, quadro de temas, guia da base enriquecida, fontes de SP e planilha do catálogo
 tests/                   testes automatizados
 specs/                   especificações do projeto
+output/                  gerado na execução: logs, banco, modelo, reports/ e exports/ (fora do Git)
 ```
 
 ## Quadro de temas
@@ -216,45 +263,81 @@ Resumo; o quadro completo, com a justificativa da combinação, está em [docs/q
 
 | Tema | Onde entra no fluxo | O que resolve |
 |---|---|---|
-| Automação / RPA | todo o pipeline: leitura da pasta, retry, idempotência, relatório | processa o lote sem intervenção; uma falha não derruba as demais |
+| Automação / RPA | todo o pipeline: leitura da pasta, retry, idempotência, relatório e CSV | processa o lote sem intervenção; uma falha não derruba as demais |
 | NLP | etapa 2: normalização e TF-IDF | entende o assunto de frases livres e mede a confiança |
 | Regras / regex | etapas 1 e 2: sanitização, atalhos por palavra-chave e urgência | barra entrada ruim, resolve o óbvio e aciona a revisão em emergências |
 | Anonimização de PII | etapa 1: antes de classificar, gravar ou logar | nenhum dado pessoal chega ao log, ao banco ou a uma API |
 
 ## Resultados
 
-Medidos no mesmo conjunto de teste (`split=test`, **54 pedidos sintéticos**, 6 por categoria, sem nenhuma linha alterada),
-sem LLM. O que mudou foi o treino do modelo: **antes**, 126 pedidos (14 por categoria); **depois**, 364 pedidos (pelo
-menos 40 por categoria, 44 em `other`):
+Todos os números abaixo são as **saídas salvas** de [notebooks/evidence.ipynb](notebooks/evidence.ipynb), executado com o
+LLM real em 2026-11-12. Os dados são sintéticos; os números descrevem estas amostras, não pedidos reais.
 
-| Métrica | Antes (126 de treino) | Depois (364 de treino) |
-|---|---|---|
-| Acurácia geral | 81,5% (44 de 54) | 88,9% (48 de 54) |
-| Pedidos enviados à revisão humana | 42,6% (23 de 54) | 33,3% (18 de 54) |
-| Cobertura automática | 57,4% (31 de 54) | 66,7% (36 de 54) |
-| Acurácia entre os respondidos sozinhos | 100% (31 de 31) | 100% (36 de 36) |
-| Confiança média dos acertos / dos erros | 0,73 / 0,26 | 0,77 / 0,31 |
+**Classificação** (sem LLM; `split=test`, **54 pedidos**, 6 por categoria, com o modelo treinado em 364 pedidos de
+`split=train` e os limiares `CONFIDENCE_MIN=0,60` e `AMBIGUITY_MARGIN=0,15`):
 
-Os 6 erros de classificação restantes foram todos encaminhados à revisão humana; nenhum virou resposta errada. Os
-limiares `CONFIDENCE_MIN=0,60` e `AMBIGUITY_MARGIN=0,15` foram reavaliados por validação cruzada de 5 partes **só no
-treino** (364 pedidos) e **mantidos**: baixar a confiança mínima aumenta a cobertura (69,2% em 0,60; 71,2% em 0,55;
-76,9% em 0,40), mas a acurácia entre os respondidos cai (98,0%; 97,7%; 96,8%), e a folga de ambiguidade não muda o
-resultado. A amostra é pequena e sintética (cada pedido de teste vale cerca de 1,9 ponto percentual): isto descreve
-esta amostra sintética, não pedidos reais. Matriz de confusão, métricas por classe, tabela de limiares, análise dos
-erros, casos de falha tratados (arquivo ausente, JSON inválido, link fora do ar, resposta vazia do LLM, modelo ausente)
-e limites estão em [notebooks/evidence.ipynb](notebooks/evidence.ipynb).
+| Métrica | Resultado |
+|---|---|
+| Acurácia geral | 88,9% (6 erros em 54 pedidos; um pedido a mais ou a menos muda 1,9%) |
+| Pedidos enviados à revisão humana | 33,3% |
+| Cobertura automática (respondidos sem revisão) | 66,7% (36 pedidos) |
+| Acurácia entre os respondidos sozinhos | 100,0% |
+| Motivos de revisão no teste | `low_confidence` 10, `out_of_catalog` 7, `urgent` 1 |
+| Confiança média dos acertos / dos erros | 0,77 / 0,31 |
 
-Localizador de fontes (sem LLM, `ServiceFinder`), medido em 96 pedidos sintéticos (48 de treino para ajustar os limiares e 48 de teste só para reportar): no teste, cobertura de 47,9%, acerto de 87,0% entre os que devolveram fonte (20 de 23) e falso positivo de 16,7% (3 de 18 pedidos sem fonte, entre eles um de outra cidade, que o piloto de São Paulo não distingue); no treino, 45,8%, 90,9% e 5,6%. Os padrões `FINDER_MIN_SCORE=0,25` e `FINDER_MARGIN=0,15` preferem dizer "não sei" a apontar a fonte errada, e isso custa cobertura: isto descreve esta amostra sintética, não pedidos reais (seção 5 do [notebook](notebooks/evidence.ipynb)).
+Os 6 erros de classificação foram todos encaminhados à revisão humana; nenhum virou resposta errada.
+
+**Calibração dos limiares**, por validação cruzada de 5 partes **só no treino** (364 pedidos, acurácia fora da amostra de
+92,9%), nunca no conjunto de teste:
+
+| `CONFIDENCE_MIN` | 0,40 | 0,50 | 0,55 | **0,60** | 0,70 | 0,80 |
+|---|---|---|---|---|---|---|
+| Cobertura automática | 76,9% | 72,0% | 71,2% | **69,2%** | 65,9% | 63,7% |
+| Acurácia entre os respondidos | 96,8% | 97,3% | 97,7% | **98,0%** | 98,3% | 98,7% |
+
+Nenhum valor abaixo de 0,60 amplia a cobertura sem piorar a acurácia entre os respondidos, então `0,60` foi **mantido**. A
+`AMBIGUITY_MARGIN` não muda o resultado entre 0,05 e 0,25.
+
+**Localizador de fontes** (sem LLM, `ServiceFinder`), medido em 96 pedidos sintéticos (48 de treino, para ajustar os
+limiares, e 48 de teste, só para reportar) sobre as **123 fontes aprovadas** do catálogo atual:
+
+| | Cobertura | Acerto entre os que devolveram fonte | Falso positivo (pedido sem fonte que recebeu uma) |
+|---|---|---|---|
+| Teste | 27,1% (13 com fonte) | 76,9% (10 de 13) | 5,6% (1 de 18) |
+| Treino | 22,9% (11 com fonte) | 81,8% (9 de 11) | 5,6% (1 de 18) |
+
+Os padrões `FINDER_MIN_SCORE=0,25` e `FINDER_MARGIN=0,15` preferem dizer "não sei" a apontar a fonte errada, e isso
+custa cobertura. No teste, 3 fontes devolvidas não eram a esperada (uma delas para um pedido de passaporte, que não tem
+fonte aprovada).
+
+**Execução com o LLM real:**
+
+- **Lote** (`data/samples`, 15 pedidos): 8 respondidos e 7 rejeitados na ingestão (arquivos defeituosos); dos 8 respondidos, 8 com link
+  no ar e nenhum fora do ar. A segunda execução da mesma pasta ignorou os 15 como já processados.
+- **Teste por perguntas** (18 perguntas, pela mesma rota do chat): 15 respondidas e 3 encaminhadas à revisão
+  (emergência, fora de escopo e tentativa de injeção); 16 categorias da interação escolhidas pelo LLM; **0 de 16 URLs** das
+  respostas fora do catálogo; **0 de 33 mensagens** enviadas ao LLM com dado pessoal bruto.
+- **Sem LLM** (as mesmas 18 perguntas): 9 respondidas e 9 encaminhadas à revisão, contra 15 e 3 com o LLM.
+
+Matriz de confusão, métricas por classe, análise dos erros, casos de falha tratados e limites estão no
+[notebook](notebooks/evidence.ipynb).
 
 ## Proteção de dados, ética e ODS
 
 O protótipo usa só dados sintéticos e anonimiza CPF, telefone, e-mail, nome de pessoa, endereço (logradouro com
 número e complementos), CEP, RG, data completa e números de documento (título de eleitor, CNH, NIS, PIS, cartão SUS,
 CNPJ, passaporte, matrícula) antes de qualquer log, gravação ou chamada a API, em linha com a LGPD (minimização e
-finalidade). A anonimização usa regex, contexto e uma lista de prenomes, sem modelo de NER, e na dúvida mascara.
-Limites declarados (risco residual): nome fora de contexto e fora da lista pode passar; endereço sem logradouro
-passa; cidade, estado e bairro não são mascarados. Do ponto de vista ético, o robô só responde com links de domínios oficiais da allowlist, prefere pedir
-**revisão humana** a arriscar uma resposta errada (urgência, dúvida e fora do catálogo vão para uma pessoa) e deixa
-claro que é um protótipo; o LLM, se ligado, só redige sobre fontes aprovadas do catálogo e sob uma guarda de saída. Como candidatos a ODS, o
-**ODS 16** (instituições eficazes e acesso à informação) e o **ODS 10** (redução das desigualdades, ao facilitar o
-acesso a serviços para quem não sabe a qual órgão recorrer) — *a confirmar com o grupo*.
+finalidade). **O dado pessoal só vai anonimizado ao provedor do LLM**, e a **saída do LLM passa por uma guarda** (link e
+telefone só das fontes enviadas, categoria só da lista fechada) antes de chegar ao cidadão. A anonimização usa regex,
+contexto e uma lista de prenomes, sem modelo de NER, e na dúvida mascara.
+
+Limites declarados (risco residual): nome fora de contexto e fora da lista pode passar; endereço sem logradouro passa;
+cidade, estado e bairro não são mascarados. Por isso **nenhum dado pessoal real deve ser digitado** no sistema, com ou sem
+LLM, e o CSV de interações e a exportação da revisão, que são texto anonimizado por regras, devem ser revisados antes de
+compartilhados. A chave do provedor fica só no `.env`, fora do Git.
+
+Do ponto de vista ético, o robô só responde com links de domínios oficiais da allowlist, prefere pedir **revisão humana**
+a arriscar uma resposta errada (urgência, dúvida e fora do catálogo vão para uma pessoa) e deixa claro que é um protótipo.
+A fila de revisão não exige login: quem tem acesso à máquina a vê. Os objetivos de desenvolvimento sustentável (ODS)
+atendidos, **confirmados pelo grupo**, são o **ODS 16** (instituições eficazes e acesso à informação) e o **ODS 10**
+(redução das desigualdades, ao facilitar o acesso a serviços para quem não sabe a qual órgão recorrer).

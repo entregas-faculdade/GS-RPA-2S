@@ -268,8 +268,7 @@ Antes de escolher **como** fazer algo, leia **[[00-knowledge]]** — é o rotead
 > é o `git` e os `adr/`.
 
 - **Prazo:** segue o calendário da Global Solution (data a confirmar com a turma).
-- **Pendente de decisão:** versão-alvo do Python (só 3.14.0 foi verificado); confirmação do grupo sobre os ODS do parágrafo de
-  ética (16 e 10 são candidatos).
+- **Pendente de decisão:** versão-alvo do Python (só 3.14.0 foi verificado).
 - **Sem binding:** o template de módulos e o gate `tools/gate` não estão instalados (decisão de 2026-11-09).
 - **Carimbo `.sarak/base.json` ausente:** o `init_repo.py` falhou ao carimbar (base via cache de plugin, sem git).
 - **Falso positivo do gate de segredos** em `.githooks/verify_commit.py` corrigido localmente em 2026-11-09;
