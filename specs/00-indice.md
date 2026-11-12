@@ -54,7 +54,7 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 1 | [plan-03.15-categoria-da-interacao-escolhida-pelo-llm](plan/plan-03.15-categoria-da-interacao-escolhida-pelo-llm.md) | Escolher a categoria da interação com o LLM, com saída segura sem ele | — | 🟡 Em execução | `specs/03.05-categoria-da-interacao.md` + `specs/03.04-agente-llm.md` |
+| 1 | [plan-03.15-categoria-da-interacao-escolhida-pelo-llm](plan/plan-03.15-categoria-da-interacao-escolhida-pelo-llm.md) | Escolher a categoria da interação com o LLM, com saída segura sem ele | — | 🟢 Aprovada | `specs/03.05-categoria-da-interacao.md` + `specs/03.04-agente-llm.md` |
 | 2 | [plan-04.06-catalogo-de-interacoes-com-tag-de-revisao-humana](plan/plan-04.06-catalogo-de-interacoes-com-tag-de-revisao-humana.md) | Catalogar cada interação com categoria, tag de revisão humana e saída por execução | plan-03.15 | 🔴 A executar | `arquitetura/04.01-persistencia.md` + `arquitetura/04.03-orquestracao-rpa.md` |
 | 3 | [plan-05.02-notebook-de-evidencias-com-teste-completo](plan/plan-05.02-notebook-de-evidencias-com-teste-completo.md) | Recriar o notebook de evidências com teste completo, executado com a chave da raiz | plan-04.06 | 🔴 A executar | `specs/05.01-validacao-e-entrega.md` |
 

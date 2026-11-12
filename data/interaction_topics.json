@@ -1,0 +1,24 @@
+{
+  "topics": [
+    {"id": "health", "label": "Saúde", "description": "Atendimento médico, vacinas, medicamentos, SUS e planos de saúde públicos."},
+    {"id": "education", "label": "Educação", "description": "Escola, matrícula, bolsas, vestibular, ENEM e financiamento estudantil."},
+    {"id": "vehicles", "label": "Veículos e trânsito", "description": "Habilitação, CNH, licenciamento, multas e documentos de veículos."},
+    {"id": "city", "label": "Serviços da cidade", "description": "Zeladoria urbana, limpeza, iluminação, transporte e serviços da prefeitura."},
+    {"id": "documents", "label": "Documentos pessoais", "description": "RG, CPF, título de eleitor, certidões e segunda via de documentos."},
+    {"id": "social", "label": "Assistência e previdência", "description": "Benefícios sociais, INSS, aposentadoria, Bolsa Família e CadÚnico."},
+    {"id": "tax", "label": "Impostos e tributos", "description": "IPTU, IPVA, Imposto de Renda, taxas e dívidas com o governo."},
+    {"id": "safety", "label": "Segurança", "description": "Boletim de ocorrência, polícia, defesa civil e denúncias."},
+    {"id": "other", "label": "Outros assuntos", "description": "Qualquer pedido que não se encaixe claramente nas categorias anteriores."}
+  ],
+  "classifier_map": {
+    "driver_license": "vehicles",
+    "property_tax": "tax",
+    "id_card": "documents",
+    "cpf_registration": "documents",
+    "voter_id": "documents",
+    "social_benefits": "social",
+    "social_security": "social",
+    "birth_certificate": "documents",
+    "other": "other"
+  }
+}

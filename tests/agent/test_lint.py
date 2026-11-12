@@ -80,6 +80,13 @@ def test_missing_answer_section_is_reported(agents_dir: Path, agent_dir: Path) -
     assert any("Tarefa: answer" in problem for problem in lint_agent(DEFAULT_AGENT_ID, agents_dir))
 
 
+def test_missing_categorize_section_is_reported(agents_dir: Path, agent_dir: Path) -> None:
+    (agent_dir / "workflow.md").write_text("## Tarefa: answer\ntexto\n", encoding="utf-8")
+    problems = lint_agent(DEFAULT_AGENT_ID, agents_dir)
+    assert any("Tarefa: categorize" in problem for problem in problems)
+    assert not any("Tarefa: answer" in problem for problem in problems)
+
+
 @pytest.mark.parametrize(
     "leak",
     [
@@ -105,7 +112,7 @@ def test_plain_words_about_keys_are_not_reported(agents_dir: Path, agent_dir: Pa
 def test_all_problems_come_back_together(agents_dir: Path, agent_dir: Path) -> None:
     (agent_dir / "identity.md").unlink()
     (agent_dir / "workflow.md").write_text("sem seção", encoding="utf-8")
-    assert len(lint_agent(DEFAULT_AGENT_ID, agents_dir)) == 2
+    assert len(lint_agent(DEFAULT_AGENT_ID, agents_dir)) == 3
 
 
 def test_cli_exits_zero_for_the_real_agent(capsys: pytest.CaptureFixture[str]) -> None:

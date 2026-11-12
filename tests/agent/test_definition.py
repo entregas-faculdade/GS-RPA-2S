@@ -107,6 +107,12 @@ def test_workflow_without_the_answer_section_is_an_error(agents_dir: Path, agent
         load_agent(DEFAULT_AGENT_ID, agents_dir)
 
 
+def test_workflow_without_the_categorize_section_is_an_error(agents_dir: Path, agent_dir: Path) -> None:
+    (agent_dir / "workflow.md").write_text("## Tarefa: answer\n\ntexto\n", encoding="utf-8")
+    with pytest.raises(AgentError, match="Tarefa: categorize"):
+        load_agent(DEFAULT_AGENT_ID, agents_dir)
+
+
 def test_workflow_with_an_empty_answer_section_is_an_error(agents_dir: Path, agent_dir: Path) -> None:
     (agent_dir / "workflow.md").write_text("## Tarefa: answer\n\n", encoding="utf-8")
     with pytest.raises(AgentError, match="Tarefa: answer"):
@@ -114,15 +120,17 @@ def test_workflow_with_an_empty_answer_section_is_an_error(agents_dir: Path, age
 
 
 def test_old_tasks_are_no_longer_required(agents_dir: Path, agent_dir: Path) -> None:
-    (agent_dir / "workflow.md").write_text("## Tarefa: answer\n\ntexto\n", encoding="utf-8")
+    (agent_dir / "workflow.md").write_text(
+        "## Tarefa: answer\n\ntexto\n\n## Tarefa: categorize\n\ntexto\n", encoding="utf-8"
+    )
 
-    assert set(load_agent(DEFAULT_AGENT_ID, agents_dir).tasks) == {"answer"}
+    assert set(load_agent(DEFAULT_AGENT_ID, agents_dir).tasks) == {"answer", "categorize"}
 
 
-def test_the_real_agent_has_only_the_answer_task_and_five_candidates() -> None:
+def test_the_real_agent_has_the_answer_and_categorize_tasks_and_five_candidates() -> None:
     agent = load_agent(DEFAULT_AGENT_ID)
 
-    assert set(agent.tasks) == {"answer"}
+    assert set(agent.tasks) == {"answer", "categorize"}
     assert agent.params.max_candidates == 5
 
 
@@ -137,7 +145,7 @@ def test_system_prompt_is_ordered_global_identity_rules_task(agents_dir: Path, a
     (agents_dir / "global_rules.md").write_text("GLOBAL", encoding="utf-8")
     (agent_dir / "identity.md").write_text("IDENTIDADE", encoding="utf-8")
     (agent_dir / "rules.md").write_text("REGRAS", encoding="utf-8")
-    (agent_dir / "workflow.md").write_text("## Tarefa: outra\nNAO\n\n## Tarefa: answer\nTAREFA\n\n## Tarefa: locate\nESCOLHA\n", encoding="utf-8")
+    (agent_dir / "workflow.md").write_text("## Tarefa: outra\nNAO\n\n## Tarefa: answer\nTAREFA\n\n## Tarefa: categorize\nCATEGORIA\n\n## Tarefa: locate\nESCOLHA\n", encoding="utf-8")
 
     prompt = compose_system_prompt(load_agent(DEFAULT_AGENT_ID, agents_dir), "answer")
 

@@ -14,7 +14,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 █████████░ 90% · 28/31 itens ✅
 
 ## Agora
-- 🟡 · plan-03.15 · R03.15 · Escolher a categoria da interação com o LLM, com saída segura sem ele
+—
 
 ## Próximas
 - 🔴 · plan-04.06 · R04.6 · Catalogar cada interação com categoria, tag de revisão humana e saída por execução
@@ -30,4 +30,5 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 05 | Validação e entrega | 1/2 | ██░░░ | 1 |
 
 ## Atenção
+- 🟢 plan-03.15 · Escolher a categoria da interação com o LLM, com saída segura sem ele — aguardando síntese
 - 📋 30 achado(s) no `00-backlog`

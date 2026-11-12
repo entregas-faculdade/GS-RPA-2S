@@ -4,7 +4,7 @@ familia: "03"
 item: "R03.15"
 titulo: "Escolher a categoria da interação com o LLM, com saída segura sem ele"
 dominio: "Automação"
-status: "🟡 Em execução"
+status: "🟢 Aprovada"
 prioridade: "Alta"
 tags: ["plan", "llm", "categoria", "interacao"]
 relacionados: ["[[03.02-resposta-final-e-llm]]", "[[03.04-agente-llm]]", "[[03.01-catalogo-e-allowlist]]", "[[02.01-classificacao]]", "[[02.02-confianca-e-revisao-humana]]"]
@@ -148,8 +148,98 @@ Texto pronto para transporte:
 
 <!-- Preenchido pelo EXECUTOR. Append-only: cada rodada acrescenta um bloco novo; nada é removido. -->
 
+## Resumo da execução — 2026-11-12
+
+**Resultado:** Concluído com pendências
+
+**O que foi feito**
+- `data/interaction_topics.json` criado: 9 categorias (as 8 áreas do catálogo + `other` por último) e `classifier_map` das 9 categorias do classificador — vocabulário fechado fora do código.
+- `src/triage/automation/topics.py` criado: `load_topics` (valida ids únicos, `other` último, mapa apontando para id existente, categorias do classificador todas mapeadas; erro `TopicsError` com causa preservada), `TopicChoice`, `TopicRequest` (agrupa os parâmetros, limite de 4), `choose_topic`, `build_topic_message`, `guard_topic_output`, `NO_TOPIC` (`source=none`).
+- Ordem fixa em `choose_topic`: urgência → `safety`/`rule` sem LLM; cliente → tarefa `categorize` + guarda → `llm`; senão `area` da fonte (`catalog`) ou mapa do classificador (`classifier`). `except` só de `LlmUnavailable` e `LlmInvalidResponse`; log só com o tipo do erro ou o motivo da rejeição.
+- `src/triage/automation/__init__.py`: exporta a API pública de `topics`.
+- `data/agents/triage-assistant/workflow.md`: nova seção `## Tarefa: categorize`.
+- `src/triage/agent/definition.py:19` — `REQUIRED_TASKS = ("answer", "categorize")`; carga e linter (que usa a mesma constante) passam a exigi-la.
+- Testes: `tests/automation/test_topics.py` (novo) e ajustes em `tests/agent/test_definition.py` e `tests/agent/test_lint.py`.
+
+**Arquivos alterados**
+| Arquivo | Natureza | O que mudou |
+|---|---|---|
+| `data/interaction_topics.json` | criado | vocabulário de 9 categorias e mapa do classificador |
+| `src/triage/automation/topics.py` | criado | carga/validação, `choose_topic`, mensagem ao LLM, guarda |
+| `src/triage/automation/__init__.py` | alterado | exporta a API de `topics` |
+| `data/agents/triage-assistant/workflow.md` | alterado | seção `categorize` |
+| `src/triage/agent/definition.py` | alterado | `categorize` obrigatória |
+| `tests/automation/test_topics.py` | criado | testes do módulo |
+| `tests/agent/test_definition.py` | alterado | testes que assumiam só `answer` agora esperam `answer` + `categorize`; novo teste de `categorize` ausente |
+| `tests/agent/test_lint.py` | alterado | novo teste de `categorize` ausente; `test_all_problems_come_back_together` passa de 2 para 3 problemas |
+
+**Verificações executadas**
+- `python -m pytest tests/automation/test_topics.py tests/agent -q` → 135 passed.
+- `python scripts/validate_agent.py` → `OK`, saída 0.
+- `python -m ruff check` nos arquivos tocados (`topics.py`, `__init__.py`, `test_topics.py`, `tests/agent`, `src/triage/agent`) → All checks passed. No escopo da plan inteira (`src/triage/automation`) há 1 erro **preexistente** em `allowlist.py` (`@lru_cache(maxsize=None)`, UP033), fora do diff.
+- Validador `padrao-python` (`validate.py`) em `topics.py`, `definition.py`, `__init__.py`, `test_topics.py`, `test_definition.py`, `test_lint.py` → `findings: []` em todos.
+- Gate declarado `nenhum`: sem mais evidência exigida. Os 5 `source` (`rule`, `llm`, `catalog`, `classifier`; `none` via `NO_TOPIC`) e as entradas exatas da guarda estão em `test_topics.py`.
+
+**Estado inicial do worktree:** `git status --short` vazio (limpo), branch `develop`.
+
+**Ambiente após a verificação:** nada criado (testes usam `tmp_path`; sem processo, servidor nem arquivo temporário).
+
+**Critérios de aceite**
+- [x] JSON com 9 categorias e mapa das 9 do classificador — `data/interaction_topics.json`; `test_the_real_vocabulary_has_nine_topics_with_other_last`.
+- [x] `choose_topic` devolve `TopicChoice` e não levanta por falha do LLM — `test_llm_failures_fall_back_without_raising`.
+- [x] Urgência → `safety`/`rule` com zero chamadas — `test_urgency_is_safety_by_rule_and_never_calls_the_llm`.
+- [x] LLM válido → `llm`; falha ou saída fora da lista → `catalog`/`classifier` — testes parametrizados.
+- [x] Lista de categorias vem do JSON; só `other` e `safety` como constantes — `topics.py` (`OTHER_TOPIC`, `SAFETY_TOPIC`); `test_the_message_lists_exactly_the_json_topics_and_the_request_as_data`.
+- [x] `workflow.md` tem `categorize`; `validate_agent.py` sai 0; linter exige — `test_missing_categorize_section_is_reported`.
+- [x] Nenhum log/erro/teste carrega texto de pedido ou chave — `test_logs_carry_neither_the_request_nor_the_llm_output`.
+- [x] Nenhum arquivo fora de §3.1 alterado — ver ressalva em Decisões.
+- [x] Testes verdes; `ruff` e validador sem violação nos arquivos alterados.
+
+**Decisões e suposições**
+- `choose_topic(request, client, vocabulary=None)`: `TopicRequest` agrupa texto, histórico, categoria, urgência e fonte; o vocabulário é opcional (injeção em teste) e, ausente, vem de `data/interaction_topics.json` (cache) validado contra `CATEGORY_RULES` + `other` do classificador.
+- Importei `CATEGORY_RULES` e `OTHER_LABEL` de `triage.classification` só para validar o mapa; não alterei esse pacote.
+- Delimitadores e `DELIMITERS` reutilizados de `rag.py`; a neutralização foi reescrita em `topics.py` porque `_neutralize_delimiters` é privada e `rag.py` está fora do escopo.
+- `source=none`: `NO_TOPIC = TopicChoice(None, "none")`; `topic` é `str | None`.
+- Ajustei testes preexistentes de `tests/agent` que afirmavam "só `answer`" — consequência direta de tornar `categorize` obrigatória (§3.1 autoriza o teste correspondente do agente).
+- A vaga/branch é `develop` (não `main`); não criei branch.
+
+**Achados fora do escopo (não corrigidos)**
+- `src/triage/automation/allowlist.py:18` — `@lru_cache(maxsize=None)` reprovado pelo `ruff` (UP033).
+
+**Pendências / riscos**
+- Texto das `description` das 9 categorias é minha redação (não havia texto pronto); o revisor pode querer ajustá-las.
+- Nenhuma chamada real a LLM foi feita (sem rede); o prompt `categorize` só foi verificado por composição e testes com cliente falso.
+
 ---
 
 # 10. Veredito
 
 <!-- Preenchido pelo REVISOR. Append-only: um bloco por rodada, com o que foi verificado e como. -->
+
+## Veredito — 2026-11-12 — 🟢 Aprovado
+
+**Nível:** escopada, elevada para a suíte inteira por um motivo: o diff toca `src/triage/automation/__init__.py`, o pacote que todos os consumidores importam, e `REQUIRED_TASKS` do agente.
+
+**Escopo.** `git status` e `git diff --stat` mostram exatamente os arquivos de §3.1: `data/interaction_topics.json`, `topics.py`, `automation/__init__.py`, `workflow.md`, `agent/definition.py` (uma linha), `tests/automation/test_topics.py`, `tests/agent/test_definition.py` e `tests/agent/test_lint.py`. Nada fora do escopo e nada faltando. O resumo bate com o diff.
+
+**Evidências por critério**
+- 9 categorias, `other` por último, mapa das 9 do classificador: `data/interaction_topics.json`; as 8 áreas do catálogo (`data/catalog.json` e `catalog.d/`) estão todas no vocabulário (varredura: nenhuma fora).
+- `choose_topic` não levanta por falha do LLM: `topics.py:165-175` captura só `LlmUnavailable` e `LlmInvalidResponse`; `test_an_unexpected_exception_from_a_foreign_client_is_not_swallowed` prova que o resto sobe.
+- Urgência sem LLM: `topics.py:193-194` retorna antes de carregar o vocabulário e antes de usar o cliente; teste dedicado e probe (`safety`/`rule`).
+- Ordem urgência → LLM → catálogo → classificador: `topics.py:186-200`.
+- Categorias lidas do JSON: só `OTHER_TOPIC` e `SAFETY_TOPIC` como constantes; mensagem montada a partir do vocabulário (`topics.py:143-151`); caminho do JSON relativo ao arquivo, não ao diretório corrente.
+- Guarda: `topics.py:154-162` aceita só id exato (caixa, aspas e ponto final tolerados); frases e ids inexistentes caem no determinístico.
+- Tarefa `categorize` obrigatória: `definition.py:20`; `python scripts/validate_agent.py` → `OK`.
+- Logs sem texto de pedido nem saída do LLM: `topics.py:170,174` registram só o tipo do erro ou o motivo; `test_logs_carry_neither_the_request_nor_the_llm_output`.
+- Sinais de atalho: nenhum `TODO`, `skip`, `print` nem citação de plan em código ou testes.
+
+**Comandos rodados**
+- `python -m pytest tests/automation/test_topics.py tests/agent -q` → 135 passed.
+- `python -m pytest -q` (suíte inteira, pelo motivo acima) → 1124 passed.
+- `python -m ruff check` nos arquivos tocados → All checks passed.
+- Validador de `padrao-python` em `topics.py`, `definition.py`, `automation/__init__.py` e `test_topics.py` → 0 achados.
+- Probe com o LLM **real** (perguntas sintéticas, sem dado pessoal): IPTU → `tax`, bilhete único → `city`, buraco → `city`, seguro-desemprego → `social`, futebol → `other`, CNH → `vehicles` (todas `source=llm`); tentativa de injeção com delimitadores soltos → `other` (sem obedecer); urgência → `safety`/`rule`; sem cliente → `classifier`. Isso cobre a pendência declarada pelo executor (prompt `categorize` sem chamada real).
+
+**Ambiente.** Nenhum processo, servidor nem arquivo temporário restou; `git status` só mostra os arquivos da plan.
+
+**Fora do escopo (já no backlog).** `allowlist.py:18` (`@lru_cache(maxsize=None)`, UP033) é o item 14, preexistente.
