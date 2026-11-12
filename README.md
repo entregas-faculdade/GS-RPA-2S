@@ -37,9 +37,10 @@ frase: ele lê o pedido, descobre o assunto e responde com o **link oficial** do
 uma **fila de revisão humana** quando não tem segurança para responder.
 
 **Recorte (piloto de São Paulo):** o **estado e a capital de São Paulo**, mais as **fontes federais**. O catálogo
-(`data/catalog.json` mais `data/catalog.d/`) tem **127 fontes**, contadas por script sobre esses arquivos: **123
-aprovadas**, que respondem ao cidadão (58 federais, 33 do Estado de São Paulo e 32 da cidade de São Paulo), e **4
-candidatas** da Prefeitura, que ainda não respondem.
+(`data/catalog.json` mais `data/catalog.d/`) tem **127 fontes**, contadas por script sobre esses arquivos: **127
+aprovadas**, que respondem ao cidadão (58 federais, 33 do Estado de São Paulo e 36 da cidade de São Paulo), e nenhuma
+candidata. As 4 fontes da Prefeitura que estavam `candidate` por causa de um HTTP 403 foram aprovadas em 2026-11-12,
+depois de responderem HTTP 200 ao identificador do robô.
 
 O que o protótipo **não** é: não é um sistema de produção, não usa dado pessoal real, não faz deploy em nuvem e não é
 um chatbot generalista.
@@ -299,7 +300,7 @@ Nenhum valor abaixo de 0,60 amplia a cobertura sem piorar a acurácia entre os r
 `AMBIGUITY_MARGIN` não muda o resultado entre 0,05 e 0,25.
 
 **Localizador de fontes** (sem LLM, `ServiceFinder`), medido em 96 pedidos sintéticos (48 de treino, para ajustar os
-limiares, e 48 de teste, só para reportar) sobre as **123 fontes aprovadas** do catálogo atual:
+limiares, e 48 de teste, só para reportar) sobre as **127 fontes aprovadas** do catálogo atual:
 
 | | Cobertura | Acerto entre os que devolveram fonte | Falso positivo (pedido sem fonte que recebeu uma) |
 |---|---|---|---|
@@ -312,10 +313,11 @@ fonte aprovada).
 
 **Execução com o LLM real:**
 
-- **Lote** (`data/samples`, 15 pedidos): 8 respondidos e 7 rejeitados na ingestão (arquivos defeituosos); dos 8 respondidos, 8 com link
-  no ar e nenhum fora do ar. A segunda execução da mesma pasta ignorou os 15 como já processados.
+- **Lote** (`data/samples`, 15 pedidos): 7 respondidos, 1 encaminhado à revisão (`out_of_catalog`) e 7 rejeitados na
+  ingestão (arquivos defeituosos); dos 7 respondidos, 7 com link no ar e nenhum fora do ar. A segunda execução da mesma
+  pasta ignorou os 15 como já processados.
 - **Teste por perguntas** (18 perguntas, pela mesma rota do chat): 15 respondidas e 3 encaminhadas à revisão
-  (emergência, fora de escopo e tentativa de injeção); 16 categorias da interação escolhidas pelo LLM; **0 de 16 URLs** das
+  (emergência, fora de escopo e tentativa de injeção); 17 categorias da interação escolhidas pelo LLM; **0 de 16 URLs** das
   respostas fora do catálogo; **0 de 33 mensagens** enviadas ao LLM com dado pessoal bruto.
 - **Sem LLM** (as mesmas 18 perguntas): 9 respondidas e 9 encaminhadas à revisão, contra 15 e 3 com o LLM.
 
