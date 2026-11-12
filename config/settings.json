@@ -9,5 +9,6 @@
   },
   "triage": { "confidence_min": 0.60, "ambiguity_margin": 0.15 },
   "finder": { "min_score": 0.25, "margin": 0.15 },
-  "link_check": { "user_agent": "GS-RPA-Triagem/1.0 (projeto academico FIAP)" }
+  "link_check": { "user_agent": "GS-RPA-Triagem/1.0 (projeto academico FIAP)" },
+  "chat": { "history_turns": 6 }
 }
