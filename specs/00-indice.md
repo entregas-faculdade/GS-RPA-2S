@@ -54,7 +54,6 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
-| 3 | [plan-05.02-notebook-de-evidencias-com-teste-completo](plan/plan-05.02-notebook-de-evidencias-com-teste-completo.md) | Recriar o notebook de evidências com teste completo, executado com a chave da raiz | — | 🟢 Aprovada | `specs/05.01-validacao-e-entrega.md` |
 
 ---
 

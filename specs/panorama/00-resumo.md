@@ -11,7 +11,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 # Panorama
 
 ## Progresso
-█████████░ 96% · 30/31 itens ✅
+██████████ 100% · 31/31 itens ✅
 
 ## Agora
 —
@@ -26,8 +26,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 02 | Classificação | 4/4 | █████ | 0 |
 | 03 | Automação | 15/15 | █████ | 0 |
 | 04 | Operação e interface | 6/6 | █████ | 0 |
-| 05 | Validação e entrega | 1/2 | ██░░░ | 1 |
+| 05 | Validação e entrega | 2/2 | █████ | 0 |
 
 ## Atenção
-- 🟢 plan-05.02 · Recriar o notebook de evidências com teste completo, executado com a chave da raiz — aguardando síntese
 - 📋 34 achado(s) no `00-backlog`

@@ -110,7 +110,7 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 
 ## 05 · Validação e entrega
 - ✅ **R05.1** Validação e entrega — métricas, notebook de evidências e README (✅ 2026-11-10)
-- 🔷 **R05.2** Notebook de evidências executado — teste completo com o LLM real
+- ✅ **R05.2** Notebook de evidências executado — teste completo com o LLM real (✅ 2026-11-12)
 
 <!-- Exemplo (comentado: não conta como item real)
 ## 02 · Base de dados

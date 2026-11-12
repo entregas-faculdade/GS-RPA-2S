@@ -268,13 +268,14 @@ Antes de escolher **como** fazer algo, leia **[[00-knowledge]]** — é o rotead
 > é o `git` e os `adr/`.
 
 - **Prazo:** segue o calendário da Global Solution (data a confirmar com a turma).
-- **Pendente de decisão:** provedor de LLM free tier; versão-alvo do Python (só 3.14.0 foi verificado); terminal e autorização
-  permanente dos commits (§5); lista final de categorias e do catálogo de serviços (recorte A).
+- **Pendente de decisão:** versão-alvo do Python (só 3.14.0 foi verificado); confirmação do grupo sobre os ODS do parágrafo de
+  ética (16 e 10 são candidatos).
 - **Sem binding:** o template de módulos e o gate `tools/gate` não estão instalados (decisão de 2026-11-09).
 - **Carimbo `.sarak/base.json` ausente:** o `init_repo.py` falhou ao carimbar (base via cache de plugin, sem git).
 - **Falso positivo do gate de segredos** em `.githooks/verify_commit.py` corrigido localmente em 2026-11-09;
   correção na base ainda pendente.
-- **Remoto e primeiro push** do repositório ainda não feitos.
+- **Entrega:** o remoto é `origin` (`entregas-faculdade/GS-RPA-2S`); o trabalho vive em `develop` e a entrega depende do merge
+  `develop` → `main` e do push.
 
 ---
 
