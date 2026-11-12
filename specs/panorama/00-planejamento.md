@@ -98,6 +98,7 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 - ✅ **R03.12** Base enriquecida do catálogo — conteúdo por página e vários arquivos (✅ 2026-11-11)
 - ✅ **R03.14** Importação da planilha da base enriquecida — 72 serviços de SP e federais (✅ 2026-11-11)
 - ✅ **R03.13** Conversa com memória e botão de nova conversa (✅ 2026-11-11)
+- 🔷 **R03.15** Categoria da interação escolhida pelo LLM — vocabulário fechado e saída segura sem ele
 
 ## 04 · Operação e interface
 - ✅ **R04.1** Persistência SQLite — idempotência, fila, feedback e execuções (✅ 2026-11-09)
@@ -105,9 +106,11 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 - ✅ **R04.3** Orquestração RPA — lote, retry, agendamento e relatório de execução (✅ 2026-11-10)
 - ✅ **R04.4** Revisão com categoria e exportação — catalogar pedidos anonimizados (✅ 2026-11-11)
 - ✅ **R04.5** Interface em formato de chat — conversa na tela e avaliação por resposta (✅ 2026-11-11)
+- 🔷 **R04.6** Catálogo de interações — categoria, tag de revisão humana e saída por execução
 
 ## 05 · Validação e entrega
 - ✅ **R05.1** Validação e entrega — métricas, notebook de evidências e README (✅ 2026-11-10)
+- 🔷 **R05.2** Notebook de evidências executado — teste completo com o LLM real
 
 <!-- Exemplo (comentado: não conta como item real)
 ## 02 · Base de dados

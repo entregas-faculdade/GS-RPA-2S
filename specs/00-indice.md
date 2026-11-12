@@ -5,7 +5,7 @@ dominio: "Governança de Specs (SDD)"
 status: "🟢 Vigente"
 tags: ["processo", "indice", "sdd"]
 relacionados: ["[[00-contexto]]", "[[00-backlog]]", "[[00-prompt-revisor]]", "[[00-prompt-executor]]"]
-proximo_numero_plan: {"01": 5, "02": 5, "03": 15, "04": 6, "05": 2} # Com famílias: mapa família → NN; simples: escalar NN único. Só sobe, nunca reaproveitado — ver §4.
+proximo_numero_plan: {"01": 5, "02": 5, "03": 16, "04": 7, "05": 3} # Com famílias: mapa família → NN; simples: escalar NN único. Só sobe, nunca reaproveitado — ver §4.
 ---
 
 # 0. O que é este arquivo
@@ -54,6 +54,9 @@ que cresce é índice quebrado.
 
 | # | Plan | Objetivo | Depende de | Status | Destino |
 |---|---|---|---|---|---|
+| 1 | [plan-03.15-categoria-da-interacao-escolhida-pelo-llm](plan/plan-03.15-categoria-da-interacao-escolhida-pelo-llm.md) | Escolher a categoria da interação com o LLM, com saída segura sem ele | — | 🟡 Em execução | `specs/03.05-categoria-da-interacao.md` + `specs/03.04-agente-llm.md` |
+| 2 | [plan-04.06-catalogo-de-interacoes-com-tag-de-revisao-humana](plan/plan-04.06-catalogo-de-interacoes-com-tag-de-revisao-humana.md) | Catalogar cada interação com categoria, tag de revisão humana e saída por execução | plan-03.15 | 🔴 A executar | `arquitetura/04.01-persistencia.md` + `arquitetura/04.03-orquestracao-rpa.md` |
+| 3 | [plan-05.02-notebook-de-evidencias-com-teste-completo](plan/plan-05.02-notebook-de-evidencias-com-teste-completo.md) | Recriar o notebook de evidências com teste completo, executado com a chave da raiz | plan-04.06 | 🔴 A executar | `specs/05.01-validacao-e-entrega.md` |
 
 ---
 
