@@ -21,6 +21,9 @@ RATING_UP = "up"
 RATING_DOWN = "down"
 VALID_RATINGS = (RATING_UP, RATING_DOWN)
 
+VALID_TOPIC_SOURCES = ("llm", "catalog", "classifier", "rule", "none")
+VALID_TIERS = ("catalog", "finder")
+
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS requests (
     hash TEXT PRIMARY KEY,
@@ -55,6 +58,18 @@ CREATE TABLE IF NOT EXISTS runs (
     started_at TEXT NOT NULL,
     finished_at TEXT,
     totals_json TEXT
+);
+CREATE TABLE IF NOT EXISTS interactions (
+    request_hash TEXT PRIMARY KEY REFERENCES requests(hash),
+    run_id INTEGER,
+    topic TEXT,
+    topic_source TEXT NOT NULL CHECK (topic_source IN ('llm', 'catalog', 'classifier', 'rule', 'none')),
+    needs_human INTEGER NOT NULL CHECK (needs_human IN (0, 1)),
+    tier TEXT CHECK (tier IS NULL OR tier IN ('catalog', 'finder')),
+    used_llm INTEGER NOT NULL DEFAULT 0 CHECK (used_llm IN (0, 1)),
+    fallback_reason TEXT,
+    response_text TEXT,
+    created_at TEXT NOT NULL
 );
 """
 

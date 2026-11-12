@@ -14,6 +14,7 @@ from triage.automation.llm_client import LlmInvalidResponse, LlmUnavailable
 from triage.automation.messages import build_no_information_message
 from triage.automation.resolver import CatalogLookup
 from triage.automation.templates import render_template
+from triage.automation.topics import CATEGORIZE_TASK
 from triage.classification.decision import Decision, ReviewReason
 from triage.config import Settings
 from triage.ingestion import Request
@@ -35,7 +36,8 @@ class FakeClient:
         self.calls: list[tuple[str, str]] = []
 
     def complete(self, task: str, user_message: str) -> str:
-        self.calls.append((task, user_message))
+        if task != CATEGORIZE_TASK:
+            self.calls.append((task, user_message))
         if isinstance(self.answer, BaseException):
             raise self.answer
         return self.answer

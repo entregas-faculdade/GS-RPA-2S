@@ -12,6 +12,7 @@ from triage.automation.catalog import load_catalog
 from triage.automation.finder import ServiceFinder
 from triage.automation.link_check import LinkStatus
 from triage.automation.resolver import CatalogLookup
+from triage.automation.topics import CATEGORIZE_TASK
 from triage.classification.decision import Decision, ReviewReason
 from triage.config import Settings
 from triage.interface.service import KIND_ANSWERED, KIND_DUPLICATE, AppService
@@ -31,8 +32,9 @@ class FakeClient:
     def __init__(self) -> None:
         self.messages: list[str] = []
 
-    def complete(self, _task: str, user_message: str) -> str:
-        self.messages.append(user_message)
+    def complete(self, task: str, user_message: str) -> str:
+        if task != CATEGORIZE_TASK:
+            self.messages.append(user_message)
         return "NENHUMA_FONTE"
 
 

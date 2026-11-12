@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 
+from triage.classification import ReviewReason
 from triage.pipeline.processor import (
     LINK_OK,
     LINK_UNAVAILABLE,
@@ -38,7 +39,8 @@ TIER_LABELS = {
     TIER_CATALOG: "serviço específico do catálogo",
     TIER_FINDER: "fonte achada pelo localizador",
 }
-FILE_TIMESTAMP_FORMAT ="%Y%m%dT%H%M%S"
+URGENT_KEY = "urgent"
+FILE_TIMESTAMP_FORMAT = "%Y%m%dT%H%M%S"
 
 logger = logging.getLogger("triage.pipeline")
 
@@ -57,6 +59,9 @@ class RunReport:
     links: dict[str, int]
     llm: dict[str, object]
     tiers: dict[str, int]
+    by_topic: dict[str, int]
+    by_topic_source: dict[str, int]
+    needs_human: dict[str, int]
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -70,6 +75,9 @@ class RunReport:
             "links": self.links,
             "llm": self.llm,
             "tiers": self.tiers,
+            "by_topic": self.by_topic,
+            "by_topic_source": self.by_topic_source,
+            "needs_human": self.needs_human,
         }
 
 
@@ -86,6 +94,9 @@ def build_report(
     link_count = Counter(result.link_status for result in outcomes if result.link_status)
     fallbacks = Counter(result.fallback_reason for result in outcomes if result.fallback_reason)
     tier_count = Counter(result.tier for result in outcomes if result.tier)
+    topics = Counter(result.topic for result in outcomes if result.topic)
+    sources = Counter(result.topic_source for result in outcomes if result.topic_source)
+    human = [result for result in outcomes if result.needs_human]
     return RunReport(
         run_id=run_id,
         started_at=started_at,
@@ -97,6 +108,12 @@ def build_report(
         links={LINK_OK: link_count.get(LINK_OK, 0), LINK_UNAVAILABLE: link_count.get(LINK_UNAVAILABLE, 0)},
         llm={"used": sum(result.used_llm for result in outcomes), "fallbacks": dict(sorted(fallbacks.items()))},
         tiers={tier: tier_count.get(tier, 0) for tier in TIER_LABELS},
+        by_topic=dict(sorted(topics.items())),
+        by_topic_source=dict(sorted(sources.items())),
+        needs_human={
+            "total": len(human),
+            URGENT_KEY: sum(result.reason == ReviewReason.URGENT.value for result in human),
+        },
     )
 
 
@@ -122,6 +139,9 @@ def render_markdown(report: RunReport) -> str:
         *_table("Totais por status", totals),
         *_table("Por categoria", report.by_category),
         *_table("Por motivo de revisão", report.by_review_reason),
+        *_table("Por categoria da interação", report.by_topic),
+        *_table("Por origem da categoria", report.by_topic_source),
+        *_table("Interações que precisam de atendimento humano", report.needs_human),
         *_table("Respondidos por degrau", tiers),
         *_table("Links do catálogo (por pedido)", links),
         "## LLM",

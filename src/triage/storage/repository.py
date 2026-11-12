@@ -9,7 +9,14 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from triage.storage.schema import VALID_RATINGS, VALID_STATUSES, init_db, session
+from triage.storage.schema import (
+    VALID_RATINGS,
+    VALID_STATUSES,
+    VALID_TIERS,
+    VALID_TOPIC_SOURCES,
+    init_db,
+    session,
+)
 
 
 @dataclass(frozen=True)
@@ -41,6 +48,63 @@ class LabeledRequest:
     request_hash: str
     anonymized_text: str
     category: str
+
+
+@dataclass(frozen=True)
+class InteractionRecord:
+    """Catalogação de uma interação: categoria, quem a escolheu, tag de revisão humana e a resposta dada."""
+
+    request_hash: str
+    topic_source: str
+    needs_human: bool
+    topic: str | None = None
+    tier: str | None = None
+    used_llm: bool = False
+    fallback_reason: str | None = None
+    response_text: str | None = None
+    run_id: int | None = None
+
+
+@dataclass(frozen=True)
+class StoredInteraction:
+    """Interação lida do banco, junto com o pedido a que pertence (texto anonimizado, status e motivo)."""
+
+    record: InteractionRecord
+    created_at: str
+    status: str
+    review_reason: str | None
+    anonymized_text: str
+
+
+@dataclass(frozen=True)
+class InteractionCounts:
+    """Interações contadas por categoria (`none` para as sem categoria) e pela tag `needs_human`."""
+
+    by_topic: dict[str, int]
+    needs_human: int
+    automatic: int
+
+
+NO_TOPIC_LABEL = "none"
+INTERACTION_COLUMNS = (
+    "i.request_hash, i.topic_source, i.needs_human, i.topic, i.tier, i.used_llm, i.fallback_reason, "
+    "i.response_text, i.run_id, i.created_at, r.status, r.review_reason, r.anonymized_text"
+)
+
+
+def _validate_interaction(record: InteractionRecord) -> None:
+    if record.topic_source not in VALID_TOPIC_SOURCES:
+        raise ValueError(f"Origem da categoria inválida: {record.topic_source!r}.")
+    if not isinstance(record.needs_human, bool):
+        raise TypeError(f"needs_human deve ser booleano: {record.needs_human!r}.")
+    if record.tier is not None and record.tier not in VALID_TIERS:
+        raise ValueError(f"Degrau inválido: {record.tier!r}.")
+
+
+def _stored_interaction(row: tuple) -> StoredInteraction:
+    (digest, source, human, topic, tier, used_llm, fallback, response, run_id, created_at, status, reason, text) = row
+    record = InteractionRecord(digest, source, bool(human), topic, tier, bool(used_llm), fallback, response, run_id)
+    return StoredInteraction(record, created_at, status, reason, text)
 
 
 def _now() -> str:
@@ -155,3 +219,45 @@ class Repository:
                 "UPDATE runs SET finished_at = ?, totals_json = ? WHERE id = ?",
                 (_now(), json.dumps(totals, ensure_ascii=False), run_id),
             )
+
+    def save_interaction(self, record: InteractionRecord) -> None:
+        """Grava a catalogação do pedido; o mesmo hash de novo é ignorado. Hash sem pedido gravado é `StorageError`."""
+        _validate_interaction(record)
+        with session(self._path) as connection:
+            connection.execute(
+                "INSERT OR IGNORE INTO interactions (request_hash, run_id, topic, topic_source, needs_human, tier, "
+                "used_llm, fallback_reason, response_text, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (
+                    record.request_hash,
+                    record.run_id,
+                    record.topic,
+                    record.topic_source,
+                    int(record.needs_human),
+                    record.tier,
+                    int(record.used_llm),
+                    record.fallback_reason,
+                    record.response_text,
+                    _now(),
+                ),
+            )
+
+    def interactions(self, run_id: int | None = None) -> list[StoredInteraction]:
+        """As interações por `created_at`, só as de uma execução quando `run_id` vem."""
+        sql = f"SELECT {INTERACTION_COLUMNS} FROM interactions i JOIN requests r ON r.hash = i.request_hash"
+        params: tuple = ()
+        if run_id is not None:
+            sql += " WHERE i.run_id = ?"
+            params = (run_id,)
+        with session(self._path) as connection:
+            rows = connection.execute(sql + " ORDER BY i.created_at, i.rowid", params).fetchall()
+        return [_stored_interaction(row) for row in rows]
+
+    def interaction_counts(self) -> InteractionCounts:
+        """Contagem das interações por categoria e pela tag `needs_human`."""
+        with session(self._path) as connection:
+            topics = connection.execute(
+                "SELECT COALESCE(topic, ?), COUNT(*) FROM interactions GROUP BY 1 ORDER BY 1", (NO_TOPIC_LABEL,)
+            ).fetchall()
+            human = connection.execute("SELECT COUNT(*) FROM interactions WHERE needs_human = 1").fetchone()[0]
+            total = connection.execute("SELECT COUNT(*) FROM interactions").fetchone()[0]
+        return InteractionCounts(dict(topics), human, total - human)

@@ -6,6 +6,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from triage.ingestion import read_folder
+from triage.pipeline.export import write_interactions_csv
 from triage.pipeline.processor import (
     STATUS_ERROR,
     Deps,
@@ -43,25 +44,25 @@ def _isolated(
         return ProcessingResult(STATUS_ERROR)
 
 
-def _process_folder(input_dir: str | Path, deps: Deps) -> list[ProcessingResult]:
+def _process_folder(input_dir: str | Path, deps: Deps, run_id: int) -> list[ProcessingResult]:
     requests, rejections = read_folder(input_dir)
     results = [
-        _isolated(lambda rejection=rejection: process_rejection(rejection, deps), rejection.source)
+        _isolated(lambda rejection=rejection: process_rejection(rejection, deps, run_id), rejection.source)
         for rejection in rejections
     ]
     for request in requests:
         results.append(
             _isolated(
-                lambda request=request: process_request(request, deps),
+                lambda request=request: process_request(request, deps, run_id=run_id),
                 request.source,
-                lambda request=request: route_to_safe_review(request, deps),
+                lambda request=request: route_to_safe_review(request, deps, run_id),
             )
         )
     return results
 
 
 def run_batch(input_dir: str | Path, deps: Deps) -> RunReport:
-    """Processa todos os pedidos da pasta e grava o relatório.
+    """Processa todos os pedidos da pasta e grava o relatório e o CSV das interações da execução.
 
     A execução é aberta com `start_run` e sempre fechada com `finish_run`, mesmo se a leitura da pasta
     falhar. Pedidos já processados (mesmo hash) não são refeitos.
@@ -70,10 +71,11 @@ def run_batch(input_dir: str | Path, deps: Deps) -> RunReport:
     started_at = _now()
     results: list[ProcessingResult] = []
     try:
-        results = _process_folder(input_dir, deps)
+        results = _process_folder(input_dir, deps, run_id)
     finally:
         report = build_report(run_id, started_at, _now(), results)
         deps.repository.finish_run(run_id, report.totals)
         write_report(report, deps.settings.output_dir)
+        write_interactions_csv(deps.repository, run_id, deps.settings.output_dir)
     logger.info("Execução %d concluída: %s", run_id, report.totals)
     return report

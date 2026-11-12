@@ -10,7 +10,7 @@ a classificação e a decisão de revisão seguem sobre a mensagem atual.
 import logging
 import time
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from sklearn.pipeline import Pipeline
@@ -31,10 +31,19 @@ from triage.automation.resolver import (
     resolve_service,
 )
 from triage.automation.response import Response, build_llm_response, build_response
+from triage.automation.topics import (
+    NO_TOPIC,
+    OTHER_TOPIC,
+    TopicChoice,
+    TopicRequest,
+    TopicsError,
+    choose_topic,
+)
 from triage.classification import (
     ModelNotAvailableError,
     ReviewReason,
     classify,
+    is_urgent,
     triage_decision,
 )
 from triage.classification.decision import ACTION_AUTO_ANSWER, Decision
@@ -44,7 +53,13 @@ from triage.common.retry import RetryPolicy, retry_with_backoff
 from triage.config import Settings
 from triage.ingestion import Rejection, Request
 from triage.privacy import anonymize
-from triage.storage import Repository, RequestRecord, StorageError, request_hash
+from triage.storage import (
+    InteractionRecord,
+    Repository,
+    RequestRecord,
+    StorageError,
+    request_hash,
+)
 from triage.storage.schema import (
     STATUS_ANSWERED,
     STATUS_QUEUED_FOR_REVIEW,
@@ -79,6 +94,10 @@ class ProcessingResult:
     used_llm: bool = False
     fallback_reason: str | None = None
     tier: str | None = None
+    topic: str | None = None
+    topic_source: str | None = None
+    needs_human: bool = False
+    service: ServiceEntry | None = field(default=None, repr=False, compare=False)
 
 
 @dataclass(frozen=True)
@@ -165,7 +184,7 @@ def _review(
     return ProcessingResult(STATUS_QUEUED_FOR_REVIEW, category, confidence, reason, link_status=link_status)
 
 
-def _answered(decision: Decision, response: Response, tier: str) -> ProcessingResult:
+def _answered(decision: Decision, response: Response, tier: str, service: ServiceEntry | None) -> ProcessingResult:
     return ProcessingResult(
         STATUS_ANSWERED,
         decision.category,
@@ -176,6 +195,7 @@ def _answered(decision: Decision, response: Response, tier: str) -> ProcessingRe
         response.used_llm,
         response.fallback_reason,
         tier,
+        service=service,
     )
 
 
@@ -217,7 +237,7 @@ def _answer_or_review(turn: _Turn, decision: Decision, deps: Deps) -> Processing
     resolution = resolve_service(decision.category, deps.lookup)
     if resolution.service is None:
         return _failed_resolution(decision, resolution.reason)
-    return _answered(decision, _catalog_response(resolution.service, turn, deps), TIER_CATALOG)
+    return _answered(decision, _catalog_response(resolution.service, turn, deps), TIER_CATALOG, resolution.service)
 
 
 def _gap_rag(turn: _Turn, deps: Deps) -> RagResult:
@@ -241,14 +261,14 @@ def _deterministic_find(turn: _Turn, decision: Decision, deps: Deps) -> Processi
     resolution = deps.lookup.resolve_entry(match.entry)
     if resolution.service is None:
         return _failed_resolution(decision, resolution.reason)
-    return _answered(decision, build_response(resolution.service), TIER_FINDER)
+    return _answered(decision, build_response(resolution.service), TIER_FINDER, resolution.service)
 
 
 def _find_or_review(turn: _Turn, decision: Decision, deps: Deps) -> ProcessingResult:
     """Degraus 2 e 3: com LLM, ele redige sobre as candidatas; sem LLM ou em falha, decide o localizador determinístico."""
     rag = _gap_rag(turn, deps) if _llm_ready(deps) else RagResult()
     if rag.text is not None:
-        return _answered(decision, build_llm_response(rag.text), TIER_FINDER)
+        return _answered(decision, build_llm_response(rag.text), TIER_FINDER, None)
     if rag.no_source:
         return _no_information(decision)
     return replace(_deterministic_find(turn, decision, deps), fallback_reason=rag.fallback_reason)
@@ -274,15 +294,71 @@ def _triage(turn: _Turn, deps: Deps) -> ProcessingResult:
     return _review(decision.category, decision.confidence, decision.reason.value)
 
 
+def _requires_human(status: str) -> bool:
+    """A tag `needs_human` e a fila de revisão saem desta mesma regra: o pedido não foi respondido."""
+    return status != STATUS_ANSWERED
+
+
 def _store(record: RequestRecord, deps: Deps) -> None:
     """Grava o pedido e, se ele não foi respondido, enfileira a revisão. Repetível: gravar o mesmo hash é ignorado."""
     deps.repository.save_request(record, anonymized=True)
-    if record.status != STATUS_ANSWERED:
+    if _requires_human(record.status):
         deps.repository.enqueue_review(record.request_hash, record.review_reason)
 
 
 def _persist(record: RequestRecord, deps: Deps) -> None:
     retry_with_backoff(lambda: _store(record, deps), deps.retry_policy, deps.sleep)
+
+
+def _persist_interaction(interaction: InteractionRecord, deps: Deps) -> None:
+    """Cataloga a interação com o mesmo retry; falha persistente é logada e não desfaz o pedido nem a fila."""
+    try:
+        retry_with_backoff(lambda: deps.repository.save_interaction(interaction), deps.retry_policy, deps.sleep)
+    except StorageError as error:
+        logger.error("Interação não catalogada (%s); o pedido segue gravado", type(error).__name__)
+
+
+def _topic_client(deps: Deps) -> LlmClient | None:
+    """O LLM escolhe a categoria só com `llm.enabled` e cliente montado; senão decidem as regras."""
+    return deps.llm_client if deps.settings.llm_enabled else None
+
+
+def _choose_topic(request: TopicRequest, client: LlmClient | None) -> TopicChoice:
+    """Categoria da interação; vocabulário inválido vira `none` (logado), nunca derruba o pedido."""
+    try:
+        return choose_topic(request, client)
+    except TopicsError as error:
+        logger.error("Vocabulário de categorias inválido (%s); interação sem categoria", type(error).__name__)
+        return NO_TOPIC
+
+
+def _with_topic(result: ProcessingResult, turn: _Turn, deps: Deps) -> ProcessingResult:
+    """Escolhe a categoria depois do degrau decidido e marca a tag; o serviço resolvido não segue no resultado."""
+    request = TopicRequest(
+        turn.text, result.category or OTHER_TOPIC, is_urgent(turn.text), result.service, turn.history
+    )
+    choice = _choose_topic(request, _topic_client(deps))
+    return replace(
+        result,
+        topic=choice.topic,
+        topic_source=choice.source,
+        needs_human=_requires_human(result.status),
+        service=None,
+    )
+
+
+def _interaction(digest: str, result: ProcessingResult, run_id: int | None) -> InteractionRecord:
+    return InteractionRecord(
+        request_hash=digest,
+        topic_source=result.topic_source,
+        needs_human=result.needs_human,
+        topic=result.topic,
+        tier=result.tier,
+        used_llm=result.used_llm,
+        fallback_reason=result.fallback_reason,
+        response_text=result.response_text,
+        run_id=run_id,
+    )
 
 
 def message_hash(text: str, conversation: Conversation | None = None) -> str:
@@ -295,27 +371,32 @@ def message_hash(text: str, conversation: Conversation | None = None) -> str:
     return request_hash(f"{conversation.id}|{conversation.turn}|{text}")
 
 
-def process_request(request: Request, deps: Deps, conversation: Conversation | None = None) -> ProcessingResult:
-    """Anonimiza → hash → duplicado? → classifica → decide → resolve e responde (ou revisão) → grava.
+def process_request(
+    request: Request, deps: Deps, conversation: Conversation | None = None, run_id: int | None = None
+) -> ProcessingResult:
+    """Anonimiza → hash → duplicado? → classifica → decide → resolve e responde (ou revisão) → categoria → grava.
 
     Só o texto anonimizado é classificado, gravado ou logado. Modelo ausente leva à revisão. `conversation`, quando
-    há, traz as mensagens anteriores **já anonimizadas**; só a mensagem atual é gravada.
+    há, traz as mensagens anteriores **já anonimizadas**; só a mensagem atual é gravada. `run_id` é a execução em lote
+    (nulo no chat) e vai para a interação catalogada.
     """
     text = anonymize(request.text).text
     digest = message_hash(text, conversation)
     if deps.repository.already_processed(digest):
         return ProcessingResult(STATUS_SKIPPED_DUPLICATE)
-    history = conversation.messages if conversation is not None else ()
-    result = _triage(_Turn(text, history), deps)
+    turn = _Turn(text, conversation.messages if conversation is not None else ())
+    result = _with_topic(_triage(turn, deps), turn, deps)
     record = RequestRecord(digest, text, result.status, result.category, result.confidence, result.reason)
     _persist(record, deps)
+    _persist_interaction(_interaction(digest, result, run_id), deps)
     return result
 
 
-def process_rejection(rejection: Rejection, deps: Deps) -> ProcessingResult:
+def process_rejection(rejection: Rejection, deps: Deps, run_id: int | None = None) -> ProcessingResult:
     """Registra o descarte da ingestão como `rejected` e abre a revisão `invalid_input`.
 
-    O hash vem da origem e do motivo (não há texto aproveitável), então rodar de novo não duplica.
+    O hash vem da origem e do motivo (não há texto aproveitável), então rodar de novo não duplica. A interação fica
+    sem categoria (`none`) e com a tag `needs_human`; o LLM não é chamado.
     """
     digest = request_hash(f"{rejection.source}|{rejection.reason}")
     if deps.repository.already_processed(digest):
@@ -323,14 +404,23 @@ def process_rejection(rejection: Rejection, deps: Deps) -> ProcessingResult:
     reason = ReviewReason.INVALID_INPUT.value
     text = REJECTED_TEXT_TEMPLATE.format(reason=rejection.reason)
     _persist(RequestRecord(digest, text, STATUS_REJECTED, review_reason=reason), deps)
-    return ProcessingResult(STATUS_REJECTED, reason=reason)
+    result = ProcessingResult(
+        STATUS_REJECTED, reason=reason, topic=NO_TOPIC.topic, topic_source=NO_TOPIC.source, needs_human=True
+    )
+    _persist_interaction(_interaction(digest, result, run_id), deps)
+    return result
 
 
-def route_to_safe_review(request: Request, deps: Deps) -> None:
-    """Caminho seguro depois de uma falha inesperada: garante o pedido na fila de revisão, sem duplicá-lo."""
+def route_to_safe_review(request: Request, deps: Deps, run_id: int | None = None) -> None:
+    """Caminho seguro depois de uma falha inesperada: garante o pedido na fila de revisão, sem duplicá-lo.
+
+    A interação sai com a tag `needs_human` e a categoria determinística: o LLM nunca é chamado aqui.
+    """
     text = anonymize(request.text).text
     digest = request_hash(text)
     if deps.repository.already_processed(digest):
         return
     record = RequestRecord(digest, text, STATUS_QUEUED_FOR_REVIEW, review_reason=SAFE_REVIEW_REASON)
     _persist(record, deps)
+    safe = _with_topic(ProcessingResult(STATUS_QUEUED_FOR_REVIEW), _Turn(text), replace(deps, llm_client=None))
+    _persist_interaction(_interaction(digest, safe, run_id), deps)
