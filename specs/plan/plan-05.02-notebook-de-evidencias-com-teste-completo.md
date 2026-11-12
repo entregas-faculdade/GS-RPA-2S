@@ -4,7 +4,7 @@ familia: "05"
 item: "R05.2"
 titulo: "Recriar o notebook de evidências com teste completo, executado com a chave da raiz"
 dominio: "Validação e entrega"
-status: "🟡 Em execução"
+status: "🟢 Aprovada"
 prioridade: "Alta"
 tags: ["plan", "notebook", "evidencias", "validacao"]
 relacionados: ["[[05.01-validacao-e-entrega]]", "[[04.03-orquestracao-rpa]]", "[[04.01-persistencia]]", "[[03.05-categoria-da-interacao]]", "[[03.02-resposta-final-e-llm]]"]
@@ -187,8 +187,106 @@ Texto pronto para transporte:
 
 <!-- Preenchido pelo EXECUTOR. Append-only: cada rodada acrescenta um bloco novo; nada é removido. -->
 
+## Resumo da execução — 2026-11-12
+
+**Resultado:** Concluído
+
+**O que foi feito**
+- `notebooks/evidence.ipynb` recriado por inteiro e executado de uma só vez (`nbconvert --execute --inplace`, 3 min 21 s, saída 0) com o LLM real: seção 0 acha a raiz, `os.chdir`, `load_settings(dotenv_path=ENV_FILE)` com `ENV_FILE = ROOT / ".env"` e imprime só fatos sim/não.
+- Seções: lote + idempotência + CSV; teste de 18 perguntas (grupos pedidos, conversa com memória) com verificação automática de URL/PII e conferência do que foi enviado ao LLM (`RecordingClient`, em memória); catálogo de interações; contraste sem LLM; métricas, calibração com decisão calculada, erros, localizador; falhas 6.1–6.6; limites.
+- Higiene: fábrica de `LogRecord` troca caminhos absolutos por `<tmp>`/`<raiz>`/`<home>`; tudo em `tempfile.mkdtemp`, removido ao fim.
+- `tests/test_notebook_evidence.py` criado (16 testes estruturais, sem rede).
+
+**Arquivos alterados**
+| Arquivo | Natureza | O que mudou |
+|---|---|---|
+| `notebooks/evidence.ipynb` | alterado | recriado e executado, saídas salvas |
+| `tests/test_notebook_evidence.py` | criado | estrutura e higiene do notebook entregue |
+| `specs/plan/plan-05.02-...md` | alterado | este resumo e `status` |
+
+**Verificações executadas**
+- `python -m pytest tests/test_notebook_evidence.py -q` → 16 passed.
+- `python -m ruff check tests/test_notebook_evidence.py` → All checks passed.
+- Varredura (sem imprimir a chave): valor de `LLM_API_KEY` ausente do notebook; sem `Traceback`; sem o nome de usuário.
+- Saídas lidas: 18 perguntas, 15 respondidas, 3 em revisão; `used_llm` verdadeiro 15; `topic_source=llm` 16; URLs fora do catálogo 0; PII bruto 0 (33 mensagens ao LLM, 0 com dado bruto); emergência = revisão, `used_llm` falso, `safety`/`rule`; 15 interações no lote (7 rejeitadas); `output/` inalterado.
+
+**Estado inicial do worktree:** limpo (`git status --short` vazio), branch `develop`.
+
+**Ambiente após a verificação:** pasta temporária do notebook removida pela própria última célula; nenhum processo ou contêiner criado. `snapshot`/`diff` da skill `code-limpeza-ambiente` não rodados: indisponível por escolha, conferência manual.
+
+**Critérios de aceite**
+- [x] LLM real, `used_llm=True` e `topic_source=llm` — saída da seção 2 (15 e 16).
+- [x] `.env` da raiz com `dotenv_path` e `chdir`; só sim/não — célula 2.
+- [x] Sem chave, caminho absoluto, traceback ou CPF bruto — testes + varredura.
+- [x] Zero URLs fora do catálogo, inclusive na injeção — saída da verificação.
+- [x] Emergência e conversa com memória (respostas diferentes: `False` na comparação).
+- [x] Tabela do catálogo de interações e CSV do lote exibidos.
+- [x] Números do texto saem de células.
+- [x] Métricas, calibração, localizador e falhas calculados na execução.
+- [x] `git status` só mostra os dois arquivos de §3.1 (mais esta plan).
+- [x] Teste verde.
+
+**Decisões e suposições**
+- "Saída salva em toda célula de código" interpretada como: toda célula executada em ordem e ao menos metade com saída (células só de definição não imprimem).
+- Quantidade de perguntas e contagens de `used_llm`/`topic_source=llm` são lidas pelo teste de linhas impressas pelo notebook.
+- Comparação "antes/depois da ampliação do treino" removida (dependia de 180 linhas fixas); não era exigida pela §5.
+- Falha de LLM fora do ar usa cliente falso; resposta vazia usa o cliente real com `requests.post` substituído.
+- Deps montadas à mão (`make_deps`) em vez de `build_deps`, para não ler `output/models`.
+
+**Achados fora do escopo (não corrigidos)**
+- Na execução real, vários modelos devolveram "conteúdo vazio" e o cliente passou aos alternativos (log salvo no notebook); vale olhar a estabilidade do modelo principal.
+- README e `docs/quadro-de-temas.md` ainda têm números fixos (previsto: atualização à parte). O localizador mediu cobertura bem menor que a do README/spec 05.01.
+
+**Pendências / riscos**
+- A saída do LLM varia: reexecutar muda os totais da seção 2.
+- Os links foram verificados na rede no momento da execução.
+
 ---
 
 # 10. Veredito
 
 <!-- Preenchido pelo REVISOR. Append-only: um bloco por rodada, com o que foi verificado e como. -->
+
+## Veredito — 2026-11-12 — 🔴 Reprovado
+
+**Nível:** escopada, como a plan declarou. O notebook **não** foi reexecutado (usa rede, custa e varia entre execuções); foi conferido pelo arquivo entregue e pelo teste.
+
+**O que está correto (verificado)**
+- Escopo: `git status` mostra só `notebooks/evidence.ipynb`, `tests/test_notebook_evidence.py` e esta plan; `output/` com data anterior à execução do notebook (nada foi criado ali).
+- Notebook executado de ponta a ponta: 57 células, 30 de código com `execution_count` de 1 a 30 em ordem, 0 saídas do tipo `error`, 29 das 30 células de código com saída (a que não tem é só de definição).
+- Higiene: o valor de `LLM_API_KEY` do `.env` da raiz **não ocorre** no arquivo (varredura sem imprimir a chave); zero `C:\Users`, `/Users/`, `/home/`, `AppData`, nome de usuário, `Traceback`, `sk-`, `gsk_`, `Bearer`; nenhum `print` de `os.environ`; `dotenv_path` explícito na raiz e `os.chdir` na célula 2.
+- Conteúdo das saídas: ambiente (`.env` sim, chave sim, LLM ligado, 5 modelos, cliente montado); lote com 15 interações e CSV exibido; segunda execução idempotente (15 duplicados); 18 perguntas (15 respondidas, 3 em revisão); 0 URLs fora do catálogo, inclusive na injeção; 33 mensagens enviadas ao LLM, 0 com dado pessoal bruto; emergência = revisão, `used_llm=False`, `safety`/`rule`; conversa com memória × sozinha; tabela de interações com `needs_human` e `topic_source`; contraste sem LLM (15 × 9 respondidos); métricas do teste (54 pedidos, acurácia 88,9%), calibração, análise de erros e localizador medido agora (123 entradas aprovadas, cobertura 27,1% no teste); falhas 6.1 a 6.6 demonstradas; limites. Números do texto saem de células.
+- Comandos: `python -m pytest tests/test_notebook_evidence.py -q` → 16 passed; `python -m ruff check tests/test_notebook_evidence.py` → All checks passed.
+
+**Achados**
+1. `tests/test_notebook_evidence.py:44` (`_output_text`): o validador de `padrao-python` reprova a função por **aninhamento acima de 3** (`for` dentro de `for` com `if/elif`), severidade alta, confiança alta. O limite de aninhamento (`padrao-escrita`, Nível 0) é regra dura e vale também para o código de teste; as plans 03.15 e 04.06 fecharam com zero achado do validador. A §7 desta plan não listou o validador, mas a `00-contexto` o inclui na verificação escopada, e o executor não o rodou.
+   - **Correção (dirigida, sem decisão de comportamento):** reescrever `_output_text` com guard clauses ou extraindo o texto de uma saída para uma função auxiliar, de modo que nenhuma função passe de 3 níveis, **mantendo exatamente o texto que ela devolve hoje** (fluxos `stream` e `text/plain` de resultados e exibições).
+   - **Verificação única da correção:** o validador de `padrao-python` (`scripts/validate.py`) sobre `tests/test_notebook_evidence.py` → `findings: []`; mais `python -m pytest tests/test_notebook_evidence.py -q` verde (16 passed) e `python -m ruff check tests/test_notebook_evidence.py` limpo. **Não reexecutar o notebook** e não tocar em nenhum outro arquivo.
+
+**Interpretações aceitas (defeito da plan, não do executor)**
+- O teste exige saída em **pelo menos metade** das células de código, e não em todas como a §5.11 escreveu: uma célula só de definição não imprime nada, e o notebook entregue tem 29 de 30 com saída. A síntese descreverá o teste como ele é.
+- A comparação "antes/depois da ampliação do treino" foi removida do notebook (dependia de 180 linhas fixas); a §5 não a exigia.
+
+**Registrado no backlog (não bloqueia):** o vocabulário de categorias não tem "trabalho e emprego" (o LLM respondeu fora da lista para o seguro-desemprego e a guarda caiu no classificador); e o modelo principal devolveu "conteúdo vazio" várias vezes na execução (cada falha passa ao modelo seguinte e soma segundos de latência).
+
+## Resumo da execução (correção 1) — 2026-11-12
+
+**Achado 1 — aninhamento em `_output_text`:** corrigido. A função em `tests/test_notebook_evidence.py:44` deixou de ter `for` dentro de `for` com `if/elif`: o texto de uma saída passou para `_single_output_text` (guard clauses) e `_output_text` ficou com uma compreensão e um `join`. O texto devolvido é o mesmo (fluxos `stream` e `text/plain` de resultados e exibições).
+- Evidência: `scripts/validate.py` de `padrao-python` sobre o teste → `findings: []` (antes: aninhamento acima de 3); `python -m pytest tests/test_notebook_evidence.py -q` → 16 passed; `python -m ruff check tests/test_notebook_evidence.py` → All checks passed.
+- Notebook não reexecutado e nenhum outro arquivo tocado por esta rodada (o `git status` mostra também `specs/00-backlog.md`, `specs/00-indice.md` e `specs/panorama/00-resumo.md`, alterados pelo revisor, não por mim).
+
+## Veredito — 2026-11-12 — 🟢 Aprovado (rodada 2)
+
+**Nível:** escopada. O notebook não foi reexecutado: a correção só tocou o teste, e o arquivo `.ipynb` tem a mesma data da execução original (01:26), anterior à correção (01:33).
+
+**Achado 1 — aninhamento em `_output_text`: corrigido.** `tests/test_notebook_evidence.py` tem agora `_single_output_text` (guard clauses: `stream`, depois `data`/`text/plain`, senão vazio) e `_output_text` com uma compreensão e um `join`. O texto devolvido é o mesmo da versão anterior (fluxos e `text/plain` de resultados e exibições).
+
+**Comandos rodados**
+- Validador de `padrao-python` (`scripts/validate.py`) sobre `tests/test_notebook_evidence.py` → `findings: []` (antes: aninhamento acima de 3).
+- `python -m pytest tests/test_notebook_evidence.py -q` → 16 passed.
+- `python -m ruff check tests/test_notebook_evidence.py` → All checks passed.
+- Varredura do notebook entregue repetida, sem imprimir a chave: 57 células, 30 de código com `execution_count` de 1 a 30 em ordem, 0 saídas `error`, 29 das 30 com saída; o valor de `LLM_API_KEY` **não** ocorre no arquivo; zero `C:\Users`, `/Users/`, `/home/`, `AppData`, nome de usuário, `Traceback`, `sk-`, `gsk_` e `Bearer`; `dotenv_path` na raiz; nenhum `print` de `os.environ`.
+
+**Escopo.** `git status`: só `notebooks/evidence.ipynb` e `tests/test_notebook_evidence.py` (mais esta plan, o índice, o backlog e o panorama, que são do revisor). A rodada de correção não tocou em mais nada. `output/` sem alteração. Ambiente sem resíduo.
+
+**Verificação da rodada 1 (mantida).** O conteúdo do notebook foi conferido na primeira rodada e segue valendo: 18 perguntas (15 respondidas, 3 em revisão), 0 URLs fora do catálogo, 0 dado pessoal bruto nas 33 mensagens ao LLM, emergência sem LLM, tabela de interações com `needs_human`, contraste sem LLM, métricas, calibração, localizador e as seis falhas demonstradas.

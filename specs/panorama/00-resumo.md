@@ -14,7 +14,7 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 █████████░ 96% · 30/31 itens ✅
 
 ## Agora
-- 🟡 · plan-05.02 · R05.2 · Recriar o notebook de evidências com teste completo, executado com a chave da raiz
+—
 
 ## Próximas
 —
@@ -29,4 +29,5 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 05 | Validação e entrega | 1/2 | ██░░░ | 1 |
 
 ## Atenção
-- 📋 32 achado(s) no `00-backlog`
+- 🟢 plan-05.02 · Recriar o notebook de evidências com teste completo, executado com a chave da raiz — aguardando síntese
+- 📋 34 achado(s) no `00-backlog`
