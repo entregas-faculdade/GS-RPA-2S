@@ -9,6 +9,16 @@ Protótipo acadêmico da **FIAP — Global Solution 2026.2**, disciplina *AI for
 - Lucca Phelipe Masini (RM 564121)
 - Bernardo Braga Perobeli (RM 562468)
 
+## Pasta de entrega (`entrega-gs/`)
+
+Os entregáveis do enunciado estão reunidos em [entrega-gs/](entrega-gs/):
+
+- **README e índice:** [entrega-gs/README.md](entrega-gs/README.md) (este README traz a documentação completa);
+- **Quadro de temas:** [entrega-gs/quadro-de-temas.md](entrega-gs/quadro-de-temas.md);
+- **Evidências:** [entrega-gs/evidencias/evidence.ipynb](entrega-gs/evidencias/evidence.ipynb);
+- **Dados, ética e ODS:** [entrega-gs/etica-dados-ods.md](entrega-gs/etica-dados-ods.md);
+- **Código:** [run.py](run.py), [app.py](app.py) e [src/](src/), na raiz do repositório.
+
 ## Execução rápida
 
 Requisitos: Python (verificado com 3.14) e internet (para instalar os pacotes e para o robô verificar os links). Comandos
@@ -121,7 +131,7 @@ python -m ruff check run.py src tests
 
 ## Notebook de evidências
 
-`notebooks/evidence.ipynb` **já vem executado, de ponta a ponta, com o LLM real**: as saídas salvas são as evidências.
+[`entrega-gs/evidencias/evidence.ipynb`](entrega-gs/evidencias/evidence.ipynb) **já vem executado, de ponta a ponta, com o LLM real**: as saídas salvas são as evidências.
 Ele mostra o robô rodando em lote e por perguntas (com a categoria e a tag `needs_human` de cada interação), as métricas
 de classificação e do localizador, e cada falha tratada (pasta inexistente, JSON inválido, link fora do ar, resposta vazia
 do LLM, LLM fora do ar, modelo ausente).
@@ -130,7 +140,7 @@ Para **reexecutar**, o notebook precisa da chave no `.env` da **raiz** do projet
 não sobrescrever o entregue:
 
 ```powershell
-jupyter nbconvert --to notebook --execute notebooks/evidence.ipynb --output evidence-reexecutado.ipynb
+jupyter nbconvert --to notebook --execute entrega-gs/evidencias/evidence.ipynb --output evidence-reexecutado.ipynb
 ```
 
 O notebook treina o modelo em memória e remove o que cria; apague `evidence-reexecutado.ipynb` depois. Como a saída do
@@ -251,16 +261,16 @@ data/
   agents/                agente LLM versionado (persona, regras, tarefas, parâmetros)
   labeled/               conjuntos rotulados (classificador e localizador)
   samples/               pedidos de exemplo, inclusive arquivos defeituosos
-notebooks/               evidence.ipynb (evidências de validação, já executado)
-docs/                    enunciado, quadro de temas, guia da base enriquecida, fontes de SP e planilha do catálogo
+entrega-gs/              entregáveis do enunciado: README, quadro de temas, ética e ODS e evidencias/evidence.ipynb (já executado)
+docs/                    enunciado, guia da base enriquecida, fontes de SP e planilha do catálogo
+  especificacoes/        documentação técnica do projeto (especificações e decisões de arquitetura)
 tests/                   testes automatizados
-specs/                   especificações do projeto
 output/                  gerado na execução: logs, banco, modelo, reports/ e exports/ (fora do Git)
 ```
 
 ## Quadro de temas
 
-Resumo; o quadro completo, com a justificativa da combinação, está em [docs/quadro-de-temas.md](docs/quadro-de-temas.md).
+Resumo; o quadro completo, com a justificativa da combinação, está em [entrega-gs/quadro-de-temas.md](entrega-gs/quadro-de-temas.md).
 
 | Tema | Onde entra no fluxo | O que resolve |
 |---|---|---|
@@ -271,7 +281,7 @@ Resumo; o quadro completo, com a justificativa da combinação, está em [docs/q
 
 ## Resultados
 
-Todos os números abaixo são as **saídas salvas** de [notebooks/evidence.ipynb](notebooks/evidence.ipynb), executado com o
+Todos os números abaixo são as **saídas salvas** de [entrega-gs/evidencias/evidence.ipynb](entrega-gs/evidencias/evidence.ipynb), executado com o
 LLM real em 2026-11-12. Os dados são sintéticos; os números descrevem estas amostras, não pedidos reais.
 
 **Classificação** (sem LLM; `split=test`, **54 pedidos**, 6 por categoria, com o modelo treinado em 364 pedidos de
@@ -322,24 +332,12 @@ fonte aprovada).
 - **Sem LLM** (as mesmas 18 perguntas): 9 respondidas e 9 encaminhadas à revisão, contra 15 e 3 com o LLM.
 
 Matriz de confusão, métricas por classe, análise dos erros, casos de falha tratados e limites estão no
-[notebook](notebooks/evidence.ipynb).
+[notebook](entrega-gs/evidencias/evidence.ipynb).
 
 ## Proteção de dados, ética e ODS
 
-O protótipo usa só dados sintéticos e anonimiza CPF, telefone, e-mail, nome de pessoa, endereço (logradouro com
-número e complementos), CEP, RG, data completa e números de documento (título de eleitor, CNH, NIS, PIS, cartão SUS,
-CNPJ, passaporte, matrícula) antes de qualquer log, gravação ou chamada a API, em linha com a LGPD (minimização e
-finalidade). **O dado pessoal só vai anonimizado ao provedor do LLM**, e a **saída do LLM passa por uma guarda** (link e
-telefone só das fontes enviadas, categoria só da lista fechada) antes de chegar ao cidadão. A anonimização usa regex,
-contexto e uma lista de prenomes, sem modelo de NER, e na dúvida mascara.
-
-Limites declarados (risco residual): nome fora de contexto e fora da lista pode passar; endereço sem logradouro passa;
-cidade, estado e bairro não são mascarados. Por isso **nenhum dado pessoal real deve ser digitado** no sistema, com ou sem
-LLM, e o CSV de interações e a exportação da revisão, que são texto anonimizado por regras, devem ser revisados antes de
-compartilhados. A chave do provedor fica só no `.env`, fora do Git.
-
-Do ponto de vista ético, o robô só responde com links de domínios oficiais da allowlist, prefere pedir **revisão humana**
-a arriscar uma resposta errada (urgência, dúvida e fora do catálogo vão para uma pessoa) e deixa claro que é um protótipo.
-A fila de revisão não exige login: quem tem acesso à máquina a vê. Os objetivos de desenvolvimento sustentável (ODS)
-atendidos, **confirmados pelo grupo**, são o **ODS 16** (instituições eficazes e acesso à informação) e o **ODS 10**
-(redução das desigualdades, ao facilitar o acesso a serviços para quem não sabe a qual órgão recorrer).
+O protótipo usa só dados sintéticos e anonimiza CPF, telefone, e-mail, nome, endereço, CEP, RG, data e números de
+documento antes de qualquer log, gravação ou chamada a API, em linha com a LGPD. O dado pessoal só vai anonimizado ao
+provedor do LLM, e a saída do LLM passa por uma guarda. Há risco residual (nome fora de contexto, endereço sem
+logradouro), então nenhum dado pessoal real deve ser digitado. O robô prefere a revisão humana a arriscar uma resposta
+errada. ODS confirmados pelo grupo: **16** e **10**. Texto completo: [entrega-gs/etica-dados-ods.md](entrega-gs/etica-dados-ods.md).

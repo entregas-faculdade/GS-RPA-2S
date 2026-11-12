@@ -1,4 +1,4 @@
-"""Testes estruturais do notebook de evidências entregue (`notebooks/evidence.ipynb`).
+"""Testes estruturais do notebook de evidências entregue (`entrega-gs/evidencias/evidence.ipynb`).
 
 Só leem o arquivo (sem rede, sem executar o notebook): conferem que ele foi entregue executado de ponta a ponta,
 sem erro, sem chave nem caminho absoluto, e que traz as seções e as evidências que o enunciado pede.
@@ -10,7 +10,7 @@ from pathlib import Path
 import nbformat
 import pytest
 
-NOTEBOOK_PATH = Path(__file__).resolve().parent.parent / "notebooks" / "evidence.ipynb"
+NOTEBOOK_PATH = Path(__file__).resolve().parent.parent / "entrega-gs" / "evidencias" / "evidence.ipynb"
 MIN_QUESTIONS = 15
 SECTION_KEYWORDS = ("lote", "perguntas", "catálogo de interações", "métricas", "falhas", "limites")
 FORBIDDEN_PATH_MARKERS = ("C:\\Users", "C:\\\\Users", "C:/Users", "/Users/", "/home/")  # com e sem escape do JSON

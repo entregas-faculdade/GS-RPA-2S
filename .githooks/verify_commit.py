@@ -179,7 +179,7 @@ def main() -> None:
 # Chave de EXEMPLO da propria documentacao da AWS (docs.aws.amazon.com) — nunca uma credencial real.
 # Usada so para provar que o padrao "AWS Access Key" do config.json real dispara o bloqueio. Partida em
 # duas por concatenacao de proposito: inteira, ela e um literal "AKIA[0-9A-Z]{16}" contiguo no PROPRIO
-# codigo-fonte deste arquivo, e o scanner estatico de audit_base.py (skills/meta-verificacao-base) nao
+# codigo-fonte deste arquivo, e um scanner estatico de segredos nao
 # tem isencao para fixture de teste — reportaria esta linha como vazamento real. Em runtime a string
 # concatenada e identica; o teste continua provando exatamente o mesmo padrao.
 AWS_EXAMPLE_KEY = "AKIA" + "IOSFODNN7EXAMPLE"

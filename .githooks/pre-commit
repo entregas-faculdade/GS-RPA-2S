@@ -11,10 +11,4 @@ if [ "$?" -ne 0 ]; then
   exit 1
 fi
 
-if [ -f .agents/generate_index.py ]; then
-  echo "[Sarak] Updating the local agents index..."
-  "$PY" .agents/generate_index.py
-  git add .agents/index.md
-fi
-
 exit 0

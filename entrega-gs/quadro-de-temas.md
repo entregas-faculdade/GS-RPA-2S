@@ -20,4 +20,4 @@ categoria da interação** numa lista fechada, sempre sobre texto anonimizado e 
 das fontes enviadas, categoria só da lista). O LLM não classifica o pedido, não decide se ele é respondido nem escolhe
 URL; sem ele, o texto-modelo e as regras fazem o mesmo trabalho.
 
-Medição e casos de falha de cada tema: [notebooks/evidence.ipynb](../notebooks/evidence.ipynb).
+Medição e casos de falha de cada tema: [evidencias/evidence.ipynb](evidencias/evidence.ipynb).
