@@ -11,13 +11,12 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 # Panorama
 
 ## Progresso
-█████████░ 90% · 28/31 itens ✅
+█████████░ 93% · 29/31 itens ✅
 
 ## Agora
-—
+- 🟡 · plan-04.06 · R04.6 · Catalogar cada interação com categoria, tag de revisão humana e saída por execução
 
 ## Próximas
-- 🔴 · plan-04.06 · R04.6 · Catalogar cada interação com categoria, tag de revisão humana e saída por execução
 - 🔴 · plan-05.02 · R05.2 · Recriar o notebook de evidências com teste completo, executado com a chave da raiz
 
 ## Por família
@@ -25,10 +24,9 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 |---|---|---|---|---|
 | 01 | Núcleo do robô | 4/4 | █████ | 0 |
 | 02 | Classificação | 4/4 | █████ | 0 |
-| 03 | Automação | 14/15 | ████░ | 1 |
+| 03 | Automação | 15/15 | █████ | 0 |
 | 04 | Operação e interface | 5/6 | ████░ | 1 |
 | 05 | Validação e entrega | 1/2 | ██░░░ | 1 |
 
 ## Atenção
-- 🟢 plan-03.15 · Escolher a categoria da interação com o LLM, com saída segura sem ele — aguardando síntese
 - 📋 30 achado(s) no `00-backlog`

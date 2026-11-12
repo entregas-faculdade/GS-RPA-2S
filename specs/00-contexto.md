@@ -143,7 +143,7 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 | Mexer no robô ponta a ponta, relatório ou agendamento | [[04.03-orquestracao-rpa]] | [[00-knowledge]] |
 | Mexer em PII, sanitização, allowlist ou revisão humana | [[003-seguranca-sem-autenticacao]] | [[00-knowledge]] |
 | Execução, ambiente ou publicação | [[004-infra-execucao-local]] | [[00-knowledge]] |
-| Usar ou alterar o LLM | [[007-llm-redige-a-resposta-com-rag-do-catalogo]] + [[005-llm-apenas-reformula-resposta]] + [[003-seguranca-sem-autenticacao]] + [[03.04-agente-llm]] | [[00-knowledge]] |
+| Usar ou alterar o LLM | [[007-llm-redige-a-resposta-com-rag-do-catalogo]] + [[005-llm-apenas-reformula-resposta]] + [[003-seguranca-sem-autenticacao]] + [[03.04-agente-llm]] + [[03.05-categoria-da-interacao]] | [[00-knowledge]] |
 | Mudar decisão estrutural | todos os `adr/` + [[00-fundacao-tecnologica]] | [[00-knowledge]] |
 | Criar ou executar uma plan | [[00-indice]] + [[00-prompt-revisor]] / [[00-prompt-executor]] | [[00-knowledge]] |
 | Achado fora do escopo | [[00-backlog]] | [[00-knowledge]] |

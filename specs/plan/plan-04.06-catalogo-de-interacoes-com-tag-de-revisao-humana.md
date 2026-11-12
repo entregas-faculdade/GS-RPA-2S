@@ -4,11 +4,11 @@ familia: "04"
 item: "R04.6"
 titulo: "Catalogar cada interação com categoria, tag de revisão humana e saída por execução"
 dominio: "Operação e interface"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan", "pipeline", "persistencia", "catalogo", "revisao-humana"]
 relacionados: ["[[04.01-persistencia]]", "[[04.03-orquestracao-rpa]]", "[[02.02-confianca-e-revisao-humana]]", "[[03.05-categoria-da-interacao]]"]
-depende_de: "plan-03.15-categoria-da-interacao-escolhida-pelo-llm — precisa estar 🟢 e sintetizada antes"
+depende_de: ""
 destino_sintese: "arquitetura/04.01-persistencia.md + arquitetura/04.03-orquestracao-rpa.md"
 ---
 
@@ -48,7 +48,7 @@ existente (`requests`, `review_queue`, `feedback`, `labels`, `runs`) **não muda
 
 ## 3.2 Fora (não tocar)
 - `src/triage/interface/` e `app.py`: nenhuma tela nova nesta plan (a tag aparece na fila de revisão existente como já aparece; mostrar a categoria na interface é item de backlog).
-- `src/triage/automation/topics.py`, `data/interaction_topics.json` e o agente: ficam como a plan 03.15 os deixou.
+- `src/triage/automation/topics.py`, `data/interaction_topics.json` e o agente: ficam como estão.
 - `config/settings.json`, `.env`, o catálogo, o classificador, a decisão de revisão e a ingestão.
 - As tabelas existentes e os métodos existentes do `Repository` (comportamento idêntico).
 - `notebooks/` (plan 05.02) e `README.md`.
