@@ -3,7 +3,12 @@
 import re
 import unicodedata
 
-from triage.ingestion.models import REASON_EMPTY_ID, REASON_TEXT_TOO_SHORT, Rejection, Request
+from triage.ingestion.models import (
+    REASON_EMPTY_ID,
+    REASON_TEXT_TOO_SHORT,
+    Rejection,
+    Request,
+)
 
 MAX_TEXT_LENGTH = 2000
 MIN_TEXT_LENGTH = 3

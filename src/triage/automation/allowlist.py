@@ -4,7 +4,7 @@ import json
 import logging
 import re
 from collections.abc import Collection
-from functools import lru_cache
+from functools import cache
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -15,7 +15,7 @@ HOST_PATTERN = re.compile(r"^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$")
 logger = logging.getLogger("triage.automation")
 
 
-@lru_cache(maxsize=None)
+@cache
 def load_allowed_suffixes(path: Path = ALLOWED_DOMAINS_PATH) -> frozenset[str]:
     """Lê os sufixos permitidos; falha segura: arquivo ausente ou inválido devolve conjunto vazio (nada é permitido)."""
     try:

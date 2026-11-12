@@ -3,7 +3,7 @@
 import json
 import logging
 import re
-from functools import lru_cache
+from functools import cache
 from pathlib import Path
 
 from triage.classification.preprocessing import fold
@@ -13,7 +13,7 @@ URGENCY_TERMS_PATH = Path("data") / "urgency_terms.json"
 logger = logging.getLogger("triage.classification")
 
 
-@lru_cache(maxsize=None)
+@cache
 def _load_pattern(terms_path: Path) -> re.Pattern[str] | None:
     """Compila o léxico numa regex de palavra/expressão inteira; devolve `None` se não puder ser lido."""
     try:

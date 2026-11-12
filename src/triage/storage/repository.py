@@ -6,7 +6,7 @@ Só texto anonimizado é gravado: `save_request` exige `anonymized=True`, barrei
 
 import json
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from triage.storage.schema import (
@@ -108,7 +108,7 @@ def _stored_interaction(row: tuple) -> StoredInteraction:
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+    return datetime.now(UTC).isoformat(timespec="seconds")
 
 
 class Repository:

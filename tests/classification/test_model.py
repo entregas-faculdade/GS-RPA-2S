@@ -7,7 +7,13 @@ import joblib
 import pytest
 from sklearn.pipeline import Pipeline
 
-from triage.classification.model import ModelNotAvailableError, load, predict_proba, save, train
+from triage.classification.model import (
+    ModelNotAvailableError,
+    load,
+    predict_proba,
+    save,
+    train,
+)
 
 
 def test_train_and_predict_on_small_sample(sample_model: Pipeline, sample_labels: set[str]) -> None:

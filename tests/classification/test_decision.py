@@ -4,8 +4,13 @@ from pathlib import Path
 
 import pytest
 
-from triage.classification import Classification, Decision, ReviewReason, triage_decision
-from triage.classification import urgency
+from triage.classification import (
+    Classification,
+    Decision,
+    ReviewReason,
+    triage_decision,
+    urgency,
+)
 from triage.config import Settings, load_settings
 
 SETTINGS = Settings(

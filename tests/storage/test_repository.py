@@ -5,7 +5,13 @@ from pathlib import Path
 
 import pytest
 
-from triage.storage import Repository, RequestRecord, StorageError, init_db, request_hash
+from triage.storage import (
+    Repository,
+    RequestRecord,
+    StorageError,
+    init_db,
+    request_hash,
+)
 
 TABLES = {"requests", "review_queue", "feedback", "labels", "runs"}
 
@@ -155,9 +161,8 @@ def test_run_start_and_finish_store_totals(repository: Repository, db_path: Path
 
 def test_storage_error_is_logged_without_request_text(repository: Repository, caplog: pytest.LogCaptureFixture) -> None:
     raw_marker = "texto-que-nao-pode-vazar"
-    with caplog.at_level(logging.ERROR, logger="triage.storage"):
-        with pytest.raises(StorageError):
-            repository.add_feedback(raw_marker, "up")
+    with caplog.at_level(logging.ERROR, logger="triage.storage"), pytest.raises(StorageError):
+        repository.add_feedback(raw_marker, "up")
     assert caplog.records
     assert raw_marker not in caplog.text
 

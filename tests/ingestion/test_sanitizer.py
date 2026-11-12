@@ -2,8 +2,19 @@
 
 import pytest
 
-from triage.ingestion.models import REASON_EMPTY_ID, REASON_TEXT_TOO_SHORT, Rejection, Request
-from triage.ingestion.sanitizer import MAX_TEXT_LENGTH, MIN_TEXT_LENGTH, TextTooLargeError, sanitize, validate
+from triage.ingestion.models import (
+    REASON_EMPTY_ID,
+    REASON_TEXT_TOO_SHORT,
+    Rejection,
+    Request,
+)
+from triage.ingestion.sanitizer import (
+    MAX_TEXT_LENGTH,
+    MIN_TEXT_LENGTH,
+    TextTooLargeError,
+    sanitize,
+    validate,
+)
 
 
 def test_script_block_is_removed_with_its_content() -> None:
