@@ -106,7 +106,7 @@ o **horizonte**: a evolução de longo prazo, em itens por família — a base d
 - ✅ **R04.3** Orquestração RPA — lote, retry, agendamento e relatório de execução (✅ 2026-11-10)
 - ✅ **R04.4** Revisão com categoria e exportação — catalogar pedidos anonimizados (✅ 2026-11-11)
 - ✅ **R04.5** Interface em formato de chat — conversa na tela e avaliação por resposta (✅ 2026-11-11)
-- 🔷 **R04.6** Catálogo de interações — categoria, tag de revisão humana e saída por execução
+- ✅ **R04.6** Catálogo de interações — categoria, tag de revisão humana e saída por execução (✅ 2026-11-12)
 
 ## 05 · Validação e entrega
 - ✅ **R05.1** Validação e entrega — métricas, notebook de evidências e README (✅ 2026-11-10)

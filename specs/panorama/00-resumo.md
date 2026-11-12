@@ -11,13 +11,13 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 # Panorama
 
 ## Progresso
-█████████░ 93% · 29/31 itens ✅
+█████████░ 96% · 30/31 itens ✅
 
 ## Agora
-—
+- 🟡 · plan-05.02 · R05.2 · Recriar o notebook de evidências com teste completo, executado com a chave da raiz
 
 ## Próximas
-- 🔴 · plan-05.02 · R05.2 · Recriar o notebook de evidências com teste completo, executado com a chave da raiz
+—
 
 ## Por família
 | FF | Família | Itens ✅/total | Progresso | Plans abertas |
@@ -25,9 +25,8 @@ tags: ["processo", "panorama", "resumo", "sdd"]
 | 01 | Núcleo do robô | 4/4 | █████ | 0 |
 | 02 | Classificação | 4/4 | █████ | 0 |
 | 03 | Automação | 15/15 | █████ | 0 |
-| 04 | Operação e interface | 5/6 | ████░ | 1 |
+| 04 | Operação e interface | 6/6 | █████ | 0 |
 | 05 | Validação e entrega | 1/2 | ██░░░ | 1 |
 
 ## Atenção
-- 🟢 plan-04.06 · Catalogar cada interação com categoria, tag de revisão humana e saída por execução — aguardando síntese
 - 📋 32 achado(s) no `00-backlog`

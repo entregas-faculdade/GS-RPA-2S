@@ -102,7 +102,7 @@ produção, não usa dado pessoal real, não faz deploy em nuvem e não é um ch
 | `triage.classification` | etapa 2 | regex + TF-IDF, score de confiança, decisão de revisão |
 | `triage.automation` | etapa 3 | catálogo, allowlist, verificação de links, localizador de fontes, resposta (+ LLM opcional) |
 | `triage.agent` | etapa 3 | agente LLM: persona, regras, fluxo e parâmetros lidos de `data/agents/`, com linter |
-| `triage.storage` | transversal | SQLite: idempotência, fila de revisão, feedback |
+| `triage.storage` | transversal | SQLite: idempotência, fila de revisão, feedback, catalogação das interações |
 | `triage.interface` | borda | Streamlit sobre o núcleo |
 | `triage.pipeline` | orquestração | encadeia as etapas, retry, idempotência e relatório de execução |
 

@@ -4,11 +4,11 @@ familia: "05"
 item: "R05.2"
 titulo: "Recriar o notebook de evidências com teste completo, executado com a chave da raiz"
 dominio: "Validação e entrega"
-status: "🔴 A executar"
+status: "🟡 Em execução"
 prioridade: "Alta"
 tags: ["plan", "notebook", "evidencias", "validacao"]
 relacionados: ["[[05.01-validacao-e-entrega]]", "[[04.03-orquestracao-rpa]]", "[[04.01-persistencia]]", "[[03.05-categoria-da-interacao]]", "[[03.02-resposta-final-e-llm]]"]
-depende_de: "plan-04.06-catalogo-de-interacoes-com-tag-de-revisao-humana — precisa estar 🟢 e sintetizada antes"
+depende_de: ""
 destino_sintese: "specs/05.01-validacao-e-entrega.md"
 ---
 
